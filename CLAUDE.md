@@ -1,5 +1,5 @@
 # Project: ShipKaro Android Kit
-> Last updated: 2026-05-18 (Phase 0 done; demo/component model locked)
+> Last updated: 2026-05-18 (phases reordered: components first)
 
 ## What This Is
 A production-ready **pure Android native** (Kotlin + Jetpack Compose) starter kit that lets indie developers skip auth, paywall, analytics, and launch plumbing and ship a Play Store app fast. Primary use: handed to **ShipKaro Weekend** cohort attendees on Day 1 so live sessions focus on app logic, not boilerplate. Also sold standalone (ShipFast model: one-time price, lifetime updates) via a marketing landing page. iOS native variant is a future, separate effort — not in scope now.
@@ -41,27 +41,28 @@ Check off as completed. Update the date when marking done.
 - [x] Localization-ready: externalized strings, en + ur, per-app `LocaleManager`, locales_config
 - [ ] Wire detekt to `:app` (currently root-only → detekt NO-SOURCE) — moved to Phase 5 CI
 
-### Phase 1: Auth + Account (Play compliance core)
+### Phase 1: Component Library + Design System (Swift-catalog parity)
+REORDERED to first — components are building blocks; auth/paywall/settings screens consume them. Building screens before components = double work.
+- [ ] `designsystem/foundation/` — polish color, type, spacing, theme tokens
+- [ ] `designsystem/icons/` — curated `KitIcons` object: ~30–50 Heroicons (outline+solid) as ImageVector, copy-pasted from composables.com/icons. "Add more = paste here" pattern. Decide: drop bloaty material-icons-extended dep in favour of KitIcons.
+- [ ] `designsystem/components/` — Button (primary/secondary/text/loading), TextField, PasswordField, Card, ListItem, BottomSheet, Dialog, Chip, Avatar, Banner
+- [ ] `designsystem/state/` — Loading / Empty / Error / Success (full-screen + inline)
+- [ ] `designsystem/onboarding/` — pager + page indicator components
+- [ ] `designsystem/settings/` — section, toggle row, nav row, account row, danger/delete row, legal links
+- [ ] Dynamic app icon
+- [ ] No in-app showcase screen — components documented in /docs (Phase 8)
+
+### Phase 2: Auth + Account (Play compliance core) — built ON Phase 1 components
 - [ ] Supabase auth: email/password + Google sign-in
-- [ ] Firebase Auth alternative (toggle-able via app config)
+- [ ] Firebase Auth alternative (toggle-able via KitConfig)
 - [ ] Session handling + auth-gated navigation
 - [ ] Settings screen (theme, account, manage subscription, legal links)
 - [ ] Account deletion + in-app data deletion flow (Play mandatory)
 
-### Phase 2: Monetization
+### Phase 3: Monetization — built ON Phase 1 components
 - [ ] RevenueCat SDK wiring + entitlement checks + restore
 - [ ] Paywall UI (hard + soft variants)
-- [ ] Onboarding → paywall combo flow (conversion pattern)
-
-### Phase 3: Onboarding + Component Library (Swift-catalog parity)
-Real reusable component library — infra screens built AS polished components, not throwaway.
-- [ ] `designsystem/foundation/` — polish color, type, spacing, theme tokens
-- [ ] `designsystem/components/` — Button (primary/secondary/text/loading), TextField, PasswordField, Card, ListItem, BottomSheet, Dialog, Chip, Avatar, Banner
-- [ ] `designsystem/state/` — Loading / Empty / Error / Success (full-screen + inline)
-- [ ] `designsystem/onboarding/` — pager, page indicator, onboarding→paywall combo
-- [ ] `designsystem/settings/` — section, toggle row, nav row, account row, danger/delete row, legal links
-- [ ] Dynamic app icon
-- [ ] No in-app showcase screen — components documented in /docs (Phase 8) instead
+- [ ] Onboarding → paywall combo flow (conversion pattern; pager from Phase 1)
 
 ### Phase 4: Analytics + Ops
 - [ ] PostHog events + Firebase Analytics
@@ -107,7 +108,8 @@ Single-module. Clean placeholder Home is attendee's real start screen.
 <!-- Update at END of each session -->
 - **2026-05-18**: Discovery + planning. Studied shipfa.st, swiftstarterkits, flutterfasttemplate, shipkaro.dev, 1dayapp, mobile-docs. Locked scope: pure Android native, core 4 modules + Play compliance + Conversion + Ops packs, kit + landing page. Wrote this CLAUDE.md. Evaluated cortinico/kotlin-android-template vs Drjacky/MVVMTemplate → rejected multi-module for beginner/AI audience. Architecture locked: single `app` module package-by-feature, Koin DI, Retrofit/Room/DataStore.
 - **2026-05-18 (cont.)**: Built Phase 0. Hand-scaffolded full source/config (build files, Koin graph, Material3 theme, type-safe nav, KitConfig/RemoteAppConfig, Room, DataStore, locale en+ur, 6 feature screens). Hit wrapper wall (can't author binary gradle-wrapper.jar; system Gradle 8.5 < AGP-required 8.7). Resolved by cloning cortinico template and overlaying its working wrapper (Gradle 8.14.5). `:app:assembleDebug` → **BUILD SUCCESSFUL**. Private repo created + pushed (github.com/wajahatkarim3/shipkaro-android-kit).
-- **2026-05-18 (discussion)**: Locked demo/component model. Rejected `:demo` module (breaks single-module). Chosen: single-module, clean placeholder Home + dev-only debug-gated "View sample app" button → self-contained `feature/demo/` subtree reusing real components/infra with fake data. Reshaped Phase 3 (real component library, Swift-catalog parity) + Phase 6 (in-app demo showcase) + Phase 8 (catalog docs, removal guide). Permissions + screenshots deferred to Phase 8. **Next: Phase 1 (Supabase auth + account/Play-compliance).**
+- **2026-05-18 (discussion)**: Locked demo/component model. Rejected `:demo` module (breaks single-module). Chosen: single-module, clean placeholder Home + dev-only debug-gated "View sample app" button → self-contained `feature/demo/` subtree reusing real components/infra with fake data. Reshaped Phase 3 (real component library, Swift-catalog parity) + Phase 6 (in-app demo showcase) + Phase 8 (catalog docs, removal guide). Permissions + screenshots deferred to Phase 8.
+- **2026-05-18 (reorder)**: User flagged building auth before components = double work. Reordered: Phase 1 = Component Library + Design System (incl. `designsystem/icons/` curated Heroicons from composables.com), Phase 2 = Auth, Phase 3 = Monetization. **Next: Phase 1 (components, design system, icons).**
 
 ## Important Decisions Made
 - **Pure Android native, not KMP** — Cohort 1 ran KMP; user found it a bad decision. iOS native deferred to a future separate effort.
@@ -125,6 +127,8 @@ Single-module. Clean placeholder Home is attendee's real start screen.
 - **Demo = in-app, single-module, NOT a module/flavor/branch** — clean placeholder Home is attendee's real start; dev-only debug-gated button enters self-contained `feature/demo/` subtree. Demo reuses real components/infra with fake data (living example). Deletion: drop placeholder button (auto-severs) then `feature/demo/` folder. `:demo` Gradle module explicitly rejected — would force multi-module refactor we ruled out.
 - **Component library, no in-app showcase** — Swift-catalog parity via well-organized `designsystem/` packages; documented in /docs, not a gallery screen. Infra screens built AS reusable components.
 - **Phase 0 screens are throwaway tech debt** — replaced by real components across Phase 1–3/6.
+- **Phases reordered (components first)** — Phase 1 = component library, then Phase 2 auth, Phase 3 monetization. Screens consume components; building screens first = double work (rejected, per user).
+- **Icons = curated `KitIcons` in designsystem** — copy-paste Heroicons ImageVector from composables.com/icons into `designsystem/icons/`; no Gradle icon lib (Heroicons isn't a compose-icons module; avoids bloat for beginner audience). Likely drop material-icons-extended.
 
 ## Known Issues / Blockers
 - [ ] detekt plugin applied at root only → `./gradlew detekt` = NO-SOURCE. Wire to `:app` in Phase 5 (CI relies on it).
