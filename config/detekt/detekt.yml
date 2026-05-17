@@ -1,0 +1,31 @@
+## ShipKaro Android Kit — detekt config.
+## Lean ruleset: keep signal high for beginners, no nitpicking.
+build:
+  maxIssues: 0
+
+formatting:
+  active: true
+  android: true
+  autoCorrect: true
+
+complexity:
+  LongMethod:
+    threshold: 80
+  LongParameterList:
+    functionThreshold: 8
+    constructorThreshold: 10
+  TooManyFunctions:
+    active: false
+
+style:
+  MagicNumber:
+    active: false
+  UnusedPrivateMember:
+    active: true
+  ReturnCount:
+    max: 4
+
+naming:
+  FunctionNaming:
+    # Compose @Composable functions are PascalCase by convention.
+    ignoreAnnotated: ['Composable']
