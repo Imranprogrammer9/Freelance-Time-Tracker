@@ -44,7 +44,7 @@ Check off as completed. Update the date when marking done.
 ### Phase 1: Component Library + Design System (Swift-catalog parity)
 REORDERED to first — components are building blocks; auth/paywall/settings screens consume them. Building screens before components = double work.
 - [ ] `designsystem/foundation/` — polish color, type, spacing, theme tokens
-- [ ] `designsystem/icons/` — curated `KitIcons` object: ~30–50 Heroicons (outline+solid) as ImageVector, copy-pasted from composables.com/icons. "Add more = paste here" pattern. Decide: drop bloaty material-icons-extended dep in favour of KitIcons.
+- [ ] Icons via **compose-icons lib** `br.com.devsrsouza.compose.icons:{pack}:1.1.1`. Default packs: feather + tabler-icons (Heroicons-like outline). Others (simple-icons, font-awesome, eva, octicons, line-awesome, linea, weather, css-gg) listed commented in version catalog as opt-in. R8 strips unused. Heroicons has NO module → docs point to composables.com/icons for Heroicons copy-paste + extras. Drop material-icons-extended dep.
 - [ ] `designsystem/components/` — Button (primary/secondary/text/loading), TextField, PasswordField, Card, ListItem, BottomSheet, Dialog, Chip, Avatar, Banner
 - [ ] `designsystem/state/` — Loading / Empty / Error / Success (full-screen + inline)
 - [ ] `designsystem/onboarding/` — pager + page indicator components
@@ -109,7 +109,7 @@ Single-module. Clean placeholder Home is attendee's real start screen.
 - **2026-05-18**: Discovery + planning. Studied shipfa.st, swiftstarterkits, flutterfasttemplate, shipkaro.dev, 1dayapp, mobile-docs. Locked scope: pure Android native, core 4 modules + Play compliance + Conversion + Ops packs, kit + landing page. Wrote this CLAUDE.md. Evaluated cortinico/kotlin-android-template vs Drjacky/MVVMTemplate → rejected multi-module for beginner/AI audience. Architecture locked: single `app` module package-by-feature, Koin DI, Retrofit/Room/DataStore.
 - **2026-05-18 (cont.)**: Built Phase 0. Hand-scaffolded full source/config (build files, Koin graph, Material3 theme, type-safe nav, KitConfig/RemoteAppConfig, Room, DataStore, locale en+ur, 6 feature screens). Hit wrapper wall (can't author binary gradle-wrapper.jar; system Gradle 8.5 < AGP-required 8.7). Resolved by cloning cortinico template and overlaying its working wrapper (Gradle 8.14.5). `:app:assembleDebug` → **BUILD SUCCESSFUL**. Private repo created + pushed (github.com/wajahatkarim3/shipkaro-android-kit).
 - **2026-05-18 (discussion)**: Locked demo/component model. Rejected `:demo` module (breaks single-module). Chosen: single-module, clean placeholder Home + dev-only debug-gated "View sample app" button → self-contained `feature/demo/` subtree reusing real components/infra with fake data. Reshaped Phase 3 (real component library, Swift-catalog parity) + Phase 6 (in-app demo showcase) + Phase 8 (catalog docs, removal guide). Permissions + screenshots deferred to Phase 8.
-- **2026-05-18 (reorder)**: User flagged building auth before components = double work. Reordered: Phase 1 = Component Library + Design System (incl. `designsystem/icons/` curated Heroicons from composables.com), Phase 2 = Auth, Phase 3 = Monetization. **Next: Phase 1 (components, design system, icons).**
+- **2026-05-18 (reorder)**: User flagged building auth before components = double work. Reordered: Phase 1 = Component Library + Design System, Phase 2 = Auth, Phase 3 = Monetization. Icons decision changed to compose-icons Gradle lib (feather+tabler default; composables.com in docs for Heroicons). **Next: Phase 1 (components, design system, icons).**
 
 ## Important Decisions Made
 - **Pure Android native, not KMP** — Cohort 1 ran KMP; user found it a bad decision. iOS native deferred to a future separate effort.
@@ -128,7 +128,7 @@ Single-module. Clean placeholder Home is attendee's real start screen.
 - **Component library, no in-app showcase** — Swift-catalog parity via well-organized `designsystem/` packages; documented in /docs, not a gallery screen. Infra screens built AS reusable components.
 - **Phase 0 screens are throwaway tech debt** — replaced by real components across Phase 1–3/6.
 - **Phases reordered (components first)** — Phase 1 = component library, then Phase 2 auth, Phase 3 monetization. Screens consume components; building screens first = double work (rejected, per user).
-- **Icons = curated `KitIcons` in designsystem** — copy-paste Heroicons ImageVector from composables.com/icons into `designsystem/icons/`; no Gradle icon lib (Heroicons isn't a compose-icons module; avoids bloat for beginner audience). Likely drop material-icons-extended.
+- **Icons = compose-icons Gradle lib** (`br.com.devsrsouza.compose.icons:{pack}:1.1.1`) — user chose lib over copy-paste so devs get multiple icon packs without pasting. Default feather + tabler-icons; rest opt-in (commented in catalog); R8 strips unused. No Heroicons module exists → docs reference composables.com/icons for Heroicons. Drop material-icons-extended.
 
 ## Known Issues / Blockers
 - [ ] detekt plugin applied at root only → `./gradlew detekt` = NO-SOURCE. Wire to `:app` in Phase 5 (CI relies on it).
