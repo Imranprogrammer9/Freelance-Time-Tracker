@@ -37,4 +37,9 @@ class SettingsRepository(private val context: Context) {
     suspend fun setOnboardingDone(done: Boolean) {
         context.dataStore.edit { it[Keys.ONBOARDING_DONE] = done.toString() }
     }
+
+    /** Wipes all stored preferences. Called by the account-deletion flow. */
+    suspend fun clearAll() {
+        context.dataStore.edit { it.clear() }
+    }
 }

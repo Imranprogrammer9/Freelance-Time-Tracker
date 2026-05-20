@@ -2,24 +2,88 @@
 <resources>
     <string name="app_name">ShipKaro Kit</string>
 
+    <!-- Common actions -->
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_get_started">Get Started</string>
+
+    <!-- Onboarding -->
     <string name="onboarding_title">Welcome</string>
     <string name="onboarding_subtitle">Ship your Android app fast.</string>
-    <string name="action_get_started">Get Started</string>
-    <string name="action_back">Back</string>
 
-    <string name="auth_title">Sign in</string>
-    <string name="auth_continue">Continue</string>
+    <!-- Auth — titles + subtitles -->
+    <string name="auth_title_sign_in">Welcome back</string>
+    <string name="auth_subtitle_sign_in">Sign in to continue</string>
+    <string name="auth_title_sign_up">Create an account</string>
+    <string name="auth_subtitle_sign_up">Get started with a new account</string>
+    <string name="auth_title_forgot">Reset your password</string>
+    <string name="auth_subtitle_forgot">We\'ll email you a reset link</string>
 
+    <!-- Auth — fields -->
+    <string name="auth_field_email">Email</string>
+    <string name="auth_field_password">Password</string>
+    <string name="auth_password_show">Show password</string>
+    <string name="auth_password_hide">Hide password</string>
+
+    <!-- Auth — primary actions -->
+    <string name="auth_action_sign_in">Sign in</string>
+    <string name="auth_action_sign_up">Sign up</string>
+    <string name="auth_action_send_reset">Send reset link</string>
+    <string name="auth_action_continue_with_google">Continue with Google</string>
+
+    <!-- Auth — mode-switch links -->
+    <string name="auth_link_forgot_password">Forgot password?</string>
+    <string name="auth_link_create_account">New here? Create an account</string>
+    <string name="auth_link_have_account">Already have an account? Sign in</string>
+    <string name="auth_link_back_to_sign_in">Back to sign in</string>
+
+    <!-- Auth — banners -->
+    <string name="auth_banner_email_confirmation">Check your inbox to confirm your email.</string>
+    <string name="auth_banner_reset_sent">If an account exists for that email, a reset link is on its way.</string>
+
+    <!-- Paywall -->
     <string name="paywall_title">Go Premium</string>
     <string name="paywall_subscribe">Subscribe</string>
     <string name="paywall_skip">Maybe later</string>
 
+    <!-- Home -->
     <string name="home_title">Home</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_sample">Sample feature</string>
 
+    <!-- Settings — screen + sections -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_section_language">Language</string>
+    <string name="settings_section_account">Account</string>
+    <string name="settings_value_selected">Selected</string>
+
+    <!-- Settings — theme labels -->
     <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System default</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+
+    <!-- Settings — language label -->
     <string name="settings_language">Language</string>
 
+    <!-- Settings — account actions -->
+    <string name="settings_account_default_name">Account</string>
+    <string name="settings_sign_out">Sign out</string>
+    <string name="settings_delete_account">Delete account</string>
+    <string name="settings_delete_account_subtitle">Permanently remove account + data</string>
+    <string name="settings_delete_dialog_title">Delete account?</string>
+    <string name="settings_delete_dialog_message">This permanently removes your account and all locally stored data. This action cannot be undone.</string>
+
+    <!-- Legal -->
+    <string name="legal_privacy">Privacy</string>
+    <string name="legal_terms">Terms</string>
+
+    <!-- Banners — generic dismiss accessibility label -->
+    <string name="banner_dismiss">Dismiss</string>
+
+    <!-- Sample -->
     <string name="sample_title">Sample feature</string>
 </resources>

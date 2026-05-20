@@ -1,5 +1,5 @@
 # Project: ShipKaro Android Kit
-> Last updated: 2026-05-20 (Phase 1 components done)
+> Last updated: 2026-05-21 (Phase 2 auth done)
 
 ## What This Is
 A production-ready **pure Android native** (Kotlin + Jetpack Compose) starter kit that lets indie developers skip auth, paywall, analytics, and launch plumbing and ship a Play Store app fast. Primary use: handed to **ShipKaro Weekend** cohort attendees on Day 1 so live sessions focus on app logic, not boilerplate. Also sold standalone (ShipFast model: one-time price, lifetime updates) via a marketing landing page. iOS native variant is a future, separate effort — not in scope now.
@@ -52,12 +52,13 @@ REORDERED to first — components are building blocks; auth/paywall/settings scr
 - [ ] ~~Dynamic app icon~~ — DEFERRED (user request, revisit later)
 - [ ] No in-app showcase screen — components documented in /docs (Phase 8)
 
-### Phase 2: Auth + Account (Play compliance core) — built ON Phase 1 components
-- [ ] Supabase auth: email/password + Google sign-in
-- [ ] Firebase Auth alternative (toggle-able via KitConfig)
-- [ ] Session handling + auth-gated navigation
-- [ ] Settings screen (theme, account, manage subscription, legal links)
-- [ ] Account deletion + in-app data deletion flow (Play mandatory)
+### Phase 2: Auth + Account (Play compliance core) — built ON Phase 1 components  ✅ DONE 2026-05-21 (assembleDebug green)
+- [x] Supabase auth: email/password + Google sign-in (Credential Manager primary + OAuth deeplink fallback)
+- [x] Firebase Auth alternative (KitConfig.AUTH_PROVIDER toggle; Stub default, no creds needed to build)
+- [x] Session handling + auth-gated navigation (SessionState Flow → nav guard redirects SignedOut → SignIn)
+- [x] Settings screen (theme picker, account row, sign-out, delete account, legal links)
+- [x] Account deletion + in-app data deletion flow (Play mandatory) — repo.deleteAccount + DataStore.clearAll + db.clearAllTables
+- [x] Toolchain upgraded for supabase-kt 3.6.0: AGP 8.5.2→8.9.2, Kotlin 2.0.21→2.2.21, KSP 2.2.21-2.0.4, Room 2.6.1→2.7.2, compileSdk 34→36, Compose BOM 2024.09.02→2025.06.00. Targetsdk stays 35.
 
 ### Phase 3: Monetization — built ON Phase 1 components
 - [ ] RevenueCat SDK wiring + entitlement checks + restore
@@ -111,6 +112,7 @@ Single-module. Clean placeholder Home is attendee's real start screen.
 - **2026-05-18 (discussion)**: Locked demo/component model. Rejected `:demo` module (breaks single-module). Chosen: single-module, clean placeholder Home + dev-only debug-gated "View sample app" button → self-contained `feature/demo/` subtree reusing real components/infra with fake data. Reshaped Phase 3 (real component library, Swift-catalog parity) + Phase 6 (in-app demo showcase) + Phase 8 (catalog docs, removal guide). Permissions + screenshots deferred to Phase 8.
 - **2026-05-18 (reorder)**: User flagged building auth before components = double work. Reordered: Phase 1 = Component Library + Design System, Phase 2 = Auth, Phase 3 = Monetization. Icons decision changed to compose-icons Gradle lib (feather+tabler default; composables.com in docs for Heroicons). **Next: Phase 1 (components, design system, icons).**
 - **2026-05-20**: Built Phase 1. KEPT `material-icons-extended` (user reversed earlier drop decision). Designed pluggable icon system: `KitIcons` interface + 3 packs (Material default / Feather / Tabler) + `LocalKitIcons` CompositionLocal + per-callsite `ImageVector?` override. User extends by subclassing one of the `*Impl` open classes. Built foundation tokens (Spacing/Shape/Elevation), expanded color scheme (surfaceVariant/outline/error), full M3 typography. Wrote 10 core components, 5 state views, onboarding pager, 7 settings rows. Skipped dynamic app icon (deferred). `:app:assembleDebug` BUILD SUCCESSFUL. **Next: Phase 2 (Auth + Account on Phase 1 components).**
+- **2026-05-21**: Built Phase 2. Verified supabase-kt is the only first-party Android Supabase client (KMP under hood; quickstart user provided uses it); user picked supabase-kt with `ktor-client-okhttp` engine to share OkHttp with Retrofit. Hit toolchain wall — supabase-kt 3.6.0 transitives require AGP 8.9+ / Kotlin 2.2+ / compileSdk 36. Upgraded toolchain comprehensively (see Phase 2 checklist). Dropped `compose-auth` + `compose-auth-ui` artifacts — they drag Compose Multiplatform material3 (1.9.0-beta) + activity 1.12.x which conflict with androidx Material3. Designed provider-agnostic AuthRepository + 3 impls (Stub default, Supabase, Firebase). KitConfig.AUTH_PROVIDER picks via Koin. Google sign-in: Credential Manager primary (native bottomsheet) → falls back to OAuth deeplink (Custom Tabs + supabase.handleDeeplinks). KitConfig.GOOGLE_WEB_CLIENT_ID + local.properties SUPABASE_URL/KEY → BuildConfig. Account deletion + DataStore + Room wipe. User flagged hardcoded "Continue with Google" → externalised ALL Phase 2 strings to res/values/strings.xml + values-ur/strings.xml (en+ur); KitDialog dismissLabel made required (no English default); KitBanner contentDescription + KitPasswordField show/hide a11y strings localized. Added i18n rule to Decisions + saved memory. `:app:assembleDebug` BUILD SUCCESSFUL. **Next: Phase 3 (Monetization — RevenueCat).**
 
 ## Important Decisions Made
 - **Pure Android native, not KMP** — Cohort 1 ran KMP; user found it a bad decision. iOS native deferred to a future separate effort.
@@ -120,7 +122,7 @@ Single-module. Clean placeholder Home is attendee's real start screen.
 - **DI = Koin** — no Hilt/KSP; less magic, faster builds, simpler for beginners + AI.
 - **Patterns from MVVMTemplate, flattened** — MVVM + NetworkResponse + Material3/edge-to-edge; drop build-logic, RxJava, KSP.
 - **DEVIATION: Navigation Compose 2.8 type-safe instead of androidx Navigation 3** — Nav3 still alpha, unsafe for a stability-critical beginner kit. Same type-safe-route goal delivered via kotlinx.serialization routes. Revisit when Nav3 stable.
-- **Wrapper bootstrapped from cortinico template** — gradle-wrapper.jar is binary, not authorable. Cloned template, copied its Gradle 8.14.5 wrapper. Toolchain: AGP 8.5.2, Kotlin 2.0.21, JDK 17, compile/targetSdk 34, minSdk 26.
+- **Wrapper bootstrapped from cortinico template** — gradle-wrapper.jar is binary, not authorable. Cloned template, copied its Gradle 8.14.5 wrapper. Toolchain: **AGP 8.9.2, Kotlin 2.2.21, KSP 2.2.21-2.0.4, Room 2.7.2, JDK 17, compileSdk 36, targetSdk 35, minSdk 26, Compose BOM 2025.06.00.** Bumped from Phase 0's (8.5.2 / 2.0.21 / 34 / 2024.09.02) in Phase 2 to satisfy supabase-kt 3.6.0 transitive deps (androidx.browser 1.10.0 + ktor 3.4.x metadata).
 - **Two-layer config** — `KitConfig` (compile-time, kit author edits) vs `RemoteAppConfig` (runtime, end-app wires to Supabase/Firebase). Kept strictly separate per user.
 - **Net/persistence = Retrofit + Room + DataStore** — max tutorial/AI coverage (chose over old kit's Ktor for learnability).
 - **Sold standalone + free for cohort** — ShipFast pricing model (one-time, lifetime updates).
@@ -130,6 +132,7 @@ Single-module. Clean placeholder Home is attendee's real start screen.
 - **Phase 0 screens are throwaway tech debt** — replaced by real components across Phase 1–3/6.
 - **Phases reordered (components first)** — Phase 1 = component library, then Phase 2 auth, Phase 3 monetization. Screens consume components; building screens first = double work (rejected, per user).
 - **Icons = pluggable pack system, Material default** — `KitIcons` semantic interface + 3 bundled impls: `MaterialKitIcons` (default, material-icons-extended), `FeatherKitIcons`, `TablerKitIcons`. `LocalKitIcons` CompositionLocal lets `ShipKaroTheme(icons = …)` swap kit-wide in one line. Components consume via `KitTheme.icons.back` etc. User extends by subclassing `MaterialKitIconsImpl()` to override individual icons, or writes a custom `KitIcons` impl. Per-callsite override = any component taking an icon accepts an `ImageVector?`. `material-icons-extended` KEPT (reversed earlier drop). compose-icons feather+tabler shipped; others commented opt-in in catalog. R8 strips unused.
+- **ALL user-facing strings MUST be localized** — never hardcode UI text. Every screen / VM-status / component contentDescription / dialog label / accessibility hint goes into `app/src/main/res/values/strings.xml` AND every `values-XX/strings.xml` shipped (currently en + ur). Components should accept String params (not hardcode English defaults) so callers stay localizable; where a sensible English fallback is unavoidable, source it via `stringResource()` so values-XX/ overrides work. Audit before commit: grep for hardcoded Western-script literals inside `Text(...)`, `contentDescription = "..."`, `label = "..."`, `confirmLabel = "..."`. Reason: kit ships en + ur, audience extends; missing string IDs silently leave English for RTL/non-English users. Tests + reviewers should reject hardcoded strings.
 
 ## Known Issues / Blockers
 - [ ] detekt plugin applied at root only → `./gradlew detekt` = NO-SOURCE. Wire to `:app` in Phase 5 (CI relies on it).

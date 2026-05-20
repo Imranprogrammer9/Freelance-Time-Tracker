@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 /**
- * Confirm/cancel dialog. Pass `null` for [onDismiss]'s dismiss button to make the dialog modal-only.
+ * Confirm/cancel dialog. Pass `null` for [dismissLabel] to make the dialog modal-only
+ * (single confirm action). All strings are caller-provided so the dialog stays localizable —
+ * the kit deliberately has no English default for the dismiss button.
  *
  * @param destructive renders the confirm button in error color (used for delete-account etc).
  */
@@ -18,8 +20,8 @@ fun KitDialog(
     confirmLabel: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
+    dismissLabel: String?,
     modifier: Modifier = Modifier,
-    dismissLabel: String? = "Cancel",
     destructive: Boolean = false,
 ) {
     AlertDialog(

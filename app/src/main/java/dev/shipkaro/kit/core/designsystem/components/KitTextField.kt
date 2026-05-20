@@ -14,9 +14,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 
 /**
@@ -65,7 +67,7 @@ fun KitTextField(
 fun KitPasswordField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String = "Password",
+    label: String = stringResource(R.string.auth_field_password),
     modifier: Modifier = Modifier,
     helperText: String? = null,
     isError: Boolean = false,
@@ -74,6 +76,8 @@ fun KitPasswordField(
 ) {
     var visible by rememberSaveable { mutableStateOf(false) }
     val icons = KitTheme.icons
+    val showDesc = stringResource(R.string.auth_password_show)
+    val hideDesc = stringResource(R.string.auth_password_hide)
     KitTextField(
         value = value,
         onValueChange = onValueChange,
@@ -89,7 +93,7 @@ fun KitPasswordField(
             IconButton(onClick = { visible = !visible }) {
                 Icon(
                     imageVector = if (visible) icons.visibilityOff else icons.visibility,
-                    contentDescription = if (visible) "Hide password" else "Show password",
+                    contentDescription = if (visible) hideDesc else showDesc,
                 )
             }
         },

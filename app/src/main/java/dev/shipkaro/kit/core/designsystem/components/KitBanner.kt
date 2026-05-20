@@ -17,7 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 
 enum class KitBannerStyle { INFO, SUCCESS, WARNING, ERROR }
@@ -65,7 +67,11 @@ fun KitBanner(
         }
         if (onDismiss != null) {
             IconButton(onClick = onDismiss, modifier = Modifier.size(24.dp)) {
-                Icon(icons.close, contentDescription = "Dismiss", modifier = Modifier.size(18.dp))
+                Icon(
+                    icons.close,
+                    contentDescription = stringResource(R.string.banner_dismiss),
+                    modifier = Modifier.size(18.dp),
+                )
             }
         }
     }

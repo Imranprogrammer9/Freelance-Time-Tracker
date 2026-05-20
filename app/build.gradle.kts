@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,20 +8,38 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+// Read Supabase URL / anon key from local.properties (git-ignored). Empty if not set —
+// kit ships with KitConfig.AUTH_PROVIDER = STUB by default so empty creds are fine.
+val localProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+val supabaseUrl: String = localProps.getProperty("supabase.url", "")
+val supabaseKey: String = localProps.getProperty("supabase.key", "")
+
 android {
     namespace = "dev.shipkaro.kit"
-    compileSdk = 34
+    // compileSdk 36 — required by androidx.browser 1.10.x (pulled by supabase-auth-kt-android 3.6.0).
+    // targetSdk stays at 35 (stable; Play Store still accepts 35 in 2026).
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "dev.shipkaro.kit"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        // Locales the app ships with. Add a language => add values-XX/strings.xml
-        // and append the tag here. Per-app language picker reads this set.
-        resourceConfigurations += setOf("en", "ur")
+
+        buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
+        buildConfigField("String", "SUPABASE_KEY", "\"$supabaseKey\"")
+    }
+
+    // Locales the app ships with. Add a language => add values-XX/strings.xml
+    // and append the tag here. Per-app language picker reads this set.
+    androidResources {
+        @Suppress("UnstableApiUsage")
+        localeFilters += setOf("en", "ur")
     }
 
     buildTypes {
@@ -89,6 +109,22 @@ dependencies {
 
     implementation(libs.datastore.preferences)
     implementation(libs.coil.compose)
+
+    // Supabase Auth (KMP, but configured with ktor-client-okhttp so HTTP stack is shared with Retrofit).
+    // compose-auth/compose-auth-ui omitted — they pull Compose Multiplatform material3 + activity 1.12
+    // which conflict with our AGP 8.5.2. Google sign-in done via Credential Manager + signInWith(IDToken).
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.supabase.auth)
+    implementation(libs.ktor.client.okhttp)
+
+    // Firebase Auth alternative (slot — activate by adding google-services.json + applying google-services plugin).
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+
+    // Credential Manager — Google sign-in path. Deeplink OAuth (via supabase-kt) is fallback.
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     testImplementation(libs.junit)
     testImplementation(libs.turbine)

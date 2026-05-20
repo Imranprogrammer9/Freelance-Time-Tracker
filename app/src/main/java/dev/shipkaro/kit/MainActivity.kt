@@ -1,5 +1,6 @@
 package dev.shipkaro.kit
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,10 +11,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.data.settings.SettingsRepository
 import dev.shipkaro.kit.core.designsystem.theme.ShipKaroTheme
 import dev.shipkaro.kit.core.navigation.KitNavHost
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.handleDeeplinks
 import org.koin.android.ext.android.inject
+import org.koin.core.context.GlobalContext
 
 class MainActivity : ComponentActivity() {
     private val settings: SettingsRepository by inject()
@@ -21,6 +26,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        forwardDeeplinkToSupabase(intent)
         setContent {
             val themeMode by settings.themeMode.collectAsState(initial = null)
             ShipKaroTheme(themeMode = themeMode) {
@@ -32,5 +38,22 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        forwardDeeplinkToSupabase(intent)
+    }
+
+    /**
+     * Routes OAuth callbacks (e.g. Supabase redirect-to scheme) into the Supabase client
+     * so the auth plugin can finalise the session. No-op when AUTH_PROVIDER != SUPABASE.
+     */
+    private fun forwardDeeplinkToSupabase(intent: Intent) {
+        if (KitConfig.AUTH_PROVIDER != KitConfig.AuthProvider.SUPABASE) return
+        val client = runCatching {
+            GlobalContext.get().get<SupabaseClient>()
+        }.getOrNull() ?: return
+        client.handleDeeplinks(intent)
     }
 }

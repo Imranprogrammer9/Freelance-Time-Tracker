@@ -18,15 +18,36 @@ package dev.shipkaro.kit.core.config
  */
 object KitConfig {
 
-    /** Auth provider baked into the build. */
-    enum class AuthProvider { SUPABASE, FIREBASE, NONE }
+    /**
+     * Auth provider baked into the build.
+     *
+     *  - [STUB]     : in-memory dev provider, no credentials needed. Default — lets the kit build & run
+     *                 immediately. Sign-in always succeeds with a fake user.
+     *  - [SUPABASE] : real Supabase auth. Requires `supabase.url` + `supabase.key` in `local.properties`.
+     *  - [FIREBASE] : Firebase Auth. Requires `google-services.json` at `app/` + applying the
+     *                 `com.google.gms.google-services` plugin in `app/build.gradle.kts`.
+     */
+    enum class AuthProvider { STUB, SUPABASE, FIREBASE }
 
     /** Show onboarding flow on first launch. */
     const val ONBOARDING_ENABLED: Boolean = true
 
-    /** Wire auth screens + auth-gated navigation. */
+    /** Wire auth screens + auth-gated navigation. Set false to ship a no-auth app. */
     const val AUTH_ENABLED: Boolean = true
-    val AUTH_PROVIDER: AuthProvider = AuthProvider.SUPABASE
+    val AUTH_PROVIDER: AuthProvider = AuthProvider.STUB
+
+    /**
+     * Web OAuth client ID used by Credential Manager for native Google sign-in.
+     *
+     * Where to get it:
+     *  - Supabase backend: Supabase Auth → Providers → Google → "Authorized client IDs"
+     *  - Firebase backend: Firebase Console → Project settings → "Web client ID"
+     *  - Or Google Cloud Console → Credentials → OAuth 2.0 client (type "Web application")
+     *
+     * Leave empty to disable native Google sign-in (the AuthScreen falls back to deeplink
+     * OAuth, which works without a web client ID).
+     */
+    const val GOOGLE_WEB_CLIENT_ID: String = ""
 
     /** Wire RevenueCat paywall + entitlement gating. */
     const val PAYWALL_ENABLED: Boolean = true

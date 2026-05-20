@@ -2,24 +2,88 @@
 <resources>
     <string name="app_name">شپ کارو کٹ</string>
 
+    <!-- Common actions -->
+    <string name="action_back">واپس</string>
+    <string name="action_cancel">منسوخ کریں</string>
+    <string name="action_delete">حذف کریں</string>
+    <string name="action_continue">جاری رکھیں</string>
+    <string name="action_get_started">شروع کریں</string>
+
+    <!-- Onboarding -->
     <string name="onboarding_title">خوش آمدید</string>
     <string name="onboarding_subtitle">اپنی Android ایپ تیزی سے بنائیں۔</string>
-    <string name="action_get_started">شروع کریں</string>
-    <string name="action_back">واپس</string>
 
-    <string name="auth_title">سائن ان کریں</string>
-    <string name="auth_continue">جاری رکھیں</string>
+    <!-- Auth — titles + subtitles -->
+    <string name="auth_title_sign_in">دوبارہ خوش آمدید</string>
+    <string name="auth_subtitle_sign_in">جاری رکھنے کے لیے سائن ان کریں</string>
+    <string name="auth_title_sign_up">اکاؤنٹ بنائیں</string>
+    <string name="auth_subtitle_sign_up">نئے اکاؤنٹ کے ساتھ شروع کریں</string>
+    <string name="auth_title_forgot">پاس ورڈ ری سیٹ کریں</string>
+    <string name="auth_subtitle_forgot">ہم آپ کو ری سیٹ لنک ای میل کریں گے</string>
 
+    <!-- Auth — fields -->
+    <string name="auth_field_email">ای میل</string>
+    <string name="auth_field_password">پاس ورڈ</string>
+    <string name="auth_password_show">پاس ورڈ دکھائیں</string>
+    <string name="auth_password_hide">پاس ورڈ چھپائیں</string>
+
+    <!-- Auth — primary actions -->
+    <string name="auth_action_sign_in">سائن ان</string>
+    <string name="auth_action_sign_up">سائن اپ</string>
+    <string name="auth_action_send_reset">ری سیٹ لنک بھیجیں</string>
+    <string name="auth_action_continue_with_google">Google کے ساتھ جاری رکھیں</string>
+
+    <!-- Auth — mode-switch links -->
+    <string name="auth_link_forgot_password">پاس ورڈ بھول گئے؟</string>
+    <string name="auth_link_create_account">نئے ہیں؟ اکاؤنٹ بنائیں</string>
+    <string name="auth_link_have_account">پہلے سے اکاؤنٹ ہے؟ سائن ان کریں</string>
+    <string name="auth_link_back_to_sign_in">سائن ان پر واپس جائیں</string>
+
+    <!-- Auth — banners -->
+    <string name="auth_banner_email_confirmation">اپنی ای میل کی تصدیق کے لیے اپنا ان باکس چیک کریں۔</string>
+    <string name="auth_banner_reset_sent">اگر اس ای میل کے لیے اکاؤنٹ موجود ہے تو ری سیٹ لنک بھیج دیا جائے گا۔</string>
+
+    <!-- Paywall -->
     <string name="paywall_title">پریمیم حاصل کریں</string>
     <string name="paywall_subscribe">سبسکرائب کریں</string>
     <string name="paywall_skip">بعد میں</string>
 
+    <!-- Home -->
     <string name="home_title">ہوم</string>
     <string name="nav_settings">ترتیبات</string>
     <string name="nav_sample">نمونہ فیچر</string>
 
+    <!-- Settings — screen + sections -->
+    <string name="settings_title">ترتیبات</string>
+    <string name="settings_section_appearance">ظاہری شکل</string>
+    <string name="settings_section_language">زبان</string>
+    <string name="settings_section_account">اکاؤنٹ</string>
+    <string name="settings_value_selected">منتخب شدہ</string>
+
+    <!-- Settings — theme labels -->
     <string name="settings_theme">تھیم</string>
+    <string name="settings_theme_system">سسٹم ڈیفالٹ</string>
+    <string name="settings_theme_light">لائٹ</string>
+    <string name="settings_theme_dark">ڈارک</string>
+
+    <!-- Settings — language label -->
     <string name="settings_language">زبان</string>
 
+    <!-- Settings — account actions -->
+    <string name="settings_account_default_name">اکاؤنٹ</string>
+    <string name="settings_sign_out">سائن آؤٹ</string>
+    <string name="settings_delete_account">اکاؤنٹ حذف کریں</string>
+    <string name="settings_delete_account_subtitle">اکاؤنٹ اور ڈیٹا ہمیشہ کے لیے ہٹا دیں</string>
+    <string name="settings_delete_dialog_title">اکاؤنٹ حذف کریں؟</string>
+    <string name="settings_delete_dialog_message">یہ آپ کے اکاؤنٹ اور تمام مقامی محفوظ کردہ ڈیٹا کو مستقل طور پر ہٹا دیتا ہے۔ یہ عمل واپس نہیں کیا جا سکتا۔</string>
+
+    <!-- Legal -->
+    <string name="legal_privacy">پرائیویسی</string>
+    <string name="legal_terms">شرائط</string>
+
+    <!-- Banners — generic dismiss accessibility label -->
+    <string name="banner_dismiss">برخاست</string>
+
+    <!-- Sample -->
     <string name="sample_title">نمونہ فیچر</string>
 </resources>
