@@ -8,11 +8,13 @@ import dev.shipkaro.kit.core.data.local.KitDatabase
 import dev.shipkaro.kit.core.data.settings.SettingsRepository
 import dev.shipkaro.kit.core.designsystem.theme.ThemeMode
 import dev.shipkaro.kit.core.locale.LocaleManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SettingsViewModel(
     private val settings: SettingsRepository,
@@ -70,7 +72,8 @@ class SettingsViewModel(
                 else -> Unit
             }
             settings.clearAll()
-            db.clearAllTables()
+            // Room.clearAllTables() is synchronous + asserts off main thread.
+            withContext(Dispatchers.IO) { db.clearAllTables() }
             _deleteStatus.value = DeleteStatus.Done
         }
     }
