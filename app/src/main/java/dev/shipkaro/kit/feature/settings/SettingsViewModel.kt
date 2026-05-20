@@ -2,6 +2,7 @@ package dev.shipkaro.kit.feature.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.shipkaro.kit.core.auth.AuthErrorCode
 import dev.shipkaro.kit.core.auth.AuthRepository
 import dev.shipkaro.kit.core.auth.AuthResult
 import dev.shipkaro.kit.core.data.local.KitDatabase
@@ -25,7 +26,7 @@ class SettingsViewModel(
         data object Idle : DeleteStatus
         data object Confirming : DeleteStatus
         data object Working : DeleteStatus
-        data class Error(val message: String) : DeleteStatus
+        data class Error(val code: AuthErrorCode) : DeleteStatus
         data object Done : DeleteStatus
     }
 
@@ -66,7 +67,7 @@ class SettingsViewModel(
             _deleteStatus.value = DeleteStatus.Working
             when (val result = auth.deleteAccount()) {
                 is AuthResult.Failure -> {
-                    _deleteStatus.value = DeleteStatus.Error(result.message)
+                    _deleteStatus.value = DeleteStatus.Error(result.code)
                     return@launch
                 }
                 else -> Unit

@@ -45,9 +45,9 @@ class SupabaseAuthRepository(
             this.password = password
         }
         val user = supabase.auth.currentUserOrNull()?.toAuthUser()
-            ?: return@runCatching AuthResult.Failure("Sign-in succeeded but no user returned")
+            ?: return@runCatching AuthResult.Failure(AuthErrorCode.UNKNOWN)
         AuthResult.Success(user)
-    }.getOrElse { it.toAuthFailure() }
+    }.getOrElse { AuthResult.Failure(it.toSupabaseAuthErrorCode(), it) }
 
     override suspend fun signUpWithEmail(email: String, password: String): AuthResult = runCatching {
         val info = supabase.auth.signUpWith(Email) {
@@ -57,12 +57,12 @@ class SupabaseAuthRepository(
         // signUpWith returns null when email confirmation is required.
         if (info == null) AuthResult.EmailConfirmationRequired
         else AuthResult.Success(info.toAuthUser())
-    }.getOrElse { it.toAuthFailure() }
+    }.getOrElse { AuthResult.Failure(it.toSupabaseAuthErrorCode(), it) }
 
     override suspend fun sendPasswordReset(email: String): AuthResult = runCatching {
         supabase.auth.resetPasswordForEmail(email)
         AuthResult.Success(AuthUser(id = "", email = email))
-    }.getOrElse { it.toAuthFailure() }
+    }.getOrElse { AuthResult.Failure(it.toSupabaseAuthErrorCode(), it) }
 
     override suspend fun signOut() {
         runCatching { supabase.auth.signOut() }
@@ -83,9 +83,9 @@ class SupabaseAuthRepository(
                 if (nonce != null) this.nonce = nonce
             }
             val user = supabase.auth.currentUserOrNull()?.toAuthUser()
-                ?: return@runCatching AuthResult.Failure("Google sign-in succeeded but no user returned")
+                ?: return@runCatching AuthResult.Failure(AuthErrorCode.UNKNOWN)
             AuthResult.Success(user)
-        }.getOrElse { it.toAuthFailure() }
+        }.getOrElse { AuthResult.Failure(it.toSupabaseAuthErrorCode(), it) }
 
     override suspend fun startOAuthRedirect(provider: OAuthProvider): AuthResult = runCatching {
         // Opens a Custom Tab; the result returns via the deeplink intent-filter ->
@@ -95,7 +95,7 @@ class SupabaseAuthRepository(
             OAuthProvider.GOOGLE -> supabase.auth.signInWith(Google)
         }
         AuthResult.Success(AuthUser(id = "", email = null))
-    }.getOrElse { it.toAuthFailure() }
+    }.getOrElse { AuthResult.Failure(it.toSupabaseAuthErrorCode(), it) }
 }
 
 private fun UserInfo.toAuthUser(): AuthUser = AuthUser(
@@ -104,6 +104,3 @@ private fun UserInfo.toAuthUser(): AuthUser = AuthUser(
     displayName = (userMetadata?.get("full_name") ?: userMetadata?.get("name"))?.toString(),
     avatarUrl = userMetadata?.get("avatar_url")?.toString(),
 )
-
-private fun Throwable.toAuthFailure(): AuthResult.Failure =
-    AuthResult.Failure(message ?: this::class.simpleName ?: "Unknown auth error", this)

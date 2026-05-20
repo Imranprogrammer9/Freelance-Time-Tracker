@@ -37,14 +37,14 @@ interface AuthRepository {
      * is the fallback for non-Play-Services devices or other OAuth providers.
      */
     suspend fun signInWithGoogleIdToken(idToken: String, nonce: String? = null): AuthResult =
-        AuthResult.Failure("Google ID-token sign-in not supported by this provider")
+        AuthResult.Failure(AuthErrorCode.PROVIDER_NOT_SUPPORTED)
 
     /**
      * Fallback: start OAuth redirect (browser tab) for a provider like Google.
      * Supabase impl uses Custom Tabs + deeplink callback. STUB/Firebase impls no-op.
      */
     suspend fun startOAuthRedirect(provider: OAuthProvider): AuthResult =
-        AuthResult.Failure("OAuth redirect not supported by this provider")
+        AuthResult.Failure(AuthErrorCode.PROVIDER_NOT_SUPPORTED)
 }
 
 enum class OAuthProvider { GOOGLE }

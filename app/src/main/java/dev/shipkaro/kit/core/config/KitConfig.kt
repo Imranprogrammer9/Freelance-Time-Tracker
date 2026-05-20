@@ -34,7 +34,7 @@ object KitConfig {
 
     /** Wire auth screens + auth-gated navigation. Set false to ship a no-auth app. */
     const val AUTH_ENABLED: Boolean = true
-    val AUTH_PROVIDER: AuthProvider = AuthProvider.STUB
+    val AUTH_PROVIDER: AuthProvider = AuthProvider.SUPABASE
 
     /**
      * Web OAuth client ID used by Credential Manager for native Google sign-in.

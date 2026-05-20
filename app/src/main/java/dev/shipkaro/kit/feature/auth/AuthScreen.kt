@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import dev.shipkaro.kit.R
+import dev.shipkaro.kit.core.auth.messageRes
 import dev.shipkaro.kit.core.designsystem.components.KitBanner
 import dev.shipkaro.kit.core.designsystem.components.KitBannerStyle
 import dev.shipkaro.kit.core.designsystem.components.KitButton
@@ -168,7 +169,10 @@ fun AuthScreen(
 @Composable
 private fun StatusBanner(status: AuthViewModel.Status) {
     when (status) {
-        is AuthViewModel.Status.Error -> KitBanner(text = status.message, style = KitBannerStyle.ERROR)
+        is AuthViewModel.Status.Error -> KitBanner(
+            text = stringResource(status.code.messageRes()),
+            style = KitBannerStyle.ERROR,
+        )
         AuthViewModel.Status.EmailConfirmationRequired -> KitBanner(
             text = stringResource(R.string.auth_banner_email_confirmation),
             style = KitBannerStyle.INFO,

@@ -46,40 +46,40 @@ class FirebaseAuthRepository(
     override suspend fun signInWithEmail(email: String, password: String): AuthResult = runCatching {
         val result = auth.signInWithEmailAndPassword(email, password).await()
         val user = result.user?.toAuthUser()
-            ?: return@runCatching AuthResult.Failure("Sign-in succeeded but no user returned")
+            ?: return@runCatching AuthResult.Failure(AuthErrorCode.UNKNOWN)
         AuthResult.Success(user)
-    }.getOrElse { it.toAuthFailure() }
+    }.getOrElse { AuthResult.Failure(it.toFirebaseAuthErrorCode(), it) }
 
     override suspend fun signUpWithEmail(email: String, password: String): AuthResult = runCatching {
         val result = auth.createUserWithEmailAndPassword(email, password).await()
         val user = result.user?.toAuthUser()
-            ?: return@runCatching AuthResult.Failure("Sign-up succeeded but no user returned")
+            ?: return@runCatching AuthResult.Failure(AuthErrorCode.UNKNOWN)
         AuthResult.Success(user)
-    }.getOrElse { it.toAuthFailure() }
+    }.getOrElse { AuthResult.Failure(it.toFirebaseAuthErrorCode(), it) }
 
     override suspend fun sendPasswordReset(email: String): AuthResult = runCatching {
         auth.sendPasswordResetEmail(email).await()
         AuthResult.Success(AuthUser(id = "", email = email))
-    }.getOrElse { it.toAuthFailure() }
+    }.getOrElse { AuthResult.Failure(it.toFirebaseAuthErrorCode(), it) }
 
     override suspend fun signOut() {
         auth.signOut()
     }
 
     override suspend fun deleteAccount(): AuthResult = runCatching {
-        val user = auth.currentUser ?: return@runCatching AuthResult.Failure("Not signed in")
+        val user = auth.currentUser ?: return@runCatching AuthResult.Failure(AuthErrorCode.NOT_SIGNED_IN)
         user.delete().await()
         AuthResult.Success(AuthUser(id = user.uid, email = user.email))
-    }.getOrElse { it.toAuthFailure() }
+    }.getOrElse { AuthResult.Failure(it.toFirebaseAuthErrorCode(), it) }
 
     override suspend fun signInWithGoogleIdToken(idToken: String, nonce: String?): AuthResult =
         runCatching {
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             val result = auth.signInWithCredential(credential).await()
             val user = result.user?.toAuthUser()
-                ?: return@runCatching AuthResult.Failure("Google sign-in returned no user")
+                ?: return@runCatching AuthResult.Failure(AuthErrorCode.UNKNOWN)
             AuthResult.Success(user)
-        }.getOrElse { it.toAuthFailure() }
+        }.getOrElse { AuthResult.Failure(it.toFirebaseAuthErrorCode(), it) }
 }
 
 private fun FirebaseUser.toAuthUser(): AuthUser = AuthUser(
@@ -94,6 +94,3 @@ private suspend fun <T> Task<T>.await(): T = suspendCancellableCoroutine { cont 
     addOnFailureListener { cont.resumeWithException(it) }
     addOnCanceledListener { cont.cancel() }
 }
-
-private fun Throwable.toAuthFailure(): AuthResult.Failure =
-    AuthResult.Failure(message ?: this::class.simpleName ?: "Unknown auth error", this)

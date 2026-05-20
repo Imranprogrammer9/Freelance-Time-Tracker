@@ -43,6 +43,19 @@
     <string name="auth_banner_email_confirmation">اپنی ای میل کی تصدیق کے لیے اپنا ان باکس چیک کریں۔</string>
     <string name="auth_banner_reset_sent">اگر اس ای میل کے لیے اکاؤنٹ موجود ہے تو ری سیٹ لنک بھیج دیا جائے گا۔</string>
 
+    <!-- Auth — error messages -->
+    <string name="auth_error_invalid_credentials">ای میل یا پاس ورڈ غلط ہے۔</string>
+    <string name="auth_error_email_not_confirmed">سائن ان سے پہلے براہ کرم اپنی ای میل کی تصدیق کریں۔</string>
+    <string name="auth_error_user_already_exists">اس ای میل کے ساتھ پہلے سے ایک اکاؤنٹ موجود ہے۔</string>
+    <string name="auth_error_weak_password">پاس ورڈ بہت کمزور ہے۔ کم از کم 6 حروف استعمال کریں۔</string>
+    <string name="auth_error_invalid_email">یہ ای میل ایڈریس درست نہیں لگتا۔</string>
+    <string name="auth_error_network">نیٹ ورک کی خرابی۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="auth_error_too_many_requests">بہت زیادہ کوششیں۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔</string>
+    <string name="auth_error_user_not_found">اس ای میل کے ساتھ کوئی اکاؤنٹ نہیں ملا۔</string>
+    <string name="auth_error_not_signed_in">آپ سائن ان نہیں ہیں۔</string>
+    <string name="auth_error_provider_not_supported">یہ سائن ان طریقہ دستیاب نہیں ہے۔</string>
+    <string name="auth_error_unknown">کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔</string>
+
     <!-- Paywall -->
     <string name="paywall_title">پریمیم حاصل کریں</string>
     <string name="paywall_subscribe">سبسکرائب کریں</string>

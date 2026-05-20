@@ -3,6 +3,7 @@ package dev.shipkaro.kit.feature.auth
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.shipkaro.kit.core.auth.AuthErrorCode
 import dev.shipkaro.kit.core.auth.AuthRepository
 import dev.shipkaro.kit.core.auth.AuthResult
 import dev.shipkaro.kit.core.auth.GoogleSignInManager
@@ -29,7 +30,9 @@ class AuthViewModel(
     sealed interface Status {
         data object Idle : Status
         data object Loading : Status
-        data class Error(val message: String) : Status
+
+        /** Carries the error code; UI maps to a localized message via [AuthErrorCode.messageRes]. */
+        data class Error(val code: AuthErrorCode) : Status
         data object EmailConfirmationRequired : Status
         data object Authenticated : Status
         data object ResetEmailSent : Status
@@ -81,8 +84,11 @@ class AuthViewModel(
                 is GoogleSignInManager.Outcome.Failure -> {
                     // Fallback on Credential Manager failure (no Play Services, user dismissed, etc.).
                     val res = repo.startOAuthRedirect(OAuthProvider.GOOGLE)
-                    if (res is AuthResult.Failure) applyResult(AuthResult.Failure(outcome.message))
-                    else applyResult(res, treatSuccessAsLoading = true)
+                    if (res is AuthResult.Failure) {
+                        applyResult(AuthResult.Failure(AuthErrorCode.UNKNOWN, outcome.cause))
+                    } else {
+                        applyResult(res, treatSuccessAsLoading = true)
+                    }
                 }
             }
         }
@@ -94,7 +100,7 @@ class AuthViewModel(
                 status = when (result) {
                     is AuthResult.Success -> if (treatSuccessAsLoading) Status.Loading else Status.Authenticated
                     AuthResult.EmailConfirmationRequired -> Status.EmailConfirmationRequired
-                    is AuthResult.Failure -> Status.Error(result.message)
+                    is AuthResult.Failure -> Status.Error(result.code)
                 },
             )
         }
@@ -113,7 +119,7 @@ class AuthViewModel(
                             Status.Authenticated
                         }
                         AuthResult.EmailConfirmationRequired -> Status.EmailConfirmationRequired
-                        is AuthResult.Failure -> Status.Error(result.message)
+                        is AuthResult.Failure -> Status.Error(result.code)
                     },
                 )
             }

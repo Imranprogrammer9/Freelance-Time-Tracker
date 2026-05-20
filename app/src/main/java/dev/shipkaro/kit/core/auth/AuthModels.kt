@@ -15,7 +15,34 @@ data class AuthUser(
 sealed interface AuthResult {
     data class Success(val user: AuthUser) : AuthResult
     data object EmailConfirmationRequired : AuthResult
-    data class Failure(val message: String, val cause: Throwable? = null) : AuthResult
+
+    /**
+     * Auth call failed. UI should render [code].messageRes() via stringResource — DO NOT
+     * surface the raw [cause] to users (it leaks URLs, headers, internal codes). [cause]
+     * is kept only for Logcat / Crashlytics.
+     */
+    data class Failure(
+        val code: AuthErrorCode,
+        val cause: Throwable? = null,
+    ) : AuthResult
+}
+
+/**
+ * Provider-agnostic auth error categories. Each repo translates its own exceptions
+ * into one of these; UI maps to a localized message via [messageRes].
+ */
+enum class AuthErrorCode {
+    INVALID_CREDENTIALS,
+    EMAIL_NOT_CONFIRMED,
+    USER_ALREADY_EXISTS,
+    WEAK_PASSWORD,
+    INVALID_EMAIL,
+    NETWORK_ERROR,
+    TOO_MANY_REQUESTS,
+    USER_NOT_FOUND,
+    NOT_SIGNED_IN,
+    PROVIDER_NOT_SUPPORTED,
+    UNKNOWN,
 }
 
 /**
