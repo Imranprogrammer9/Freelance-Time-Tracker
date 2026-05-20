@@ -68,6 +68,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
+    // Optional icon packs (see libs.versions.toml for full list). R8 strips unused.
+    implementation(libs.composeicons.feather)
+    implementation(libs.composeicons.tabler)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     implementation(libs.androidx.navigation.compose)

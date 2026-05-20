@@ -1,0 +1,67 @@
+package dev.shipkaro.kit.core.designsystem.icons
+
+import androidx.compose.ui.graphics.vector.ImageVector
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.AlertCircle
+import compose.icons.feathericons.AlertTriangle
+import compose.icons.feathericons.ArrowLeft
+import compose.icons.feathericons.ArrowRight
+import compose.icons.feathericons.Bell
+import compose.icons.feathericons.Check
+import compose.icons.feathericons.CheckCircle
+import compose.icons.feathericons.ChevronRight
+import compose.icons.feathericons.Edit2
+import compose.icons.feathericons.Eye
+import compose.icons.feathericons.EyeOff
+import compose.icons.feathericons.Info
+import compose.icons.feathericons.Lock
+import compose.icons.feathericons.LogOut
+import compose.icons.feathericons.Mail
+import compose.icons.feathericons.Menu
+import compose.icons.feathericons.MoreVertical
+import compose.icons.feathericons.Plus
+import compose.icons.feathericons.Search
+import compose.icons.feathericons.Settings
+import compose.icons.feathericons.Share2
+import compose.icons.feathericons.Trash2
+import compose.icons.feathericons.User
+import compose.icons.feathericons.X
+
+/**
+ * Feather icon pack (outline style). Activate via `ShipKaroTheme(icons = FeatherKitIcons)`.
+ *
+ * Note: Feather has no Google brand icon — `google` falls back to [FeatherIcons.User].
+ * Override in a subclass if you need the brand mark (typically via a vector drawable resource).
+ */
+open class FeatherKitIconsImpl : KitIcons {
+    override val back: ImageVector = FeatherIcons.ArrowLeft
+    override val close: ImageVector = FeatherIcons.X
+    override val menu: ImageVector = FeatherIcons.Menu
+    override val search: ImageVector = FeatherIcons.Search
+    override val more: ImageVector = FeatherIcons.MoreVertical
+    override val arrowRight: ImageVector = FeatherIcons.ArrowRight
+    override val chevronRight: ImageVector = FeatherIcons.ChevronRight
+
+    override val add: ImageVector = FeatherIcons.Plus
+    override val edit: ImageVector = FeatherIcons.Edit2
+    override val delete: ImageVector = FeatherIcons.Trash2
+    override val check: ImageVector = FeatherIcons.Check
+    override val share: ImageVector = FeatherIcons.Share2
+    override val logout: ImageVector = FeatherIcons.LogOut
+
+    override val account: ImageVector = FeatherIcons.User
+    override val settings: ImageVector = FeatherIcons.Settings
+    override val notification: ImageVector = FeatherIcons.Bell
+    override val lock: ImageVector = FeatherIcons.Lock
+    override val email: ImageVector = FeatherIcons.Mail
+    override val visibility: ImageVector = FeatherIcons.Eye
+    override val visibilityOff: ImageVector = FeatherIcons.EyeOff
+    override val google: ImageVector = FeatherIcons.User
+
+    override val success: ImageVector = FeatherIcons.CheckCircle
+    override val info: ImageVector = FeatherIcons.Info
+    override val warning: ImageVector = FeatherIcons.AlertTriangle
+    override val error: ImageVector = FeatherIcons.AlertCircle
+}
+
+object FeatherKitIcons : FeatherKitIconsImpl()

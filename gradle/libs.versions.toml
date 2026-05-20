@@ -16,6 +16,7 @@ room = "2.6.1"
 datastore = "1.1.1"
 appcompat = "1.7.0"
 coil = "2.7.0"
+composeIcons = "1.1.1"
 detekt = "1.23.7"
 junit = "4.13.2"
 androidxTestExt = "1.2.1"
@@ -36,6 +37,20 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
+
+# Optional icon packs (compose-icons by devsrsouza). Default: feather + tabler.
+# Add others by uncommenting and adding to app/build.gradle.kts dependencies.
+# R8 strips unused packs in release builds.
+composeicons-feather = { group = "br.com.devsrsouza.compose.icons", name = "feather", version.ref = "composeIcons" }
+composeicons-tabler = { group = "br.com.devsrsouza.compose.icons", name = "tabler-icons", version.ref = "composeIcons" }
+# composeicons-simple = { group = "br.com.devsrsouza.compose.icons", name = "simple-icons", version.ref = "composeIcons" }
+# composeicons-fontawesome = { group = "br.com.devsrsouza.compose.icons", name = "font-awesome", version.ref = "composeIcons" }
+# composeicons-eva = { group = "br.com.devsrsouza.compose.icons", name = "eva-icons", version.ref = "composeIcons" }
+# composeicons-octicons = { group = "br.com.devsrsouza.compose.icons", name = "octicons", version.ref = "composeIcons" }
+# composeicons-lineawesome = { group = "br.com.devsrsouza.compose.icons", name = "line-awesome", version.ref = "composeIcons" }
+# composeicons-linea = { group = "br.com.devsrsouza.compose.icons", name = "linea", version.ref = "composeIcons" }
+# composeicons-weather = { group = "br.com.devsrsouza.compose.icons", name = "weather-icons", version.ref = "composeIcons" }
+# composeicons-cssgg = { group = "br.com.devsrsouza.compose.icons", name = "css-gg", version.ref = "composeIcons" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
