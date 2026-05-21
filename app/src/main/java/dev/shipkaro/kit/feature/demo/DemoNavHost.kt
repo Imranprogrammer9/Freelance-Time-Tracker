@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.shipkaro.kit.feature.auth.AuthScreen
+import dev.shipkaro.kit.feature.changelog.ChangelogScreen
 import dev.shipkaro.kit.feature.demo.habits.AddHabitScreen
 import dev.shipkaro.kit.feature.demo.habits.HabitListScreen
 import dev.shipkaro.kit.feature.demo.splash.DemoSplashScreen
@@ -71,7 +72,13 @@ fun DemoNavHost() {
             AddHabitScreen(onDone = { nav.popBackStack() })
         }
         composable<DemoRoute.Settings> {
-            SettingsScreen(onBack = { nav.popBackStack() })
+            SettingsScreen(
+                onBack = { nav.popBackStack() },
+                onWhatsNew = { nav.navigate(DemoRoute.Changelog) },
+            )
+        }
+        composable<DemoRoute.Changelog> {
+            ChangelogScreen(onBack = { nav.popBackStack() })
         }
     }
 }

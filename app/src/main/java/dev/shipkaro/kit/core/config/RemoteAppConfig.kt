@@ -13,6 +13,11 @@ import kotlinx.coroutines.flow.flowOf
  *
  * The kit only provides the contract + a local no-op default so the template
  * compiles and runs offline. Phase 4 swaps in the Supabase/Firebase impl.
+ *
+ * Conventional keys consumed by the kit's ops layer (set them on your backend):
+ *  - `min_supported_version`, `latest_version`, `latest_version_name`, `maintenance_mode`,
+ *    `maintenance_message` — see [dev.shipkaro.kit.core.ops.UpdateManager]
+ *  - `app_changelog` (JSON) — see [dev.shipkaro.kit.core.ops.ChangelogManager]
  */
 interface RemoteAppConfig {
     fun isEnabled(key: String, default: Boolean = false): Flow<Boolean>

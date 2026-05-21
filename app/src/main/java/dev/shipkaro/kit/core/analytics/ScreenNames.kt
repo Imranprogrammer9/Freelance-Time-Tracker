@@ -7,5 +7,6 @@ object ScreenNames {
     const val PAYWALL = "Paywall"
     const val HOME = "Home"
     const val SETTINGS = "Settings"
+    const val CHANGELOG = "Changelog"
     const val SAMPLE = "Sample"
 }

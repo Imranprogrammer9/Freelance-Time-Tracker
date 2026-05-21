@@ -3,6 +3,7 @@ package dev.shipkaro.kit.core.data.settings
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.shipkaro.kit.core.designsystem.theme.ThemeMode
@@ -21,6 +22,7 @@ class SettingsRepository(private val context: Context) {
         val THEME_MODE = stringPreferencesKey("theme_mode")
         val ONBOARDING_DONE = stringPreferencesKey("onboarding_done")
         val ANALYTICS_ENABLED = booleanPreferencesKey("analytics_enabled")
+        val LAST_SEEN_VERSION = intPreferencesKey("last_seen_version_code")
     }
 
     val themeMode: Flow<ThemeMode> = context.dataStore.data.map { prefs ->
@@ -47,6 +49,18 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAnalyticsEnabled(enabled: Boolean) {
         context.dataStore.edit { it[Keys.ANALYTICS_ENABLED] = enabled }
+    }
+
+    /**
+     * Highest app version code the user has already seen the "What's New" sheet for.
+     * 0 = never recorded (fresh install). Used by the changelog auto-popup.
+     */
+    val lastSeenVersionCode: Flow<Int> = context.dataStore.data.map { prefs ->
+        prefs[Keys.LAST_SEEN_VERSION] ?: 0
+    }
+
+    suspend fun setLastSeenVersionCode(code: Int) {
+        context.dataStore.edit { it[Keys.LAST_SEEN_VERSION] = code }
     }
 
     /** Wipes all stored preferences. Called by the account-deletion flow. */

@@ -147,6 +147,7 @@
     <!-- Settings — about -->
     <string name="settings_section_about">ایپ کے بارے میں</string>
     <string name="settings_rate_app">اس ایپ کو ریٹ کریں</string>
+    <string name="settings_whats_new">کیا نیا ہے</string>
 
     <!-- Update gate -->
     <string name="update_required_title">اپ ڈیٹ ضروری ہے</string>
@@ -155,6 +156,32 @@
     <string name="update_optional_message">ایپ کا نیا ورژن بہتری اور درستگیوں کے ساتھ دستیاب ہے۔</string>
     <string name="update_action">اپ ڈیٹ کریں</string>
     <string name="update_later">بعد میں</string>
+    <string name="update_whats_changed">کیا تبدیل ہوا</string>
+
+    <!-- Maintenance mode (backend-triggered) -->
+    <string name="maintenance_title">مرمت جاری ہے</string>
+    <string name="maintenance_message_default">ہم چیزوں کو بہتر بنا رہے ہیں۔ براہ کرم تھوڑی دیر بعد دوبارہ چیک کریں۔</string>
+
+    <!-- What's New sheet + changelog screen -->
+    <string name="whats_new_title">کیا نیا ہے</string>
+    <string name="whats_new_version">ورژن %1$s</string>
+    <string name="whats_new_dismiss">ٹھیک ہے</string>
+    <string name="changelog_title">کیا نیا ہے</string>
+    <string name="changelog_version">ورژن %1$s</string>
+    <string name="changelog_installed_badge">انسٹال شدہ</string>
+    <string name="changelog_empty_title">کوئی ریلیز نوٹس نہیں</string>
+    <string name="changelog_empty_message">ریلیز نوٹس یہاں ظاہر ہوں گے۔</string>
+
+    <!-- Permission priming -->
+    <string name="permission_allow">اجازت دیں</string>
+    <string name="permission_not_now">ابھی نہیں</string>
+    <string name="permission_open_settings">ترتیبات کھولیں</string>
+    <string name="permission_notifications_title">باخبر رہیں</string>
+    <string name="permission_notifications_rationale">یاد دہانیاں اور اہم اپ ڈیٹس حاصل کرنے کے لیے نوٹیفکیشنز آن کریں۔</string>
+    <string name="permission_camera_title">کیمرہ تک رسائی</string>
+    <string name="permission_camera_rationale">ایپ میں تصاویر لینے کے لیے کیمرے تک رسائی کی اجازت دیں۔</string>
+    <string name="permission_location_title">مقام تک رسائی</string>
+    <string name="permission_location_rationale">اپنے قریب مواد دکھانے کے لیے مقام تک رسائی کی اجازت دیں۔</string>
 
     <!-- Settings — account actions -->
     <string name="settings_account_default_name">اکاؤنٹ</string>

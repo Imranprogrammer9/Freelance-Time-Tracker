@@ -15,6 +15,7 @@ import dev.shipkaro.kit.core.config.LocalRemoteAppConfig
 import dev.shipkaro.kit.core.config.RemoteAppConfig
 import dev.shipkaro.kit.core.data.local.KitDatabase
 import dev.shipkaro.kit.core.data.settings.SettingsRepository
+import dev.shipkaro.kit.core.ops.ChangelogManager
 import dev.shipkaro.kit.core.ops.InAppReviewManager
 import dev.shipkaro.kit.core.ops.UpdateManager
 import dev.shipkaro.kit.feature.auth.AuthViewModel
@@ -116,9 +117,10 @@ private val analyticsModule = module {
     single { AnalyticsManager(androidContext(), get()) }
 }
 
-/** Ops graph — update gate + in-app review. */
+/** Ops graph — update gate, changelog, in-app review. */
 private val opsModule = module {
     single { UpdateManager(get()) }
+    single { ChangelogManager(get()) }
     single { InAppReviewManager() }
 }
 

@@ -21,4 +21,6 @@ sealed interface DemoRoute {
     @Serializable data object AddHabit : DemoRoute
 
     @Serializable data object Settings : DemoRoute
+
+    @Serializable data object Changelog : DemoRoute
 }

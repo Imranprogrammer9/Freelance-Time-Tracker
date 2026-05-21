@@ -8,9 +8,11 @@ import compose.icons.feathericons.Aperture
 import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.ArrowRight
 import compose.icons.feathericons.Bell
+import compose.icons.feathericons.Camera
 import compose.icons.feathericons.Check
 import compose.icons.feathericons.CheckCircle
 import compose.icons.feathericons.ChevronRight
+import compose.icons.feathericons.Download
 import compose.icons.feathericons.Edit2
 import compose.icons.feathericons.Eye
 import compose.icons.feathericons.EyeOff
@@ -19,6 +21,7 @@ import compose.icons.feathericons.Info
 import compose.icons.feathericons.Lock
 import compose.icons.feathericons.LogOut
 import compose.icons.feathericons.Mail
+import compose.icons.feathericons.MapPin
 import compose.icons.feathericons.Menu
 import compose.icons.feathericons.MoreVertical
 import compose.icons.feathericons.Plus
@@ -27,6 +30,7 @@ import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Share2
 import compose.icons.feathericons.Shield
 import compose.icons.feathericons.Star
+import compose.icons.feathericons.Tool
 import compose.icons.feathericons.Trash2
 import compose.icons.feathericons.User
 import compose.icons.feathericons.X
@@ -66,6 +70,11 @@ open class FeatherKitIconsImpl : KitIcons {
     override val language: ImageVector = FeatherIcons.Globe
     override val star: ImageVector = FeatherIcons.Star
     override val shield: ImageVector = FeatherIcons.Shield
+
+    override val update: ImageVector = FeatherIcons.Download
+    override val maintenance: ImageVector = FeatherIcons.Tool
+    override val camera: ImageVector = FeatherIcons.Camera
+    override val location: ImageVector = FeatherIcons.MapPin
 
     override val success: ImageVector = FeatherIcons.CheckCircle
     override val info: ImageVector = FeatherIcons.Info

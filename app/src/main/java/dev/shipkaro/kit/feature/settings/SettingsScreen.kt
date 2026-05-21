@@ -55,6 +55,7 @@ import org.koin.compose.koinInject
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
+    onWhatsNew: () -> Unit,
     vm: SettingsViewModel = koinViewModel(),
 ) {
     val theme by vm.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
@@ -139,6 +140,13 @@ fun SettingsScreen(
             }
 
             SettingsSection(title = stringResource(R.string.settings_section_about)) {
+                NavRow(
+                    title = stringResource(R.string.settings_whats_new),
+                    leading = KitTheme.icons.update,
+                    chipColor = KitTheme.colors.info,
+                    onClick = onWhatsNew,
+                )
+                SettingsDivider()
                 NavRow(
                     title = stringResource(R.string.settings_rate_app),
                     leading = KitTheme.icons.star,

@@ -49,7 +49,6 @@ REORDERED to first — components are building blocks; auth/paywall/settings scr
 - [x] `designsystem/state/` — KitLoadingState / KitInlineLoading / KitEmptyState / KitErrorState / KitSuccessState (full-screen + inline via `fullScreen` param)
 - [x] `designsystem/onboarding/` — KitOnboardingPager + KitPageIndicator
 - [x] `designsystem/settings/` — SettingsSection, ToggleRow, NavRow, AccountRow, DangerRow, LegalLinks, SettingsDivider
-- [ ] ~~Dynamic app icon~~ — DEFERRED (user request, revisit later)
 - [ ] No in-app showcase screen — components documented in /docs (Phase 8)
 
 ### Phase 2: Auth + Account (Play compliance core) — built ON Phase 1 components  ✅ DONE 2026-05-21 (assembleDebug green)
@@ -74,6 +73,8 @@ REORDERED to first — components are building blocks; auth/paywall/settings scr
 - [x] Push notifications (FCM) + deep links / app links — `KitMessagingService` + `KitNotifications` channel; POST_NOTIFICATIONS perm; manifest service + https App Links intent-filter
 - [x] Force / soft update gate (kill switch) — `UpdateManager` (reads min_supported_version / latest_version from RemoteAppConfig) + `UpdateGate` composable wrapping nav host
 - [x] In-app review prompt — `InAppReviewManager` (ported from KMM, Play In-App Review API; FakeReviewManager in debug); Settings → About → Rate row
+- [x] Maintenance mode + backend changelog (added 2026-05-22) — `UpdateManager` reads `maintenance_mode`/`maintenance_message`/`latest_version_name`; `ChangelogManager` parses `app_changelog` JSON from `RemoteAppConfig`; `UpdateGate` rewritten: maintenance screen → force update sheet → soft update sheet → auto "What's New" sheet
+- [x] In-app changelog UI (added 2026-05-22) — `ChangelogScreen` (Settings → About → What's new) + version-bump "What's New" popup via DataStore `lastSeenVersionCode` (fresh install suppressed)
 
 ### Phase 5: Launch Tooling  ✅ DONE 2026-05-21 (assembleDebug + detekt green)
 - [x] Fastlane: Play Store submission lane (internal track) — `fastlane/Fastfile` `internal` + `promote` lanes
@@ -115,11 +116,12 @@ Split into 6a (design pass) + 6b (demo). Model CHANGED mid-phase — see Decisio
 - [ ] Component catalog docs (Swift-catalog parity: name + screenshot + usage; user provides screenshots)
 - [ ] "Make it yours" 2-step demo-removal guide
 - [ ] Guides (adding a screen, toggling modules, rename package)
-- [ ] Permissions priming components (deferred from Phase 3; user provides specs here)
+- [x] Permissions priming components (built 2026-05-22) — `KitPermission` enum + `rememberKitPermissionState` helper + `KitPermissionPrimer`/`KitPermissionPrimerSheet` components (components+helper only, not force-wired)
 - [ ] Deployment + Troubleshooting
 
 ## Session Log
 <!-- Update at END of each session -->
+- **2026-05-22 (loose-ends + ops/permissions)**: Fixed code loose-ends (`AUTH_PROVIDER`→`STUB`, Retrofit baseUrl→`KitConfig.API_BASE_URL`, Room `dropAllTables` overload). Built backend-driven ops + features: maintenance mode + backend changelog — `UpdateManager` +`maintenance`/`latestVersionName`, new `ChangelogManager` parses `app_changelog` JSON from `RemoteAppConfig`. `UpdateGate` rewritten: maintenance screen → force update sheet → soft update sheet → auto "What's New" sheet (DataStore `lastSeenVersionCode`, fresh install suppressed). New components `KitUpdateSheet`/`KitWhatsNewSheet`/`KitMaintenanceScreen` (`designsystem/ops/`), `ChangelogScreen` (`feature/changelog/`, wired Settings → About → What's new + `DemoRoute.Changelog`). Permission priming: `KitPermission` enum + `rememberKitPermissionState` helper + `KitPermissionPrimer`/`KitPermissionPrimerSheet` (components+helper only). Removed dynamic app icons (rejected). `KitIcons` +4 roles (update/maintenance/camera/location) across 3 packs. Strings en+ur. `:app:compileDebugKotlin` green; detekt NOT run (user skipped). **Next: Phase 7.**
 - **2026-05-22**: No code changes — planned sales/distribution/docs strategy with user (first time selling code). Decisions: (1) Updates = tagged releases + per-release changelog/migration-guide; git-remote-merge documented as optional. (2) Piracy = sell private-repo access + per-buyer watermark + LICENSE; real moat is updates/community/masterclass, accept some leakage. (3) Docs = per-page gating — public pages SEO-indexed, `gated:true` pages require buyer session + `noindex`. Phase 7 = ONE Next.js+Nextra site (landing + docs), auth-first checkout (GitHub OAuth → Merchant-of-Record payment → webhook adds repo collaborator), separate web repo. Cohorts stay on WhatsApp (Pakistan audience). Full plan saved to `.session/phase7-sales-and-docs-plan.md`. **User now device-testing Phases 0–6 before any further code. Resume: fix code loose-ends from test findings, then Phase 7.**
 - **2026-05-18**: Discovery + planning. Studied shipfa.st, swiftstarterkits, flutterfasttemplate, shipkaro.dev, 1dayapp, mobile-docs. Locked scope: pure Android native, core 4 modules + Play compliance + Conversion + Ops packs, kit + landing page. Wrote this CLAUDE.md. Evaluated cortinico/kotlin-android-template vs Drjacky/MVVMTemplate → rejected multi-module for beginner/AI audience. Architecture locked: single `app` module package-by-feature, Koin DI, Retrofit/Room/DataStore.
 - **2026-05-18 (cont.)**: Built Phase 0. Hand-scaffolded full source/config (build files, Koin graph, Material3 theme, type-safe nav, KitConfig/RemoteAppConfig, Room, DataStore, locale en+ur, 6 feature screens). Hit wrapper wall (can't author binary gradle-wrapper.jar; system Gradle 8.5 < AGP-required 8.7). Resolved by cloning cortinico template and overlaying its working wrapper (Gradle 8.14.5). `:app:assembleDebug` → **BUILD SUCCESSFUL**. Private repo created + pushed (github.com/wajahatkarim3/shipkaro-android-kit).
@@ -155,15 +157,17 @@ Split into 6a (design pass) + 6b (demo). Model CHANGED mid-phase — see Decisio
 - **Phase 0 screens are throwaway tech debt** — replaced by real components across Phase 1–3/6.
 - **Phases reordered (components first)** — Phase 1 = component library, then Phase 2 auth, Phase 3 monetization. Screens consume components; building screens first = double work (rejected, per user).
 - **Icons = pluggable pack system, Material default** — `KitIcons` semantic interface + 3 bundled impls: `MaterialKitIcons` (default, material-icons-extended), `FeatherKitIcons`, `TablerKitIcons`. `LocalKitIcons` CompositionLocal lets `ShipKaroTheme(icons = …)` swap kit-wide in one line. Components consume via `KitTheme.icons.back` etc. User extends by subclassing `MaterialKitIconsImpl()` to override individual icons, or writes a custom `KitIcons` impl. Per-callsite override = any component taking an icon accepts an `ImageVector?`. `material-icons-extended` KEPT (reversed earlier drop). compose-icons feather+tabler shipped; others commented opt-in in catalog. R8 strips unused.
+- **Dynamic app icons — REJECTED** (not deferred). User: useless feature. No runtime launcher-icon switching in the kit; not building it.
+- **Ops are backend-driven via `RemoteAppConfig`** — update gate (force/soft), maintenance mode, and the changelog all read conventional keys (`min_supported_version`, `latest_version`, `maintenance_mode`, `app_changelog` JSON, …) from `RemoteAppConfig`, so they work with whatever provider is wired (LOCAL/Firebase; Supabase provider is a future option). No static changelog file — `ChangelogManager` ships a `SAMPLE_CHANGELOG` default so the screen is demoable offline.
 - **ALL user-facing strings MUST be localized** — never hardcode UI text. Every screen / VM-status / component contentDescription / dialog label / accessibility hint goes into `app/src/main/res/values/strings.xml` AND every `values-XX/strings.xml` shipped (currently en + ur). Components should accept String params (not hardcode English defaults) so callers stay localizable; where a sensible English fallback is unavoidable, source it via `stringResource()` so values-XX/ overrides work. Audit before commit: grep for hardcoded Western-script literals inside `Text(...)`, `contentDescription = "..."`, `label = "..."`, `confirmLabel = "..."`. Reason: kit ships en + ur, audience extends; missing string IDs silently leave English for RTL/non-English users. Tests + reviewers should reject hardcoded strings.
 
 ## Known Issues / Blockers
 - [x] ~~detekt root-only → NO-SOURCE~~ — RESOLVED Phase 5: detekt plugin applied to `:app`, config Compose-tuned.
-- [ ] Retrofit baseUrl is a placeholder (`https://example.com/`) — real host set per app.
-- [ ] `KitDatabase.fallbackToDestructiveMigration()` deprecation warning — replace with the overload taking a drop-tables flag (`DemoDatabase` already uses the new overload).
+- [x] ~~Retrofit baseUrl hardcoded placeholder~~ — RESOLVED 2026-05-22: hoisted to `KitConfig.API_BASE_URL` (still a placeholder value — set real host before shipping).
+- [x] ~~`KitDatabase.fallbackToDestructiveMigration()` deprecation~~ — RESOLVED 2026-05-22: swapped to the `dropAllTables = true` overload.
+- [x] ~~`KitConfig.AUTH_PROVIDER` shipping default~~ — RESOLVED 2026-05-22: set to `STUB` (builds + runs with no backend creds).
 - [ ] `release` buildType produces an UNSIGNED AAB locally (no keystore); CI signs via `RELEASE_*` env vars. Kit author wires their own keystore.
-- [ ] **Runtime NOT device-tested** — Phases 0–6 are compile + detekt green only; no emulator run yet. User testing now.
-- [ ] `KitConfig.AUTH_PROVIDER` currently set to `SUPABASE` (user set it). Runtime-fails on empty creds — for shipping default, reset to `STUB` (works with no backend) OR keep SUPABASE and require `local.properties` keys. Decide before release.
+- [ ] **Runtime NOT device-tested** — compile green only; no emulator run yet. User testing now.
 
 ## Commands to Remember
 - Build debug APK: `./gradlew :app:assembleDebug --no-daemon`

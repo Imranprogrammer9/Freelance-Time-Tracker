@@ -65,6 +65,12 @@ interface KitIcons {
     val star: ImageVector
     val shield: ImageVector
 
+    // Ops / permissions
+    val update: ImageVector
+    val maintenance: ImageVector
+    val camera: ImageVector
+    val location: ImageVector
+
     // State
     val success: ImageVector
     val info: ImageVector

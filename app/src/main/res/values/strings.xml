@@ -147,6 +147,7 @@
     <!-- Settings — about -->
     <string name="settings_section_about">About</string>
     <string name="settings_rate_app">Rate this app</string>
+    <string name="settings_whats_new">What\'s new</string>
 
     <!-- Update gate -->
     <string name="update_required_title">Update required</string>
@@ -155,6 +156,32 @@
     <string name="update_optional_message">A newer version of the app is available with improvements and fixes.</string>
     <string name="update_action">Update</string>
     <string name="update_later">Later</string>
+    <string name="update_whats_changed">What\'s changed</string>
+
+    <!-- Maintenance mode (backend-triggered) -->
+    <string name="maintenance_title">Under maintenance</string>
+    <string name="maintenance_message_default">We\'re making things better. Please check back shortly.</string>
+
+    <!-- What\'s New sheet + changelog screen -->
+    <string name="whats_new_title">What\'s New</string>
+    <string name="whats_new_version">Version %1$s</string>
+    <string name="whats_new_dismiss">Got it</string>
+    <string name="changelog_title">What\'s New</string>
+    <string name="changelog_version">Version %1$s</string>
+    <string name="changelog_installed_badge">Installed</string>
+    <string name="changelog_empty_title">No release notes</string>
+    <string name="changelog_empty_message">Release notes will show up here.</string>
+
+    <!-- Permission priming -->
+    <string name="permission_allow">Allow</string>
+    <string name="permission_not_now">Not now</string>
+    <string name="permission_open_settings">Open settings</string>
+    <string name="permission_notifications_title">Stay in the loop</string>
+    <string name="permission_notifications_rationale">Turn on notifications to get reminders and important updates.</string>
+    <string name="permission_camera_title">Camera access</string>
+    <string name="permission_camera_rationale">Allow camera access to take photos in the app.</string>
+    <string name="permission_location_title">Location access</string>
+    <string name="permission_location_rationale">Allow location access to show content near you.</string>
 
     <!-- Settings — account actions -->
     <string name="settings_account_default_name">Account</string>
