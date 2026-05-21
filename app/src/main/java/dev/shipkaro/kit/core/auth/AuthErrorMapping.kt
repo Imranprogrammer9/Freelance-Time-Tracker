@@ -57,8 +57,11 @@ internal fun Throwable.toFirebaseAuthErrorCode(): AuthErrorCode {
     val msg = (message ?: "").lowercase()
     return when {
         name == "FirebaseAuthInvalidCredentialsException" ->
-            if ("badly formatted" in msg || "invalid email" in msg) AuthErrorCode.INVALID_EMAIL
-            else AuthErrorCode.INVALID_CREDENTIALS
+            if ("badly formatted" in msg || "invalid email" in msg) {
+                AuthErrorCode.INVALID_EMAIL
+            } else {
+                AuthErrorCode.INVALID_CREDENTIALS
+            }
         name == "FirebaseAuthInvalidUserException" -> AuthErrorCode.USER_NOT_FOUND
         name == "FirebaseAuthUserCollisionException" -> AuthErrorCode.USER_ALREADY_EXISTS
         name == "FirebaseAuthWeakPasswordException" -> AuthErrorCode.WEAK_PASSWORD

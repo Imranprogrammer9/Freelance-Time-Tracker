@@ -41,7 +41,9 @@ fun KitDialog(
             }
         },
         dismissButton = dismissLabel?.let {
-            { TextButton(onClick = onDismiss) { Text(it) } }
+            {
+                TextButton(onClick = onDismiss) { Text(it) }
+            }
         },
         modifier = modifier,
     )

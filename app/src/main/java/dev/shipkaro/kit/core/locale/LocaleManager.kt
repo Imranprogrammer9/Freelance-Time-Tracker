@@ -25,8 +25,11 @@ object LocaleManager {
     /** Apply a language by BCP-47 tag, or empty string to follow system. */
     fun setLanguage(tag: String) {
         val locales =
-            if (tag.isBlank()) LocaleListCompat.getEmptyLocaleList()
-            else LocaleListCompat.forLanguageTags(tag)
+            if (tag.isBlank()) {
+                LocaleListCompat.getEmptyLocaleList()
+            } else {
+                LocaleListCompat.forLanguageTags(tag)
+            }
         AppCompatDelegate.setApplicationLocales(locales)
     }
 

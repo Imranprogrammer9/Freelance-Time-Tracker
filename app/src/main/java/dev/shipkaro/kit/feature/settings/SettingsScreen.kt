@@ -29,8 +29,6 @@ import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.analytics.ScreenNames
 import dev.shipkaro.kit.core.data.local.KitDatabase
-import dev.shipkaro.kit.core.ops.InAppReviewManager
-import kotlinx.coroutines.launch
 import dev.shipkaro.kit.core.designsystem.components.KitDialog
 import dev.shipkaro.kit.core.designsystem.settings.AccountRow
 import dev.shipkaro.kit.core.designsystem.settings.DangerRow
@@ -41,6 +39,8 @@ import dev.shipkaro.kit.core.designsystem.settings.SettingsSection
 import dev.shipkaro.kit.core.designsystem.settings.ToggleRow
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 import dev.shipkaro.kit.core.designsystem.theme.ThemeMode
+import dev.shipkaro.kit.core.ops.InAppReviewManager
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 

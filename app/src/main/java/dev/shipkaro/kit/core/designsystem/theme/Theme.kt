@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalContext
-import dev.shipkaro.kit.core.designsystem.foundation.KitSpacing
+import dev.shipkaro.kit.core.designsystem.foundation.KitElevation
 import dev.shipkaro.kit.core.designsystem.foundation.KitShapes
+import dev.shipkaro.kit.core.designsystem.foundation.KitSpacing
 import dev.shipkaro.kit.core.designsystem.foundation.LocalKitElevation
 import dev.shipkaro.kit.core.designsystem.foundation.LocalKitSpacing
-import dev.shipkaro.kit.core.designsystem.foundation.KitElevation
 import dev.shipkaro.kit.core.designsystem.icons.KitIcons
 import dev.shipkaro.kit.core.designsystem.icons.LocalKitIcons
 import dev.shipkaro.kit.core.designsystem.icons.MaterialKitIcons
@@ -113,11 +113,15 @@ fun ShipKaroTheme(
  */
 object KitTheme {
     val icons: KitIcons
-        @Composable @ReadOnlyComposable get() = LocalKitIcons.current
+        @Composable @ReadOnlyComposable
+        get() = LocalKitIcons.current
     val colors: KitColors
-        @Composable @ReadOnlyComposable get() = LocalKitColors.current
+        @Composable @ReadOnlyComposable
+        get() = LocalKitColors.current
     val spacing: KitSpacing
-        @Composable @ReadOnlyComposable get() = LocalKitSpacing.current
+        @Composable @ReadOnlyComposable
+        get() = LocalKitSpacing.current
     val elevation: KitElevation
-        @Composable @ReadOnlyComposable get() = LocalKitElevation.current
+        @Composable @ReadOnlyComposable
+        get() = LocalKitElevation.current
 }

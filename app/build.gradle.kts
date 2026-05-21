@@ -6,6 +6,16 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.detekt)
+}
+
+// detekt + ktlint (via detekt-formatting) for the app module.
+// Root build.gradle.kts only configures the root project; without this the
+// `detekt` task is NO-SOURCE because all source lives in :app.
+detekt {
+    buildUponDefaultConfig = true
+    config.setFrom("$rootDir/config/detekt/detekt.yml")
+    autoCorrect = true
 }
 
 // Read Supabase URL / anon key from local.properties (git-ignored). Empty if not set —
@@ -51,6 +61,21 @@ android {
         localeFilters += setOf("en", "ur")
     }
 
+    // Release signing — reads from RELEASE_* env vars (set in CI). When they're absent
+    // (local dev, the kit out of the box) no release signingConfig is created, so
+    // `bundleRelease` produces an unsigned artifact instead of failing the build.
+    val releaseStoreFile: String? = System.getenv("RELEASE_STORE_FILE")
+    signingConfigs {
+        if (releaseStoreFile != null) {
+            create("release") {
+                storeFile = rootProject.file(releaseStoreFile)
+                storePassword = System.getenv("RELEASE_STORE_PASSWORD")
+                keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -59,6 +84,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            if (releaseStoreFile != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
         debug {
             applicationIdSuffix = ".debug"
@@ -149,10 +177,127 @@ dependencies {
     implementation(libs.firebase.config)
     implementation(libs.play.review)
 
+    detektPlugins(libs.detekt.formatting)
+
     testImplementation(libs.junit)
     testImplementation(libs.turbine)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// refactorPackage — rename the kit's package + applicationId + app name in one shot.
+// Adapted from the ShipKaro KMM starter for this single-module native project.
+//
+// Usage (run once, early — before you add your own code):
+//   ./gradlew refactorPackage -PnewAppId=com.acme.myapp -PnewAppName=MyApp
+//   ./gradlew refactorPackage -PnewAppId=com.acme.myapp -PnewAppName=MyApp -PshouldUpdatePackageName=false
+// ─────────────────────────────────────────────────────────────────────────────
+tasks.register("refactorPackage") {
+    group = "shipkaro"
+    description = "Renames applicationId, app name, package declarations and directory structure"
+    notCompatibleWithConfigurationCache("Uses Task.project and file I/O at execution time")
+
+    doLast {
+        val newAppId = project.findProperty("newAppId")?.toString()
+            ?: throw GradleException("Missing parameter. Usage: -PnewAppId=com.example.app")
+        val newAppName = project.findProperty("newAppName")?.toString()
+            ?: throw GradleException("Missing parameter. Usage: -PnewAppName=MyApp")
+        val updatePackage = project.findProperty("shouldUpdatePackageName")
+            ?.toString()?.toBoolean() ?: true
+
+        val packagePattern = Regex("^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*){1,}$")
+        if (!packagePattern.matches(newAppId)) {
+            throw GradleException(
+                "Invalid package name: '$newAppId'. Must be lowercase dot-separated, e.g. com.example.app",
+            )
+        }
+
+        // Detect current package from the `namespace` in this build file.
+        val buildGradle = file("build.gradle.kts")
+        val oldAppId = buildGradle.readLines()
+            .firstOrNull { it.trim().startsWith("namespace") }
+            ?.substringAfter("\"")?.substringBefore("\"")
+            ?: throw GradleException("Could not detect namespace in app/build.gradle.kts")
+
+        if (oldAppId == newAppId) {
+            println("\n⚠️  New app ID equals the current one ($oldAppId). Nothing to do.\n")
+            return@doLast
+        }
+
+        val oldPath = oldAppId.replace('.', '/')
+        val newPath = newAppId.replace('.', '/')
+        val changed = mutableListOf<String>()
+
+        fun File.replaceText(old: String, new: String): Boolean {
+            if (!exists() || !isFile) return false
+            val original = readText()
+            val updated = original.replace(old, new)
+            return if (updated != original) { writeText(updated); true } else false
+        }
+
+        // 1. build.gradle.kts — namespace + applicationId
+        if (buildGradle.replaceText("\"$oldAppId\"", "\"$newAppId\"")) {
+            changed += "app/build.gradle.kts"
+        }
+
+        // 2. strings.xml — app_name (every locale)
+        fileTree("src").matching { include("**/res/values*/strings.xml") }.forEach { f ->
+            val original = f.readText()
+            val updated = original.replace(
+                Regex("<string name=\"app_name\">[^<]*</string>"),
+                "<string name=\"app_name\">$newAppName</string>",
+            )
+            if (updated != original) { f.writeText(updated); changed += f.relativeTo(rootDir).path }
+        }
+
+        // 3. Kotlin sources — package + import declarations
+        if (updatePackage) {
+            fileTree("src").matching { include("**/*.kt") }.forEach { f ->
+                val original = f.readText()
+                val updated = original
+                    .replace("package $oldAppId", "package $newAppId")
+                    .replace("import $oldAppId.", "import $newAppId.")
+                if (updated != original) { f.writeText(updated); changed += f.relativeTo(rootDir).path }
+            }
+
+            // 4. Rename source directories
+            listOf("src/main/java", "src/test/java", "src/androidTest/java").forEach { base ->
+                val oldDir = file("$base/$oldPath")
+                val newDir = file("$base/$newPath")
+                if (oldDir.exists()) {
+                    newDir.parentFile.mkdirs()
+                    oldDir.copyRecursively(newDir, overwrite = true)
+                    oldDir.deleteRecursively()
+                    var parent = oldDir.parentFile
+                    while (parent != null &&
+                        parent.listFiles()?.isEmpty() == true &&
+                        parent.canonicalPath != file(base).canonicalPath
+                    ) {
+                        parent.delete()
+                        parent = parent.parentFile
+                    }
+                    changed += "  $base/$oldPath  →  $base/$newPath"
+                }
+            }
+        }
+
+        val line = "─".repeat(64)
+        println("\n$line\n  Refactor complete!\n$line")
+        println("  Old ID   : $oldAppId")
+        println("  New ID   : $newAppId")
+        println("  App Name : $newAppName")
+        println("  Package  : ${if (updatePackage) "updated" else "skipped"}")
+        println(line)
+        changed.forEach { println("  ✓ $it") }
+        println(line)
+        println("  Next steps:")
+        println("  1. Sync Gradle (File → Sync Project with Gradle Files)")
+        if (updatePackage) println("  2. Invalidate Caches / Restart in Android Studio")
+        println("  3. Update google-services.json if Firebase is configured")
+        println("  4. Update the OAuth deeplink scheme/host in AndroidManifest.xml + KitConfig")
+        println("$line\n")
+    }
 }

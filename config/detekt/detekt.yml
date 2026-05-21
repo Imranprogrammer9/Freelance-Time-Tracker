@@ -9,11 +9,17 @@ formatting:
   autoCorrect: true
 
 complexity:
+  # Thresholds raised for a Compose codebase — screen composables are long by nature
+  # and components legitimately take many parameters (slots, styling, callbacks).
   LongMethod:
-    threshold: 80
+    threshold: 150
   LongParameterList:
-    functionThreshold: 8
+    functionThreshold: 10
     constructorThreshold: 10
+    # @Composable functions mirror Material APIs (slots, styling, callbacks) — exempt.
+    ignoreAnnotated: ['Composable']
+  CyclomaticComplexMethod:
+    threshold: 25
   TooManyFunctions:
     active: false
 
@@ -24,8 +30,19 @@ style:
     active: true
   ReturnCount:
     max: 4
+  ForbiddenComment:
+    # The kit deliberately ships TODO markers as "kit author fills this in" guidance.
+    active: false
+
+comments:
+  # Same reason — TODO/FIXME markers are intentional kit guidance, not debt.
+  active: false
 
 naming:
   FunctionNaming:
     # Compose @Composable functions are PascalCase by convention.
     ignoreAnnotated: ['Composable']
+  MatchingDeclarationName:
+    # The kit groups a component with its small enum in one file by design
+    # (e.g. KitButton.kt holds KitButton + KitButtonStyle). Don't force 1:1.
+    active: false

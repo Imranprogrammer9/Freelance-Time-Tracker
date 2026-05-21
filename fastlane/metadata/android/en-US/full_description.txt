@@ -1,0 +1,14 @@
+Replace this with your Play Store long description (max 4000 characters).
+
+ASO tips — front-load your primary keyword in the first two lines, since Play
+indexes the title + short + full description. Lead with the benefit, then list
+features as scannable bullets:
+
+• Feature one — the benefit it delivers
+• Feature two — the benefit it delivers
+• Feature three — the benefit it delivers
+
+Close with a short call to action.
+
+For the full ASO + listing playbook (keyword research, screenshot strategy,
+localization), see the ShipKaro docs: https://shipkaro.dev/mobile-docs

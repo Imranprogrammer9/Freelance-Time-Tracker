@@ -29,8 +29,11 @@ class SupabaseAuthRepository(
             when (status) {
                 is SessionStatus.Authenticated -> {
                     val user = status.session.user
-                    if (user != null) SessionState.SignedIn(user.toAuthUser())
-                    else SessionState.SignedOut
+                    if (user != null) {
+                        SessionState.SignedIn(user.toAuthUser())
+                    } else {
+                        SessionState.SignedOut
+                    }
                 }
                 is SessionStatus.NotAuthenticated, is SessionStatus.RefreshFailure -> SessionState.SignedOut
                 SessionStatus.Initializing -> SessionState.Loading
@@ -55,8 +58,11 @@ class SupabaseAuthRepository(
             this.password = password
         }
         // signUpWith returns null when email confirmation is required.
-        if (info == null) AuthResult.EmailConfirmationRequired
-        else AuthResult.Success(info.toAuthUser())
+        if (info == null) {
+            AuthResult.EmailConfirmationRequired
+        } else {
+            AuthResult.Success(info.toAuthUser())
+        }
     }.getOrElse { AuthResult.Failure(it.toSupabaseAuthErrorCode(), it) }
 
     override suspend fun sendPasswordReset(email: String): AuthResult = runCatching {

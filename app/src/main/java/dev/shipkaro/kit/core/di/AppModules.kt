@@ -2,10 +2,10 @@ package dev.shipkaro.kit.core.di
 
 import androidx.room.Room
 import dev.shipkaro.kit.BuildConfig
+import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.auth.AuthRepository
 import dev.shipkaro.kit.core.auth.FirebaseAuthRepository
 import dev.shipkaro.kit.core.auth.GoogleSignInManager
-import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.auth.StubAuthRepository
 import dev.shipkaro.kit.core.auth.SupabaseAuthRepository
 import dev.shipkaro.kit.core.billing.PurchaseManager
@@ -129,5 +129,11 @@ private val featureModule = module {
 }
 
 val appModules = listOf(
-    coreModule, dataModule, authModule, billingModule, analyticsModule, opsModule, featureModule,
+    coreModule,
+    dataModule,
+    authModule,
+    billingModule,
+    analyticsModule,
+    opsModule,
+    featureModule,
 )

@@ -91,11 +91,17 @@ class PurchaseManager(private val appContext: Context) {
             val params = PurchaseParams.Builder(activity, pkg).build()
             val result = Purchases.sharedInstance.awaitPurchase(params)
             applyCustomerInfo(result.customerInfo)
-            if (_isPremium.value) PurchaseOutcome.Success
-            else PurchaseOutcome.Failure(BillingErrorCode.UNKNOWN)
+            if (_isPremium.value) {
+                PurchaseOutcome.Success
+            } else {
+                PurchaseOutcome.Failure(BillingErrorCode.UNKNOWN)
+            }
         } catch (e: PurchasesTransactionException) {
-            if (e.userCancelled) PurchaseOutcome.Cancelled
-            else PurchaseOutcome.Failure(e.code.toBillingErrorCode(), e)
+            if (e.userCancelled) {
+                PurchaseOutcome.Cancelled
+            } else {
+                PurchaseOutcome.Failure(e.code.toBillingErrorCode(), e)
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 # Project: ShipKaro Android Kit
-> Last updated: 2026-05-21 (Phase 3 monetization done)
+> Last updated: 2026-05-21 (Phase 5 launch tooling done)
 
 ## What This Is
 A production-ready **pure Android native** (Kotlin + Jetpack Compose) starter kit that lets indie developers skip auth, paywall, analytics, and launch plumbing and ship a Play Store app fast. Primary use: handed to **ShipKaro Weekend** cohort attendees on Day 1 so live sessions focus on app logic, not boilerplate. Also sold standalone (ShipFast model: one-time price, lifetime updates) via a marketing landing page. iOS native variant is a future, separate effort — not in scope now.
@@ -75,15 +75,16 @@ REORDERED to first — components are building blocks; auth/paywall/settings scr
 - [x] Force / soft update gate (kill switch) — `UpdateManager` (reads min_supported_version / latest_version from RemoteAppConfig) + `UpdateGate` composable wrapping nav host
 - [x] In-app review prompt — `InAppReviewManager` (ported from KMM, Play In-App Review API; FakeReviewManager in debug); Settings → About → Rate row
 
-### Phase 5: Launch Tooling
-- [ ] Fastlane: Play Store submission lane (internal track)
-- [ ] Fastlane: screenshot generation + metadata
-- [ ] GitHub Actions CI (build, test, lint, detekt/ktlint)
-- [ ] Package-name refactor script
-- [ ] Changelog generator tool
-- [ ] Privacy policy + terms templates
-- [ ] Play Data Safety mapping doc
-- [ ] ASO assets (icon, screenshots, listing copy template)
+### Phase 5: Launch Tooling  ✅ DONE 2026-05-21 (assembleDebug + detekt green)
+- [x] Fastlane: Play Store submission lane (internal track) — `fastlane/Fastfile` `internal` + `promote` lanes
+- [x] Fastlane: screenshot generation + metadata — `screenshots`/`metadata` lanes + `fastlane/metadata/android/en-US/` structure
+- [x] GitHub Actions CI — `ci.yml` (detekt + tests + assembleDebug) + new `release.yml` (signed AAB + Play internal upload)
+- [x] Package-name refactor — `refactorPackage` Gradle task in `app/build.gradle.kts` (ported from KMM starter, adapted single-module). `./gradlew refactorPackage -PnewAppId=… -PnewAppName=…`
+- [x] Changelog generator — `CHANGELOG.md` (Keep-a-Changelog seed) + references the changelog Claude skill
+- [x] Privacy policy + terms templates — `legal/privacy-policy-template.md` + `legal/terms-template.md`
+- [x] Play Data Safety mapping doc — `legal/play-data-safety.md` (per-SDK collection mapping)
+- [x] ASO assets — `fastlane/metadata/` listing-copy templates double as ASO listing; full ASO playbook referenced to docs site
+- [x] detekt wired to `:app` (was Phase 0 deferred) — config tuned for Compose (Long*/Cyclomatic thresholds, ignoreAnnotated Composable); `Routes.kt`→`Route.kt`
 
 ### Phase 6: In-App Demo Showcase (`feature/demo/`)
 Single-module. Clean placeholder Home is attendee's real start screen.
@@ -114,6 +115,7 @@ Single-module. Clean placeholder Home is attendee's real start screen.
 - **2026-05-18 (discussion)**: Locked demo/component model. Rejected `:demo` module (breaks single-module). Chosen: single-module, clean placeholder Home + dev-only debug-gated "View sample app" button → self-contained `feature/demo/` subtree reusing real components/infra with fake data. Reshaped Phase 3 (real component library, Swift-catalog parity) + Phase 6 (in-app demo showcase) + Phase 8 (catalog docs, removal guide). Permissions + screenshots deferred to Phase 8.
 - **2026-05-18 (reorder)**: User flagged building auth before components = double work. Reordered: Phase 1 = Component Library + Design System, Phase 2 = Auth, Phase 3 = Monetization. Icons decision changed to compose-icons Gradle lib (feather+tabler default; composables.com in docs for Heroicons). **Next: Phase 1 (components, design system, icons).**
 - **2026-05-20**: Built Phase 1. KEPT `material-icons-extended` (user reversed earlier drop decision). Designed pluggable icon system: `KitIcons` interface + 3 packs (Material default / Feather / Tabler) + `LocalKitIcons` CompositionLocal + per-callsite `ImageVector?` override. User extends by subclassing one of the `*Impl` open classes. Built foundation tokens (Spacing/Shape/Elevation), expanded color scheme (surfaceVariant/outline/error), full M3 typography. Wrote 10 core components, 5 state views, onboarding pager, 7 settings rows. Skipped dynamic app icon (deferred). `:app:assembleDebug` BUILD SUCCESSFUL. **Next: Phase 2 (Auth + Account on Phase 1 components).**
+- **2026-05-21 (Phase 5)**: Built Launch Tooling. Wired detekt to `:app` (Phase 0 deferred item) — autoCorrect fixed formatting kit-wide, config tuned for Compose (LongMethod 150, CyclomaticComplexMethod 25, LongParameterList ignoreAnnotated Composable, MatchingDeclarationName/ForbiddenComment off — kit deliberately groups component+enum per file + ships TODO author-guidance). Renamed `Routes.kt`→`Route.kt`. Ported KMM starter's `refactorPackage` Gradle task → adapted single-module native (detects `namespace`, renames `.kt` package/import + `namespace`/`applicationId` + `app_name` per-locale + `src/{main,test,androidTest}/java` dirs). Fastlane scaffold (`Fastfile` internal/promote/metadata/screenshots lanes, `Appfile`, `Gemfile`, `metadata/android/en-US/` listing copy). `release.yml` GitHub Actions workflow (signed AAB via `RELEASE_*` env + optional Play internal upload); `release` buildType signingConfig guarded — unsigned locally, signed in CI. `legal/` templates (privacy, terms, Play Data Safety per-SDK mapping). `CHANGELOG.md` seed. ASO/marketing NOT copied into kit per user — `fastlane/metadata` doubles as listing template, full playbook stays on docs site. Reference docs: `shipkaro-1dayapp-docs` (Docusaurus — marketing/aso, tools, deployment, guides/refactor-package). `:app:assembleDebug` + `:app:detekt` green. **Next: Phase 6 (In-App Demo Showcase).**
 - **2026-05-21 (Phase 4 complete)**: Finished Ops. `FirebaseRemoteAppConfig` impl of `RemoteAppConfig` (generation-counter flow so collectors re-read after fetchAndActivate); `KitConfig.REMOTE_CONFIG_PROVIDER` LOCAL default. FCM: `KitMessagingService` + `KitNotifications` channel + POST_NOTIFICATIONS perm + manifest service & https App Links intent-filter (`shipkaro.dev` placeholder, autoVerify). Update gate: `UpdateManager` compares `BuildConfig.VERSION_CODE` against `min_supported_version`/`latest_version` remote keys → `UpdateGate` composable wraps nav host, REQUIRED = non-dismissible KitDialog, OPTIONAL = dismissible. In-app review: ported KMM `InAppReviewManager` (Play API, `FakeReviewManager` in debug), wired to Settings → About → Rate row. `logScreen` threaded into Auth/Paywall/Settings (Phase 0 placeholders skipped — they get replaced). All Firebase ops pieces inert until google-services.json added. `play-review` dep added (no KMP). `:app:assembleDebug` green. **Next: Phase 5 (Launch Tooling).**
 - **2026-05-21 (Phase 4, partial)**: Started Analytics + Ops. Ported KMM starter's analytics layer — KMM had `Analytics` (expect/actual bridge) + `AnalyticsManager` (gated facade); native Android collapses to one `AnalyticsManager` class fanning out to PostHog (`com.posthog:posthog-android:3.44.2`) + Firebase Analytics + Crashlytics. Analytics user-toggle persisted in DataStore (`SettingsRepository.analyticsEnabled`), surfaced as a ToggleRow in Settings → Privacy section; crash reporting (`logError`) intentionally NOT gated by the toggle. PostHog key from `local.properties` (`posthog.api.key`/`posthog.host`) → BuildConfig. Firebase Analytics/Crashlytics inert until google-services.json + plugins added. `AnalyticsEvents`/`AnalyticsParams`/`ScreenNames` constants. `:app:assembleDebug` green. **Phase 4 remaining: remote config/feature flags, FCM push + deep links, update gate, in-app review.**
 - **2026-05-21 (Phase 3)**: Built Monetization. Studied the ShipKaro KMM starter (`../shipkaro-kmm-starter`) per user — ported its `PurchaseManager` manager-pattern to native (`com.revenuecat.purchases:purchases:9.23.1`, no KMP). KMM used RC's prebuilt `Paywall` composable; kit diverges — custom `PaywallScreen` on Phase 1 components (hard + soft variants per CLAUDE.md), `purchases-ui` excluded to avoid Compose-Multiplatform dep conflict (same class as Phase 2's compose-auth-ui). PurchaseManager extended beyond KMM's (which only did refresh+restore) with `offerings` + `purchase()` since custom paywall owns purchasing. KitConfig: `ENTITLEMENT_ID` + `PAYWALL_MODE`; RevenueCat key in `local.properties` (`revenuecat.android.api.key`) → BuildConfig. `BillingErrorCode` enum + localized mapping. RevenueCat configured in KitApplication.onCreate. KMM starter also has an AnalyticsManager — noted for Phase 4. `:app:assembleDebug` green. **Next: Phase 4 (Analytics + Ops).**
@@ -141,8 +143,10 @@ Single-module. Clean placeholder Home is attendee's real start screen.
 - **ALL user-facing strings MUST be localized** — never hardcode UI text. Every screen / VM-status / component contentDescription / dialog label / accessibility hint goes into `app/src/main/res/values/strings.xml` AND every `values-XX/strings.xml` shipped (currently en + ur). Components should accept String params (not hardcode English defaults) so callers stay localizable; where a sensible English fallback is unavoidable, source it via `stringResource()` so values-XX/ overrides work. Audit before commit: grep for hardcoded Western-script literals inside `Text(...)`, `contentDescription = "..."`, `label = "..."`, `confirmLabel = "..."`. Reason: kit ships en + ur, audience extends; missing string IDs silently leave English for RTL/non-English users. Tests + reviewers should reject hardcoded strings.
 
 ## Known Issues / Blockers
-- [ ] detekt plugin applied at root only → `./gradlew detekt` = NO-SOURCE. Wire to `:app` in Phase 5 (CI relies on it).
-- [ ] Retrofit baseUrl is a placeholder (`https://example.com/`) — real host set per app in Phase 1+.
+- [x] ~~detekt root-only → NO-SOURCE~~ — RESOLVED Phase 5: detekt plugin applied to `:app`, config Compose-tuned.
+- [ ] Retrofit baseUrl is a placeholder (`https://example.com/`) — real host set per app.
+- [ ] Room `fallbackToDestructiveMigration()` deprecation warning — replace with the overload taking a drop-tables flag.
+- [ ] `release` buildType produces an UNSIGNED AAB locally (no keystore); CI signs via `RELEASE_*` env vars. Kit author wires their own keystore.
 
 ## Commands to Remember
 - Build debug APK: `./gradlew :app:assembleDebug --no-daemon`

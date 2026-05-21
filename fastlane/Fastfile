@@ -1,0 +1,57 @@
+# ShipKaro Android Kit — Fastlane lanes for Play Store releases.
+# Docs: https://docs.fastlane.tools
+#
+# Prerequisites:
+#   1. `bundle install` (installs fastlane from the Gemfile)
+#   2. A release keystore + signingConfig wired in app/build.gradle.kts
+#   3. fastlane/play-store-service-account.json (see Appfile)
+
+default_platform(:android)
+
+platform :android do
+
+  desc "Build a signed release AAB"
+  lane :build do
+    gradle(task: "clean", project_dir: ".")
+    gradle(task: "bundleRelease", project_dir: ".")
+  end
+
+  desc "Build + upload to the Play Store internal testing track"
+  lane :internal do
+    build
+    upload_to_play_store(
+      track: "internal",
+      aab: "app/build/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: false,
+      skip_upload_images: false,
+      skip_upload_screenshots: false,
+    )
+  end
+
+  desc "Promote the latest internal build to production"
+  lane :promote do
+    upload_to_play_store(
+      track: "internal",
+      track_promote_to: "production",
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+  desc "Upload store listing text + images only (no binary)"
+  lane :metadata do
+    upload_to_play_store(
+      skip_upload_aab: true,
+      skip_upload_apk: true,
+    )
+  end
+
+  desc "Capture localized screenshots with screengrab"
+  # Requires a debug + test APK and the screengrab Gradle setup.
+  # See https://docs.fastlane.tools/actions/screengrab
+  lane :screenshots do
+    screengrab
+  end
+end
