@@ -37,9 +37,15 @@ Then ask, with the **AskUserQuestion** tool, **what they are building**:
 Use the answer to recommend which steps matter (e.g. skip the paywall for a free
 app) — but let them override any recommendation.
 
-Confirm prerequisites quickly: run `./gradlew --version` to check the Gradle
-wrapper works, and confirm `local.properties` has an `sdk.dir` line. If either
-fails, help fix it before continuing.
+Confirm prerequisites quickly:
+- If `local.properties` does not exist, copy it from the template:
+  `cp local.properties.template local.properties`. Then make sure the `sdk.dir`
+  line points at the developer's real Android SDK path.
+- Run `./gradlew --version` to check the Gradle wrapper works.
+
+If either fails, help fix it before continuing. Tell the developer that
+`local.properties` holds their SDK path and all secret keys, is git-ignored, and
+must never be committed — the later steps will write keys into it.
 
 ## Step 1 — Rename the kit  →  `.claude/commands/refactor.md`
 

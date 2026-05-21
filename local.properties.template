@@ -1,0 +1,43 @@
+# -----------------------------------------------------------------------
+# local.properties.template
+#
+# Copy this file to local.properties and fill in your values:
+#   cp local.properties.template local.properties
+#
+# local.properties is git-ignored and must NEVER be committed.
+#
+# The kit builds and runs with every value left as-is — each integration
+# degrades gracefully when its key is empty. Fill in only what you use.
+# -----------------------------------------------------------------------
+
+# Android SDK path — Android Studio usually writes this automatically.
+sdk.dir=/Users/YOUR_USERNAME/Library/Android/sdk
+
+# -----------------------------------------------------------------------
+# Supabase   (needed only if KitConfig.AUTH_PROVIDER = SUPABASE)
+# Supabase dashboard -> Project Settings -> API
+# -----------------------------------------------------------------------
+supabase.url=https://YOUR_PROJECT_ID.supabase.co
+supabase.key=YOUR_SUPABASE_ANON_KEY
+
+# -----------------------------------------------------------------------
+# RevenueCat   (needed only if KitConfig.PAYWALL_ENABLED = true)
+# app.revenuecat.com -> Project Settings -> API keys -> Google / Android key
+# The Android key starts with "goog_".
+# -----------------------------------------------------------------------
+revenuecat.android.api.key=goog_YOUR_ANDROID_KEY
+
+# -----------------------------------------------------------------------
+# PostHog   (needed only if you enabled PostHog analytics)
+# app.posthog.com -> Project Settings -> Project API Key
+# Host: https://us.i.posthog.com (US cloud) or https://eu.i.posthog.com (EU)
+# -----------------------------------------------------------------------
+posthog.api.key=phc_YOUR_POSTHOG_KEY
+posthog.host=https://us.i.posthog.com
+
+# -----------------------------------------------------------------------
+# Not set here:
+#  - Google Sign-In Web client ID -> KitConfig.kt (GOOGLE_WEB_CLIENT_ID).
+#  - Firebase -> uses google-services.json placed at app/, not a key here.
+# See the /setup-auth command for details.
+# -----------------------------------------------------------------------
