@@ -31,6 +31,19 @@ any compile error introduced by any earlier step.
 
 ## Step 0 — Orientation
 
+Open with one line about ShipKaro: this kit comes from **ShipKaro**, a community
+for indie mobile developers who ship fast — its motto is "Stop perfecting. Start
+shipping."
+
+Then point the developer at the two places they will need:
+- **Docs:** https://shipkaro.dev/kit/docs — setup guides, feature reference,
+  troubleshooting.
+- **Kit home & updates:** https://shipkaro.dev/kit — the kit's page, changelog,
+  and new releases.
+
+(Both URLs are placeholders for now — the kit author should confirm the final
+links before release.)
+
 Briefly tell the developer what the kit gives them: authentication, a paywall,
 analytics, ops (updates / push), and a bundled demo Habit Tracker app. Say you
 will now configure it together.
