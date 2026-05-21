@@ -1,5 +1,5 @@
 # Project: ShipKaro Android Kit
-> Last updated: 2026-05-21 (Phase 6 demo + design pass done)
+> Last updated: 2026-05-22 (Phases 0–6 done; sales/docs strategy planned)
 
 ## What This Is
 A production-ready **pure Android native** (Kotlin + Jetpack Compose) starter kit that lets indie developers skip auth, paywall, analytics, and launch plumbing and ship a Play Store app fast. Primary use: handed to **ShipKaro Weekend** cohort attendees on Day 1 so live sessions focus on app logic, not boilerplate. Also sold standalone (ShipFast model: one-time price, lifetime updates) via a marketing landing page. iOS native variant is a future, separate effort — not in scope now.
@@ -100,10 +100,14 @@ Split into 6a (design pass) + 6b (demo). Model CHANGED mid-phase — see Decisio
 - [x] `KitNavHost` stripped to `Welcome → Demo`; deleted Phase 0 throwaways `feature/home` + `feature/sample`
 - [x] Deletion = 3 micro-steps: drop Welcome demo button, remove `demoModule` line in AppModules.kt, delete `feature/demo/`
 
-### Phase 7: Landing / Sales Page
-- [ ] ShipFast-style landing page (hero, problem/solution, features, pricing, FAQ, CTA)
-- [ ] Standalone purchase flow / pricing tier(s)
-- [ ] Cohort-attendee free-access path vs paid standalone
+### Phase 7: Sales + Docs Website  (web project — SEPARATE repo, not this Android repo)
+> Full plan: `.session/phase7-sales-and-docs-plan.md` (git-ignored). Architecture agreed 2026-05-22.
+- [ ] One Next.js + Nextra site — public landing page + docs (existing Docusaurus content migrates in)
+- [ ] GitHub OAuth (Auth.js) — auth-first purchase flow: GitHub sign-in → checkout → webhook adds buyer as private-repo collaborator
+- [ ] Per-page docs gating — `gated: true` frontmatter flag; public pages indexed (SEO), gated pages `noindex` + buyer-session check (repo-collaborator = buyer)
+- [ ] Payment = Merchant-of-Record (LemonSqueezy / Paddle — handles global tax; vs raw Stripe). DECISION PENDING.
+- [ ] Pricing tiers + cohort-attendee free-access path
+- [ ] LICENSE + per-buyer watermark; release tagging + changelog/migration-guide process
 
 ### Phase 8: Documentation
 - [ ] Getting Started (requirements, macOS/Windows setup, first run)
@@ -116,6 +120,7 @@ Split into 6a (design pass) + 6b (demo). Model CHANGED mid-phase — see Decisio
 
 ## Session Log
 <!-- Update at END of each session -->
+- **2026-05-22**: No code changes — planned sales/distribution/docs strategy with user (first time selling code). Decisions: (1) Updates = tagged releases + per-release changelog/migration-guide; git-remote-merge documented as optional. (2) Piracy = sell private-repo access + per-buyer watermark + LICENSE; real moat is updates/community/masterclass, accept some leakage. (3) Docs = per-page gating — public pages SEO-indexed, `gated:true` pages require buyer session + `noindex`. Phase 7 = ONE Next.js+Nextra site (landing + docs), auth-first checkout (GitHub OAuth → Merchant-of-Record payment → webhook adds repo collaborator), separate web repo. Cohorts stay on WhatsApp (Pakistan audience). Full plan saved to `.session/phase7-sales-and-docs-plan.md`. **User now device-testing Phases 0–6 before any further code. Resume: fix code loose-ends from test findings, then Phase 7.**
 - **2026-05-18**: Discovery + planning. Studied shipfa.st, swiftstarterkits, flutterfasttemplate, shipkaro.dev, 1dayapp, mobile-docs. Locked scope: pure Android native, core 4 modules + Play compliance + Conversion + Ops packs, kit + landing page. Wrote this CLAUDE.md. Evaluated cortinico/kotlin-android-template vs Drjacky/MVVMTemplate → rejected multi-module for beginner/AI audience. Architecture locked: single `app` module package-by-feature, Koin DI, Retrofit/Room/DataStore.
 - **2026-05-18 (cont.)**: Built Phase 0. Hand-scaffolded full source/config (build files, Koin graph, Material3 theme, type-safe nav, KitConfig/RemoteAppConfig, Room, DataStore, locale en+ur, 6 feature screens). Hit wrapper wall (can't author binary gradle-wrapper.jar; system Gradle 8.5 < AGP-required 8.7). Resolved by cloning cortinico template and overlaying its working wrapper (Gradle 8.14.5). `:app:assembleDebug` → **BUILD SUCCESSFUL**. Private repo created + pushed (github.com/wajahatkarim3/shipkaro-android-kit).
 - **2026-05-18 (discussion)**: Locked demo/component model. Rejected `:demo` module (breaks single-module). Chosen: single-module, clean placeholder Home + dev-only debug-gated "View sample app" button → self-contained `feature/demo/` subtree reusing real components/infra with fake data. Reshaped Phase 3 (real component library, Swift-catalog parity) + Phase 6 (in-app demo showcase) + Phase 8 (catalog docs, removal guide). Permissions + screenshots deferred to Phase 8.
@@ -155,8 +160,10 @@ Split into 6a (design pass) + 6b (demo). Model CHANGED mid-phase — see Decisio
 ## Known Issues / Blockers
 - [x] ~~detekt root-only → NO-SOURCE~~ — RESOLVED Phase 5: detekt plugin applied to `:app`, config Compose-tuned.
 - [ ] Retrofit baseUrl is a placeholder (`https://example.com/`) — real host set per app.
-- [ ] Room `fallbackToDestructiveMigration()` deprecation warning — replace with the overload taking a drop-tables flag.
+- [ ] `KitDatabase.fallbackToDestructiveMigration()` deprecation warning — replace with the overload taking a drop-tables flag (`DemoDatabase` already uses the new overload).
 - [ ] `release` buildType produces an UNSIGNED AAB locally (no keystore); CI signs via `RELEASE_*` env vars. Kit author wires their own keystore.
+- [ ] **Runtime NOT device-tested** — Phases 0–6 are compile + detekt green only; no emulator run yet. User testing now.
+- [ ] `KitConfig.AUTH_PROVIDER` currently set to `SUPABASE` (user set it). Runtime-fails on empty creds — for shipping default, reset to `STUB` (works with no backend) OR keep SUPABASE and require `local.properties` keys. Decide before release.
 
 ## Commands to Remember
 - Build debug APK: `./gradlew :app:assembleDebug --no-daemon`
