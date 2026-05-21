@@ -55,15 +55,45 @@ Then ask, with the **AskUserQuestion** tool, **what they are building**:
 Use the answer to recommend which steps matter (e.g. skip the paywall for a free
 app) — but let them override any recommendation.
 
-Confirm prerequisites quickly:
-- If `local.properties` does not exist, copy it from the template:
-  `cp local.properties.template local.properties`. Then make sure the `sdk.dir`
-  line points at the developer's real Android SDK path.
-- Run `./gradlew --version` to check the Gradle wrapper works.
+Confirm prerequisites. This is where first-time developers — **especially on
+Windows** — get stuck, so do it carefully and verify, never guess.
 
-If either fails, help fix it before continuing. Tell the developer that
+**a. Create `local.properties`.** If it does not exist, copy it from the
+template: `cp local.properties.template local.properties` on macOS/Linux, or
+`copy local.properties.template local.properties` on Windows.
+
+**b. Detect the OS.** Run `uname`. macOS reports `Darwin`, Linux reports `Linux`,
+and Windows under Git Bash reports something starting with `MINGW` or `MSYS`. If
+the result is unclear, ask the developer whether they are on macOS or Windows.
+
+**c. Find the Android SDK path** for that OS:
+- **macOS:** `/Users/<username>/Library/Android/sdk` — get `<username>` from
+  `echo $HOME`.
+- **Windows:** usually `C:\Users\<username>\AppData\Local\Android\Sdk`. An older
+  alternative is `C:\Program Files (x86)\Android\android-sdk`.
+- **Linux:** usually `/home/<username>/Android/Sdk`.
+
+If you cannot work it out, tell the developer to open Android Studio → Settings
+→ Appearance & Behavior → System Settings → Android SDK and read the path at the
+top, labelled **"Android SDK Location"** — then paste it back to you.
+
+**d. Verify the path exists — do NOT skip this.** A wrong `sdk.dir` is the single
+most common reason the build fails for new developers. Check the directory
+actually exists: `test -d "<path>" && echo "SDK OK" || echo "NOT FOUND"`. If it
+is not found, ask the developer for the correct path (or to open it in their
+file explorer to confirm) and re-check — do not continue on a guessed path.
+
+**e. Write `sdk.dir`.** Set the `sdk.dir` line in `local.properties` to the
+verified path. On **Windows, write the path with forward slashes** —
+`sdk.dir=C:/Users/Name/AppData/Local/Android/Sdk` — because single backslashes
+need escaping in this file and that trips people up constantly.
+
+**f. Gradle check.** Run `./gradlew --version` to confirm the Gradle wrapper
+works.
+
+If anything fails, help fix it before continuing. Tell the developer that
 `local.properties` holds their SDK path and all secret keys, is git-ignored, and
-must never be committed — the later steps will write keys into it.
+must never be committed — later steps write keys into it.
 
 ## Step 1 — Rename the kit  →  `.claude/commands/refactor.md`
 

@@ -10,7 +10,24 @@
 # degrades gracefully when its key is empty. Fill in only what you use.
 # -----------------------------------------------------------------------
 
-# Android SDK path — Android Studio usually writes this automatically.
+# -----------------------------------------------------------------------
+# Android SDK path
+#
+# Android Studio usually writes this line for you. If it is missing or
+# wrong, set sdk.dir for your operating system:
+#
+#   macOS:    /Users/<your_username>/Library/Android/sdk
+#   Windows:  C:/Users/<YourUsername>/AppData/Local/Android/Sdk
+#             (older alt: C:/Program Files (x86)/Android/android-sdk)
+#   Linux:    /home/<your_username>/Android/Sdk
+#
+# Windows: use FORWARD slashes (/) as shown above. Backslashes need to be
+# escaped in this file and are the #1 cause of setup failures.
+#
+# Not sure of the path? Open Android Studio -> Settings -> Appearance &
+# Behavior -> System Settings -> Android SDK. The path is at the top,
+# labelled "Android SDK Location".
+# -----------------------------------------------------------------------
 sdk.dir=/Users/YOUR_USERNAME/Library/Android/sdk
 
 # -----------------------------------------------------------------------
