@@ -2,7 +2,7 @@
 description: Remove the bundled demo app so only your own app remains
 ---
 
-You are running **`/make-it-yours`** for the ShipKaro Android Kit. Goal: strip
+You are running **`/make-it-yours`** for ShipKit. Goal: strip
 the bundled demo (a Habit Tracker app) so the kit becomes a clean base for the
 developer's own app.
 

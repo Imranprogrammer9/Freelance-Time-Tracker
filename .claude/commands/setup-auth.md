@@ -2,7 +2,7 @@
 description: Choose and configure the kit's authentication provider
 ---
 
-You are running **`/setup-auth`** for the ShipKaro Android Kit. Goal: pick and
+You are running **`/setup-auth`** for ShipKit. Goal: pick and
 wire the authentication provider.
 
 Audience: first-time mobile developers. Be brief; you make the edits, they answer

@@ -2,7 +2,7 @@
 description: Configure PostHog and Firebase analytics + crash reporting
 ---
 
-You are running **`/setup-analytics`** for the ShipKaro Android Kit. Goal: wire
+You are running **`/setup-analytics`** for ShipKit. Goal: wire
 product analytics and crash reporting.
 
 Audience: first-time mobile developers. Be brief; you make the edits.

@@ -2,7 +2,7 @@
 description: Add google-services.json and apply the Firebase Gradle plugins (shared helper)
 ---
 
-You are running **`/setup-firebase`** for the ShipKaro Android Kit. This is a
+You are running **`/setup-firebase`** for ShipKit. This is a
 shared helper used by `/setup-auth`, `/setup-analytics`, and `/setup-ops`. It
 makes the Firebase SDKs (already on the classpath) actually connect to a Firebase
 project.

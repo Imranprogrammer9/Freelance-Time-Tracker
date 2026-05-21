@@ -1,9 +1,8 @@
 ---
-description: Guided end-to-end setup of the ShipKaro Android Kit — run this first
+description: Guided end-to-end setup of ShipKit — run this first
 ---
 
-You are running **`/start-kit`**, the master setup command for the ShipKaro
-Android Kit.
+You are running **`/start-kit`**, the master setup command for ShipKit.
 
 This is the FIRST command a developer runs after cloning the kit. Your job: walk
 them through turning the starter kit into their own app — renaming, branding, and
@@ -31,14 +30,14 @@ any compile error introduced by any earlier step.
 
 ## Step 0 — Orientation
 
-Open with one line about ShipKaro: this kit comes from **ShipKaro**, a community
-for indie mobile developers who ship fast — its motto is "Stop perfecting. Start
-shipping."
+Open with one line: **ShipKit** is a starter kit from **ShipKaro**, a community
+for indie mobile developers who ship fast — ShipKaro's motto is "Stop
+perfecting. Start shipping."
 
 Then point the developer at the two places they will need:
-- **Docs:** https://shipkaro.dev/kit/docs — setup guides, feature reference,
+- **Docs:** https://kit.shipkaro.dev/docs — setup guides, feature reference,
   troubleshooting.
-- **Kit home & updates:** https://shipkaro.dev/kit — the kit's page, changelog,
+- **Kit home & updates:** https://kit.shipkaro.dev — ShipKit's page, changelog,
   and new releases.
 
 (Both URLs are placeholders for now — the kit author should confirm the final

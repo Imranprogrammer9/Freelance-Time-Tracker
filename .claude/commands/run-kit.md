@@ -2,7 +2,7 @@
 description: Build the kit and run it on a device or emulator
 ---
 
-You are running **`/run-kit`** for the ShipKaro Android Kit. Goal: get the app
+You are running **`/run-kit`** for ShipKit. Goal: get the app
 running so the developer can see it work.
 
 Audience: first-time mobile developers. Be brief and concrete.

@@ -2,7 +2,7 @@
 description: Configure remote config, the update gate, and push notifications
 ---
 
-You are running **`/setup-ops`** for the ShipKaro Android Kit. Goal: wire the
+You are running **`/setup-ops`** for ShipKit. Goal: wire the
 "operations" features — remote config / feature flags, the force/soft update
 gate, maintenance mode, and FCM push notifications.
 

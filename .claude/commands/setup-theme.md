@@ -3,7 +3,7 @@ description: Set the kit's brand color, theme options, and app icon
 argument-hint: [#hexcolor]
 ---
 
-You are running **`/setup-theme`** for the ShipKaro Android Kit. Goal: make the
+You are running **`/setup-theme`** for ShipKit. Goal: make the
 app look like the developer's brand.
 
 Audience: first-time mobile developers. Be brief and concrete; you make the
