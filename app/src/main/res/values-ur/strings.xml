@@ -99,10 +99,29 @@
     <string name="billing_error_product_unavailable">یہ پروڈکٹ ابھی دستیاب نہیں ہے۔</string>
     <string name="billing_error_unknown">خریداری مکمل نہیں ہو سکی۔ دوبارہ کوشش کریں۔</string>
 
-    <!-- Home -->
-    <string name="home_title">ہوم</string>
+    <!-- Welcome (kit entry — placeholder) -->
+    <string name="welcome_tagline">پروڈکشن کے لیے تیار Android اسٹارٹر کٹ۔ آتھ، ادائیگیاں، تجزیات اور لانچ ٹولنگ — پہلے سے تیار۔</string>
+    <string name="welcome_feature_auth_title">تصدیق</string>
+    <string name="welcome_feature_auth_desc">ای میل + Google سائن ان، سیشنز اور اکاؤنٹ حذف کرنا۔</string>
+    <string name="welcome_feature_paywall_title">ادائیگیاں</string>
+    <string name="welcome_feature_paywall_desc">سبسکرپشن ٹیئرز اور بحالی کے ساتھ RevenueCat پے وال۔</string>
+    <string name="welcome_feature_ops_title">تجزیات اور آپریشنز</string>
+    <string name="welcome_feature_ops_desc">ایونٹس، کریش رپورٹنگ، ریموٹ کنفگ اور اپ ڈیٹ گیٹ۔</string>
+    <string name="welcome_launch_demo">ڈیمو لانچ کریں</string>
+    <string name="welcome_replace_hint">یہ ایک پلیس ہولڈر ہے۔ WelcomeScreen کو اپنی اسٹارٹ اسکرین سے بدلیں۔</string>
+
+    <!-- Demo — Habit Tracker sample app -->
+    <string name="habit_list_title">میری عادات</string>
+    <string name="habit_empty_title">ابھی کوئی عادت نہیں</string>
+    <string name="habit_empty_message">اسٹریک شروع کرنے کے لیے اپنی پہلی عادت شامل کریں۔</string>
+    <string name="habit_streak">%d دن کی اسٹریک</string>
+    <string name="habit_free_limit_hint">%2$d میں سے %1$d مفت عادات استعمال — لامحدود کے لیے اپ گریڈ کریں</string>
+    <string name="habit_add">عادت شامل کریں</string>
+    <string name="habit_add_title">نئی عادت</string>
+    <string name="habit_name_label">عادت کا نام</string>
+    <string name="habit_save">عادت محفوظ کریں</string>
+
     <string name="nav_settings">ترتیبات</string>
-    <string name="nav_sample">نمونہ فیچر</string>
 
     <!-- Settings — screen + sections -->
     <string name="settings_title">ترتیبات</string>
@@ -151,7 +170,4 @@
 
     <!-- Banners — generic dismiss accessibility label -->
     <string name="banner_dismiss">برخاست</string>
-
-    <!-- Sample -->
-    <string name="sample_title">نمونہ فیچر</string>
 </resources>

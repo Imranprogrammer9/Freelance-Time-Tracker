@@ -99,10 +99,29 @@
     <string name="billing_error_product_unavailable">This product isn\'t available right now.</string>
     <string name="billing_error_unknown">Couldn\'t complete the purchase. Please try again.</string>
 
-    <!-- Home -->
-    <string name="home_title">Home</string>
+    <!-- Welcome (kit entry — placeholder, replace with your real start screen) -->
+    <string name="welcome_tagline">A production-ready Android starter kit. Auth, payments, analytics and launch tooling — already wired.</string>
+    <string name="welcome_feature_auth_title">Authentication</string>
+    <string name="welcome_feature_auth_desc">Email + Google sign-in, sessions and account deletion.</string>
+    <string name="welcome_feature_paywall_title">Payments</string>
+    <string name="welcome_feature_paywall_desc">RevenueCat paywall with subscription tiers and restore.</string>
+    <string name="welcome_feature_ops_title">Analytics &amp; Ops</string>
+    <string name="welcome_feature_ops_desc">Events, crash reporting, remote config and an update gate.</string>
+    <string name="welcome_launch_demo">Launch Demo</string>
+    <string name="welcome_replace_hint">This is a placeholder. Replace WelcomeScreen with your own start screen.</string>
+
+    <!-- Demo — Habit Tracker sample app -->
+    <string name="habit_list_title">My Habits</string>
+    <string name="habit_empty_title">No habits yet</string>
+    <string name="habit_empty_message">Add your first habit to start a streak.</string>
+    <string name="habit_streak">%d day streak</string>
+    <string name="habit_free_limit_hint">%1$d of %2$d free habits used — upgrade for unlimited</string>
+    <string name="habit_add">Add habit</string>
+    <string name="habit_add_title">New habit</string>
+    <string name="habit_name_label">Habit name</string>
+    <string name="habit_save">Save habit</string>
+
     <string name="nav_settings">Settings</string>
-    <string name="nav_sample">Sample feature</string>
 
     <!-- Settings — screen + sections -->
     <string name="settings_title">Settings</string>
@@ -151,7 +170,4 @@
 
     <!-- Banners — generic dismiss accessibility label -->
     <string name="banner_dismiss">Dismiss</string>
-
-    <!-- Sample -->
-    <string name="sample_title">Sample feature</string>
 </resources>

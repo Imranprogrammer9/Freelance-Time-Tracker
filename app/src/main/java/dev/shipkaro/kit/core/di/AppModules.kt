@@ -18,6 +18,7 @@ import dev.shipkaro.kit.core.data.settings.SettingsRepository
 import dev.shipkaro.kit.core.ops.InAppReviewManager
 import dev.shipkaro.kit.core.ops.UpdateManager
 import dev.shipkaro.kit.feature.auth.AuthViewModel
+import dev.shipkaro.kit.feature.demo.demoModule
 import dev.shipkaro.kit.feature.paywall.PurchaseViewModel
 import dev.shipkaro.kit.feature.settings.SettingsViewModel
 import io.github.jan.supabase.SupabaseClient
@@ -128,12 +129,14 @@ private val featureModule = module {
     viewModel { PurchaseViewModel(get()) }
 }
 
-val appModules = listOf(
-    coreModule,
-    dataModule,
-    authModule,
-    billingModule,
-    analyticsModule,
-    opsModule,
-    featureModule,
-)
+val appModules = buildList {
+    add(coreModule)
+    add(dataModule)
+    add(authModule)
+    add(billingModule)
+    add(analyticsModule)
+    add(opsModule)
+    add(featureModule)
+    // DEMO — remove this line, then delete feature/demo/, to strip the bundled demo.
+    if (KitConfig.SAMPLE_FEATURE_ENABLED) add(demoModule)
+}
