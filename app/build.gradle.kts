@@ -253,13 +253,12 @@ tasks.register("refactorPackage") {
             if (updated != original) { f.writeText(updated); changed += f.relativeTo(rootDir).path }
         }
 
-        // 3. Kotlin sources — package + import declarations
+        // 3. Kotlin sources — package + import declarations, plus any other
+        // fully-qualified references (KDoc [links], qualified type names).
         if (updatePackage) {
             fileTree("src").matching { include("**/*.kt") }.forEach { f ->
                 val original = f.readText()
-                val updated = original
-                    .replace("package $oldAppId", "package $newAppId")
-                    .replace("import $oldAppId.", "import $newAppId.")
+                val updated = original.replace(oldAppId, newAppId)
                 if (updated != original) { f.writeText(updated); changed += f.relativeTo(rootDir).path }
             }
 
