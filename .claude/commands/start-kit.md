@@ -40,12 +40,15 @@ Then point the developer at the two places they will need:
 - **Kit home & updates:** https://kit.shipkaro.dev — ShipKit's page, changelog,
   and new releases.
 
-(Both URLs are placeholders for now — the kit author should confirm the final
-links before release.)
+Then show the developer what ShipKit gives them — present this list as-is:
 
-Briefly tell the developer what the kit gives them: authentication, a paywall,
-analytics, ops (updates / push), and a bundled demo Habit Tracker app. Say you
-will now configure it together.
+- 🔑 **Authentication** — email + Google sign-in
+- 💳 **Paywall + subscriptions** — RevenueCat
+- 📊 **Analytics + crash reporting**
+- 🔧 **Ops** — remote config, force/soft updates, push notifications
+- 🎯 **Bundled demo** Habit Tracker app to explore
+
+Then say you will now configure it together.
 
 Then ask, with the **AskUserQuestion** tool, **what they are building**:
 - A free app
