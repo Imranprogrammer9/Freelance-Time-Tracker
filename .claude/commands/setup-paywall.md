@@ -2,10 +2,16 @@
 description: Configure the RevenueCat paywall and subscriptions
 ---
 
-You are running **`/setup-paywall`** for ShipKit. Goal: wire
-RevenueCat so the app can sell subscriptions.
+You are running **`/setup-paywall`** for ShipKit. Goal: wire RevenueCat so the
+app can sell subscriptions.
 
 Audience: first-time mobile developers. Be brief; you make the edits.
+
+**Docs:** https://kit.shipkaro.dev/docs/paywall
+
+When a section below shows a block quoted with `>`, present that block to the
+developer **verbatim** — do not paraphrase or improvise. Prose outside those
+blocks is instructions for you, not the developer.
 
 ## Step 1 — Does the app need a paywall?
 
@@ -13,26 +19,28 @@ Ask (AskUserQuestion). If the app is free, set `PAYWALL_ENABLED = false` in
 `KitConfig.kt` and stop. The kit still builds; the paywall screen just is not
 wired into navigation.
 
-## Step 2 — RevenueCat account + product
+## Step 2 — Set up RevenueCat
 
-Guide the developer:
-1. Create an account at revenuecat.com and a new project.
-2. Connect their Google Play app. This needs a Play Console app with a
-   subscription product — tell them this can be done later; the kit runs fine
-   without it, the paywall just shows no offerings until products exist.
-3. In RevenueCat, create an **Entitlement** and note its identifier (the kit
-   default is `premium`).
-4. Get the **Android API key**: RevenueCat dashboard → Project Settings → API
-   keys → the Google / Android key (it starts with `goog_`).
+Show the developer exactly this:
+
+> **Create your RevenueCat project:**
+> 1. Sign up at https://app.revenuecat.com and create a new project.
+> 2. Add an app: **Project Settings → Apps → New app** → choose **Google Play**.
+> 3. Open **Entitlements** → create one (e.g. `premium`). Note its identifier.
+> 4. Open **Project Settings → API keys** → copy the **Google / Android** key
+>    (it starts with `goog_`).
+>
+> Connecting a real Play subscription product can be done later — the kit runs
+> fine without it; the paywall just shows no offerings until products exist.
 
 ## Step 3 — Configure the kit
 
-Write the API key to `local.properties` (git-ignored — never commit it):
+Write the API key into `local.properties` (git-ignored — never committed):
 
-    revenuecat.android.api.key=goog_XXXXXXXXXXXX
+    revenuecat.android.api.key=goog_YOUR_ANDROID_KEY
 
-In `KitConfig.kt` set:
-- `ENTITLEMENT_ID` — must match the entitlement identifier from RevenueCat
+In `KitConfig.kt`, set:
+- `ENTITLEMENT_ID` — must match the entitlement identifier created in Step 2
   (default `premium`).
 - `PAYWALL_MODE` — ask the developer which they want:
   - `SOFT` — the paywall is dismissible; the user can skip it and use the app

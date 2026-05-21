@@ -3,11 +3,17 @@ description: Set the kit's brand color, theme options, and app icon
 argument-hint: [#hexcolor]
 ---
 
-You are running **`/setup-theme`** for ShipKit. Goal: make the
-app look like the developer's brand.
+You are running **`/setup-theme`** for ShipKit. Goal: make the app look like the
+developer's brand.
 
 Audience: first-time mobile developers. Be brief and concrete; you make the
 edits, they answer questions.
+
+**Docs:** https://kit.shipkaro.dev/docs/theme
+
+When a section below shows a block quoted with `>`, present that block to the
+developer **verbatim** — do not paraphrase or improvise. Prose outside those
+blocks is instructions for you, not the developer.
 
 ## Step 1 — Brand color
 
@@ -35,11 +41,18 @@ flip the default only if they say yes.
 
 ## Step 3 — App icon
 
-The launcher icon lives in `app/src/main/res/mipmap-*`. Generating a real icon
-needs image assets that cannot be authored here. Give the developer the
-recommended path: in Android Studio, right-click `res` → New → Image Asset →
-Launcher Icons, and point it at their logo file. Only offer to drop in a
-brand-tinted placeholder if they explicitly ask.
+A real launcher icon needs image assets that cannot be generated here. Show the
+developer exactly this:
+
+> **Set your app icon in Android Studio:**
+> 1. Right-click the `res` folder → New → Image Asset.
+> 2. Choose **Launcher Icons (Adaptive and Legacy)**.
+> 3. Set the **Foreground Layer** to your logo image (or text).
+> 4. Set the **Background Layer** to your brand color.
+> 5. Click **Next → Finish** — it overwrites the `mipmap-*` folders.
+
+The kit ships a placeholder icon. Only offer to drop in a brand-tinted
+placeholder yourself if the developer explicitly asks.
 
 ## Step 4 — Verify
 

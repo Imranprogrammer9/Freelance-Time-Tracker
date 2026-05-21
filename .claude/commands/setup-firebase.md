@@ -2,42 +2,50 @@
 description: Add google-services.json and apply the Firebase Gradle plugins (shared helper)
 ---
 
-You are running **`/setup-firebase`** for ShipKit. This is a
-shared helper used by `/setup-auth`, `/setup-analytics`, and `/setup-ops`. It
-makes the Firebase SDKs (already on the classpath) actually connect to a Firebase
-project.
+You are running **`/setup-firebase`** for ShipKit. This is a shared helper used
+by `/setup-auth`, `/setup-analytics`, and `/setup-ops`. It makes the Firebase
+SDKs (already on the classpath) connect to a Firebase project.
 
 Audience: first-time mobile developers. Be brief; you make the edits.
 
+**Docs:** https://kit.shipkaro.dev/docs/firebase
+
+When a section below shows a block quoted with `>`, present that block to the
+developer **verbatim** — do not paraphrase or improvise. Prose outside those
+blocks is instructions for you, not the developer.
+
 ## Step 1 — Create the Firebase project + register the Android app
 
-Guide the developer:
-1. Go to console.firebase.google.com and create a project (or pick an existing
-   one).
-2. Add an Android app. The **package name Firebase asks for must exactly match**
-   the `applicationId` in `app/build.gradle.kts` — open that file, read the
-   value, and tell them exactly what to paste.
-3. Download the generated `google-services.json`.
+Open `app/build.gradle.kts`, read the `applicationId` value, and tell the
+developer that exact string — they must paste it in the steps below.
+
+Then show the developer exactly this:
+
+> **Create the Firebase project:**
+> 1. Go to https://console.firebase.google.com and click **Add project**
+>    (or pick an existing project).
+> 2. Click **Add app** → the **Android** icon.
+> 3. For **Android package name**, paste your app's `applicationId` exactly.
+> 4. Click **Register app**.
+> 5. Click **Download google-services.json**.
 
 ## Step 2 — Place google-services.json
 
 The file goes at `app/google-services.json` (next to `app/build.gradle.kts`).
-Ask the developer to confirm they have moved it there, then verify the file
-exists. Do NOT continue until it does.
+Ask the developer to confirm they moved it there, then verify the file exists.
+Do NOT continue until it does.
 
 `google-services.json` holds project identifiers — recommend keeping it out of
-any public repo. Check `.gitignore`; for this private kit repo, committing it is
-the developer's call.
+any public repo.
 
 ## Step 3 — Apply the Gradle plugins
 
 The Firebase deps compile without plugins, but Analytics / Crashlytics / Remote
-Config only report once the plugins are applied. The kit's deps are present; the
-plugins are not yet declared. If the plugins are already declared (check
-`gradle/libs.versions.toml`), skip this step.
+Config only report once the plugins are applied. If the plugins are already
+declared (check `gradle/libs.versions.toml`), skip this step.
 
 1. In `gradle/libs.versions.toml`, under `[versions]` add (use the latest stable
-   — at time of writing google-services 4.4.x, the Crashlytics plugin 3.0.x):
+   — at time of writing google-services 4.4.x, Crashlytics plugin 3.0.x):
 
        google-services = "4.4.2"
        firebase-crashlytics-plugin = "3.0.2"
@@ -67,9 +75,8 @@ the end. If this command was run on its own, run
 `./gradlew :app:compileDebugKotlin`.
 
 The common failure here is a package-name mismatch — the plugin reports that
-`google-services.json` has no client for the app's `applicationId`. If that
-happens, the package registered in Firebase does not match `applicationId` in
-`app/build.gradle.kts`; fix it in the Firebase console (add an app with the right
-package) and re-download the file.
+`google-services.json` has no client for the app's `applicationId`. If so, the
+package registered in Firebase does not match `applicationId`; fix it in the
+Firebase console and re-download the file.
 
 Report success and return to whichever command sent you here.

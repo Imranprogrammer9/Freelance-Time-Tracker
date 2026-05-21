@@ -2,10 +2,16 @@
 description: Configure PostHog and Firebase analytics + crash reporting
 ---
 
-You are running **`/setup-analytics`** for ShipKit. Goal: wire
-product analytics and crash reporting.
+You are running **`/setup-analytics`** for ShipKit. Goal: wire product analytics
+and crash reporting.
 
 Audience: first-time mobile developers. Be brief; you make the edits.
+
+**Docs:** https://kit.shipkaro.dev/docs/analytics
+
+When a section below shows a block quoted with `>`, present that block to the
+developer **verbatim** — do not paraphrase or improvise. Prose outside those
+blocks is instructions for you, not the developer.
 
 ## Step 1 — Pick what to enable
 
@@ -20,13 +26,18 @@ reports still go out even with analytics off.
 
 ## Step 2 — PostHog
 
-Guide them: posthog.com → create a project → Project Settings → copy the
-**Project API Key** (starts with `phc_`) and note the **host** — US cloud is
-`https://us.i.posthog.com`, EU cloud is `https://eu.i.posthog.com`.
+Show the developer exactly this:
 
-Write to `local.properties` (git-ignored — never commit it):
+> **Get your PostHog key:**
+> 1. Sign up at https://posthog.com and create a project.
+> 2. Open **Settings → Project** and copy the **Project API Key**
+>    (it starts with `phc_`).
+> 3. Note your cloud region — US is `https://us.i.posthog.com`,
+>    EU is `https://eu.i.posthog.com`.
 
-    posthog.api.key=phc_XXXXXXXXXXXX
+Write to `local.properties` (git-ignored — never committed):
+
+    posthog.api.key=phc_YOUR_POSTHOG_KEY
     posthog.host=https://us.i.posthog.com
 
 ## Step 3 — Firebase Analytics / Crashlytics

@@ -2,11 +2,17 @@
 description: Remove the bundled demo app so only your own app remains
 ---
 
-You are running **`/make-it-yours`** for ShipKit. Goal: strip
-the bundled demo (a Habit Tracker app) so the kit becomes a clean base for the
-developer's own app.
+You are running **`/make-it-yours`** for ShipKit. Goal: strip the bundled demo
+(a Habit Tracker app) so the kit becomes a clean base for the developer's own
+app.
 
 Audience: first-time mobile developers. Be brief and careful — this deletes code.
+
+**Docs:** https://kit.shipkaro.dev/docs/make-it-yours
+
+When a section below shows a block quoted with `>`, present that block to the
+developer **verbatim** — do not paraphrase or improvise. Prose outside those
+blocks is instructions for you, not the developer.
 
 ## First — confirm what they want
 
@@ -21,28 +27,26 @@ The demo is genuinely useful while learning: it shows onboarding → auth → pa
 
 If they choose "keep for now", set the flag, confirm, and stop.
 
-## Full removal — 3 steps
+## Full removal
 
-Recommend a clean git state first (`git status`) so the deletion is reviewable
-and revertible. Warn them if there are already uncommitted changes.
+Check `git status` first — recommend a clean tree so the deletion is reviewable
+and revertible. Warn if there are already uncommitted changes.
 
-1. **Welcome screen** — `WelcomeScreen.kt` (under `feature/welcome/`) has a
-   "Launch Demo" button. Remove that button and its navigation callback. This
-   screen is a placeholder the developer is expected to replace with their own
-   entry screen anyway.
+Show the developer exactly this:
 
-2. **DI module** — in `AppModules.kt`, remove the demo import
-   (`import ...feature.demo.demoModule`) and the line
-   `if (KitConfig.SAMPLE_FEATURE_ENABLED) add(demoModule)`.
+> **Removing the demo — the 3 changes I'll make:**
+> 1. `WelcomeScreen.kt` — remove the "Launch Demo" button and its callback.
+> 2. `AppModules.kt` — remove the `demoModule` import and the line
+>    `if (KitConfig.SAMPLE_FEATURE_ENABLED) add(demoModule)`.
+> 3. Delete the whole `feature/demo/` directory. It is self-contained (its own
+>    Room database, repository, and screens), so deleting it breaks nothing.
 
-3. **Delete the demo subtree** — delete the entire `feature/demo/` directory. It
-   is self-contained (its own Room database, repository, and screens), so
-   deleting it breaks nothing else.
+Then make those three changes.
 
-Then **rewire navigation**: `KitNavHost.kt` currently routes `Welcome → Demo`.
-With the demo gone, `Welcome` should route to the developer's own first screen.
-If they do not have one yet, leave `Welcome` as the start destination and tell
-them to point it at their screen later.
+After removal, **rewire navigation**: `KitNavHost.kt` currently routes
+`Welcome → Demo`. With the demo gone, `Welcome` should route to the developer's
+own first screen. If they do not have one yet, leave `Welcome` as the start
+destination and tell them to point it at their screen later.
 
 ## Verify
 
