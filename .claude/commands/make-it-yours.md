@@ -46,6 +46,9 @@ them to point it at their screen later.
 
 ## Verify
 
-Run `./gradlew :app:compileDebugKotlin`. If it fails, the likely cause is a
-leftover reference to a `feature/demo/` symbol or the `Demo` route — find and fix
-those. Report what was removed.
+**Skip the build if you are running as part of `/start-kit`** — it builds once at
+the end. If this command was run on its own, run
+`./gradlew :app:compileDebugKotlin`.
+
+If it fails, the likely cause is a leftover reference to a `feature/demo/` symbol
+or the `Demo` route — find and fix those. Report what was removed.

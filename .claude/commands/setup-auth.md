@@ -66,7 +66,10 @@ shown above.
 
 ## Step 4 — Verify
 
-Run `./gradlew :app:compileDebugKotlin`. If they configured Supabase or Firebase,
-remind them the real test is signing in on a device (covered by `/run-kit`).
-Report what was set, and that any secrets live in `local.properties`, which is
-never committed.
+**Skip this step if you are running as part of `/start-kit`** — it builds once at
+the end. If this command was run on its own, run
+`./gradlew :app:compileDebugKotlin`.
+
+If they configured Supabase or Firebase, remind them the real test is signing in
+on a device (covered by `/run-kit`). Report what was set, and that any secrets
+live in `local.properties`, which is never committed.

@@ -23,6 +23,12 @@ token — ignore it (treat it as empty) when running them as part of this flow.
 Every step is independent. If the developer wants to stop after any step, that is
 fine — they can resume later by running that single command on its own.
 
+**Speed — important:** do NOT run `./gradlew` compile or build commands between
+steps. They are slow and the wait adds up across the flow. Each sub-command has a
+"Verify" step that compiles — SKIP that step while running inside `/start-kit`. A
+single build runs once at the very end, in Step 8 (`/run-kit`), and it catches
+any compile error introduced by any earlier step.
+
 ## Step 0 — Orientation
 
 Briefly tell the developer what the kit gives them: authentication, a paywall,

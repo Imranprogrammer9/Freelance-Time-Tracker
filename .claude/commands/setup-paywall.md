@@ -41,7 +41,10 @@ In `KitConfig.kt` set:
 
 ## Step 4 — Verify
 
-Run `./gradlew :app:compileDebugKotlin`. Tell the developer real purchases can
-only be tested with a signed build on a Play Console test track — the paywall
-screen renders now, but shows offerings only once Play products are live. Report
-what was set.
+**Skip this step if you are running as part of `/start-kit`** — it builds once at
+the end. If this command was run on its own, run
+`./gradlew :app:compileDebugKotlin`.
+
+Tell the developer real purchases can only be tested with a signed build on a
+Play Console test track — the paywall screen renders now, but shows offerings
+only once Play products are live. Report what was set.

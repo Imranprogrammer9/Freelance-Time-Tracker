@@ -62,10 +62,14 @@ plugins are not yet declared. If the plugins are already declared (check
 
 ## Step 4 — Verify
 
-Run `./gradlew :app:compileDebugKotlin`. The common failure here is a
-package-name mismatch — the plugin reports that `google-services.json` has no
-client for the app's `applicationId`. If that happens, the package registered in
-Firebase does not match `applicationId` in `app/build.gradle.kts`; fix it in the
-Firebase console (add an app with the right package) and re-download the file.
+**Skip the build if you are running as part of `/start-kit`** — it builds once at
+the end. If this command was run on its own, run
+`./gradlew :app:compileDebugKotlin`.
+
+The common failure here is a package-name mismatch — the plugin reports that
+`google-services.json` has no client for the app's `applicationId`. If that
+happens, the package registered in Firebase does not match `applicationId` in
+`app/build.gradle.kts`; fix it in the Firebase console (add an app with the right
+package) and re-download the file.
 
 Report success and return to whichever command sent you here.

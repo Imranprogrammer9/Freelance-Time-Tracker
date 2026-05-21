@@ -43,6 +43,9 @@ brand-tinted placeholder if they explicitly ask.
 
 ## Step 4 — Verify
 
-Run `./gradlew :app:compileDebugKotlin` to confirm the color change compiles.
+**Skip this step if you are running as part of `/start-kit`** — it builds once at
+the end. If this command was run on its own, run
+`./gradlew :app:compileDebugKotlin` to confirm the color change compiles.
+
 Report success and remind them the brand color is the one knob that reskins the
 whole app.

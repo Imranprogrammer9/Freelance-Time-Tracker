@@ -82,7 +82,12 @@ the task itself flags:
 3. Update `google-services.json` if Firebase is configured.
 4. Update the OAuth deeplink scheme/host in `AndroidManifest.xml` + `KitConfig`.
 
-Finally, suggest a sanity build: `./gradlew :app:compileDebugKotlin`.
+Finally, a sanity build — but **only if this command was run on its own**. If
+you are running as part of `/start-kit`, skip it; that flow builds once at the
+end. Standalone, suggest: `./gradlew :app:compileDebugKotlin`.
+
+Note: `./gradlew refactorPackage` in Step 4 is the actual work and must always
+run — only the *extra verification* build is what gets skipped inside `/start-kit`.
 
 Keep your messages short and beginner-friendly — the audience is first-time mobile
 developers. Explain *why* each step matters in one line, not paragraphs.

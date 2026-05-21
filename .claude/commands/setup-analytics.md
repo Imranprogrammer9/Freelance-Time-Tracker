@@ -37,6 +37,10 @@ return here. No extra keys are needed beyond `google-services.json`.
 
 ## Step 4 — Verify
 
-Run `./gradlew :app:compileDebugKotlin`. Report what was enabled. Mention the
-in-app analytics toggle: end users can opt out via Settings → Privacy, and that
-preference is respected for analytics events (crash reporting still runs).
+**Skip this step if you are running as part of `/start-kit`** — it builds once at
+the end. If this command was run on its own, run
+`./gradlew :app:compileDebugKotlin`.
+
+Report what was enabled. Mention the in-app analytics toggle: end users can opt
+out via Settings → Privacy, and that preference is respected for analytics events
+(crash reporting still runs).

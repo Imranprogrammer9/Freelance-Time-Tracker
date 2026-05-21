@@ -43,5 +43,8 @@ Android's "Verify Android App Links" docs for the file contents.
 
 ## Step 4 — Verify
 
-Run `./gradlew :app:compileDebugKotlin`. Report what was configured and what was
-left at defaults.
+**Skip this step if you are running as part of `/start-kit`** — it builds once at
+the end. If this command was run on its own, run
+`./gradlew :app:compileDebugKotlin`.
+
+Report what was configured and what was left at defaults.
