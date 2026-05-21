@@ -7,12 +7,14 @@ import dev.shipkaro.kit.core.auth.FirebaseAuthRepository
 import dev.shipkaro.kit.core.auth.GoogleSignInManager
 import dev.shipkaro.kit.core.auth.StubAuthRepository
 import dev.shipkaro.kit.core.auth.SupabaseAuthRepository
+import dev.shipkaro.kit.core.billing.PurchaseManager
 import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.config.LocalRemoteAppConfig
 import dev.shipkaro.kit.core.config.RemoteAppConfig
 import dev.shipkaro.kit.core.data.local.KitDatabase
 import dev.shipkaro.kit.core.data.settings.SettingsRepository
 import dev.shipkaro.kit.feature.auth.AuthViewModel
+import dev.shipkaro.kit.feature.paywall.PurchaseViewModel
 import dev.shipkaro.kit.feature.settings.SettingsViewModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
@@ -95,9 +97,15 @@ private val authModule = module {
     single { GoogleSignInManager(androidContext()) }
 }
 
+/** Billing graph. PurchaseManager is a singleton; no-ops when no RevenueCat key is set. */
+private val billingModule = module {
+    single { PurchaseManager(androidContext()) }
+}
+
 private val featureModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { SettingsViewModel(get(), get()) }
+    viewModel { PurchaseViewModel(get()) }
 }
 
-val appModules = listOf(coreModule, dataModule, authModule, featureModule)
+val appModules = listOf(coreModule, dataModule, authModule, billingModule, featureModule)

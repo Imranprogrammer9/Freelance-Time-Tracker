@@ -57,9 +57,25 @@
     <string name="auth_error_unknown">Something went wrong. Please try again.</string>
 
     <!-- Paywall -->
-    <string name="paywall_title">Go Premium</string>
-    <string name="paywall_subscribe">Subscribe</string>
+    <string name="paywall_headline">Unlock Premium</string>
+    <string name="paywall_subhead">Get the full experience with a subscription.</string>
+    <string name="paywall_benefit_1">Unlimited access to every feature</string>
+    <string name="paywall_benefit_2">An ad-free experience</string>
+    <string name="paywall_benefit_3">Priority support</string>
+    <string name="paywall_restore">Restore purchases</string>
     <string name="paywall_skip">Maybe later</string>
+    <string name="paywall_nothing_restored">No previous purchases found to restore.</string>
+    <string name="paywall_not_configured">RevenueCat is not configured. Add revenuecat.android.api.key to local.properties to load offerings.</string>
+
+    <!-- Billing — error messages (mapped from BillingErrorCode) -->
+    <string name="billing_error_not_configured">Purchases are not available right now.</string>
+    <string name="billing_error_network">Network error. Check your connection and try again.</string>
+    <string name="billing_error_store">There was a problem with the Play Store. Please try again.</string>
+    <string name="billing_error_already_purchased">You already own this. Try Restore purchases.</string>
+    <string name="billing_error_payment_pending">Your purchase is pending approval.</string>
+    <string name="billing_error_not_allowed">Purchases aren\'t allowed on this device or account.</string>
+    <string name="billing_error_product_unavailable">This product isn\'t available right now.</string>
+    <string name="billing_error_unknown">Couldn\'t complete the purchase. Please try again.</string>
 
     <!-- Home -->
     <string name="home_title">Home</string>

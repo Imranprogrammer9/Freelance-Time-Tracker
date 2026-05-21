@@ -57,9 +57,25 @@
     <string name="auth_error_unknown">کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔</string>
 
     <!-- Paywall -->
-    <string name="paywall_title">پریمیم حاصل کریں</string>
-    <string name="paywall_subscribe">سبسکرائب کریں</string>
+    <string name="paywall_headline">پریمیم اَن لاک کریں</string>
+    <string name="paywall_subhead">سبسکرپشن کے ساتھ مکمل تجربہ حاصل کریں۔</string>
+    <string name="paywall_benefit_1">ہر فیچر تک لامحدود رسائی</string>
+    <string name="paywall_benefit_2">اشتہارات کے بغیر تجربہ</string>
+    <string name="paywall_benefit_3">ترجیحی سپورٹ</string>
+    <string name="paywall_restore">خریداریاں بحال کریں</string>
     <string name="paywall_skip">بعد میں</string>
+    <string name="paywall_nothing_restored">بحال کرنے کے لیے کوئی پچھلی خریداری نہیں ملی۔</string>
+    <string name="paywall_not_configured">RevenueCat ترتیب نہیں دیا گیا۔ آفرنگز لوڈ کرنے کے لیے local.properties میں revenuecat.android.api.key شامل کریں۔</string>
+
+    <!-- Billing — error messages -->
+    <string name="billing_error_not_configured">ابھی خریداریاں دستیاب نہیں ہیں۔</string>
+    <string name="billing_error_network">نیٹ ورک کی خرابی۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="billing_error_store">Play Store میں مسئلہ پیش آیا۔ دوبارہ کوشش کریں۔</string>
+    <string name="billing_error_already_purchased">آپ پہلے ہی اس کے مالک ہیں۔ خریداریاں بحال کریں آزمائیں۔</string>
+    <string name="billing_error_payment_pending">آپ کی خریداری منظوری کے انتظار میں ہے۔</string>
+    <string name="billing_error_not_allowed">اس ڈیوائس یا اکاؤنٹ پر خریداریوں کی اجازت نہیں ہے۔</string>
+    <string name="billing_error_product_unavailable">یہ پروڈکٹ ابھی دستیاب نہیں ہے۔</string>
+    <string name="billing_error_unknown">خریداری مکمل نہیں ہو سکی۔ دوبارہ کوشش کریں۔</string>
 
     <!-- Home -->
     <string name="home_title">ہوم</string>

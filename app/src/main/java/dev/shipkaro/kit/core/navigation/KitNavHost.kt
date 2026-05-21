@@ -84,7 +84,12 @@ fun KitNavHost() {
             )
         }
         composable<Route.Paywall> {
-            PaywallScreen(onContinue = { navController.navigate(Route.Home) })
+            val toHome: () -> Unit = {
+                navController.navigate(Route.Home) {
+                    popUpTo(Route.Paywall) { inclusive = true }
+                }
+            }
+            PaywallScreen(onPurchased = toHome, onDismiss = toHome)
         }
         composable<Route.Home> {
             HomeScreen(

@@ -52,6 +52,22 @@ object KitConfig {
     /** Wire RevenueCat paywall + entitlement gating. */
     const val PAYWALL_ENABLED: Boolean = true
 
+    /**
+     * RevenueCat entitlement identifier checked to decide premium status. Must match the
+     * entitlement configured in the RevenueCat dashboard. The RevenueCat API key itself is
+     * NOT here — it lives in `local.properties` (`revenuecat.android.api.key`) → BuildConfig,
+     * since it's environment config, not a template switch. Empty key = PurchaseManager no-ops.
+     */
+    const val ENTITLEMENT_ID: String = "premium"
+
+    /**
+     * Paywall enforcement style.
+     *  - [SOFT] : paywall is dismissible — user can skip and continue free.
+     *  - [HARD] : paywall blocks access until purchase or restore (no skip).
+     */
+    enum class PaywallMode { SOFT, HARD }
+    val PAYWALL_MODE: PaywallMode = PaywallMode.SOFT
+
     /** Wire PostHog / Firebase analytics + Crashlytics. */
     const val ANALYTICS_ENABLED: Boolean = true
 

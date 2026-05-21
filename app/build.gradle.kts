@@ -16,6 +16,9 @@ val localProps = Properties().apply {
 }
 val supabaseUrl: String = localProps.getProperty("supabase.url", "")
 val supabaseKey: String = localProps.getProperty("supabase.key", "")
+// RevenueCat Android API key (from RevenueCat dashboard > Project > Android app).
+// Empty if not set — PurchaseManager no-ops gracefully so the kit still builds & runs.
+val revenueCatApiKey: String = localProps.getProperty("revenuecat.android.api.key", "")
 
 android {
     namespace = "dev.shipkaro.kit"
@@ -33,6 +36,7 @@ android {
 
         buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
         buildConfigField("String", "SUPABASE_KEY", "\"$supabaseKey\"")
+        buildConfigField("String", "REVENUECAT_API_KEY", "\"$revenueCatApiKey\"")
     }
 
     // Locales the app ships with. Add a language => add values-XX/strings.xml
@@ -125,6 +129,9 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
+
+    // RevenueCat — subscriptions / paywall. Custom paywall UI, purchases-ui omitted (see catalog note).
+    implementation(libs.revenuecat.purchases)
 
     testImplementation(libs.junit)
     testImplementation(libs.turbine)
