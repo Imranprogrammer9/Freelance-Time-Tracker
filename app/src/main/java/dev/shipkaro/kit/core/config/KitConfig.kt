@@ -81,4 +81,11 @@ object KitConfig {
 
     /** Ship the demo sample feature (turn off before release). */
     const val SAMPLE_FEATURE_ENABLED: Boolean = true
+
+    /**
+     * Base URL for the Retrofit API client. Placeholder by default — set this to your real
+     * API host before shipping. Must end with `/`. If your app has no REST backend, you can
+     * leave it as-is; the Retrofit instance is only created when something injects it.
+     */
+    const val API_BASE_URL: String = "https://example.com/"
 }

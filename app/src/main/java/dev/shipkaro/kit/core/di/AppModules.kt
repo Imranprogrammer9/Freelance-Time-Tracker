@@ -54,9 +54,8 @@ private val coreModule = module {
             .build()
     }
     single {
-        // baseUrl is a placeholder; the app sets its real API host here.
         Retrofit.Builder()
-            .baseUrl("https://example.com/")
+            .baseUrl(KitConfig.API_BASE_URL)
             .client(get())
             .build()
     }
@@ -65,7 +64,7 @@ private val coreModule = module {
 private val dataModule = module {
     single {
         Room.databaseBuilder(androidContext(), KitDatabase::class.java, KitDatabase.NAME)
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
     }
     single { get<KitDatabase>().sampleDao() }
