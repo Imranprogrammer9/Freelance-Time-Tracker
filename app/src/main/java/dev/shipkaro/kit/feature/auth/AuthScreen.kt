@@ -34,6 +34,7 @@ import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.analytics.ScreenNames
 import dev.shipkaro.kit.core.auth.messageRes
+import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.designsystem.components.KitBanner
 import dev.shipkaro.kit.core.designsystem.components.KitBannerStyle
 import dev.shipkaro.kit.core.designsystem.components.KitButton
@@ -63,6 +64,8 @@ fun AuthScreen(
     }
 
     val loading = state.status is AuthViewModel.Status.Loading
+    val emailEnabled = KitConfig.EMAIL_SIGN_IN_ENABLED
+    val googleEnabled = KitConfig.GOOGLE_SIGN_IN_ENABLED
 
     Column(
         modifier = Modifier
@@ -109,53 +112,58 @@ fun AuthScreen(
 
         StatusBanner(state.status)
 
-        KitTextField(
-            value = state.email,
-            onValueChange = vm::setEmail,
-            label = stringResource(R.string.auth_field_email),
-            leadingIcon = KitTheme.icons.email,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        )
+        if (emailEnabled) {
+            KitTextField(
+                value = state.email,
+                onValueChange = vm::setEmail,
+                label = stringResource(R.string.auth_field_email),
+                leadingIcon = KitTheme.icons.email,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            )
 
-        if (state.mode != AuthViewModel.Mode.FORGOT) {
-            KitPasswordField(
-                value = state.password,
-                onValueChange = vm::setPassword,
-                label = stringResource(R.string.auth_field_password),
+            if (state.mode != AuthViewModel.Mode.FORGOT) {
+                KitPasswordField(
+                    value = state.password,
+                    onValueChange = vm::setPassword,
+                    label = stringResource(R.string.auth_field_password),
+                )
+            }
+
+            if (state.mode == AuthViewModel.Mode.SIGN_IN) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    TextButton(onClick = { vm.setMode(AuthViewModel.Mode.FORGOT) }) {
+                        Text(stringResource(R.string.auth_link_forgot_password))
+                    }
+                }
+            }
+
+            val primaryLabel = stringResource(
+                when (state.mode) {
+                    AuthViewModel.Mode.SIGN_IN -> R.string.auth_action_sign_in
+                    AuthViewModel.Mode.SIGN_UP -> R.string.auth_action_sign_up
+                    AuthViewModel.Mode.FORGOT -> R.string.auth_action_send_reset
+                },
+            )
+            KitButton(
+                text = primaryLabel,
+                onClick = {
+                    when (state.mode) {
+                        AuthViewModel.Mode.SIGN_IN -> vm.signIn()
+                        AuthViewModel.Mode.SIGN_UP -> vm.signUp()
+                        AuthViewModel.Mode.FORGOT -> vm.sendReset()
+                    }
+                },
+                loading = loading,
+                enabled = state.email.isNotBlank() &&
+                    (state.mode == AuthViewModel.Mode.FORGOT || state.password.isNotBlank()),
             )
         }
 
-        if (state.mode == AuthViewModel.Mode.SIGN_IN) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = { vm.setMode(AuthViewModel.Mode.FORGOT) }) {
-                    Text(stringResource(R.string.auth_link_forgot_password))
-                }
-            }
-        }
-
-        val primaryLabel = stringResource(
-            when (state.mode) {
-                AuthViewModel.Mode.SIGN_IN -> R.string.auth_action_sign_in
-                AuthViewModel.Mode.SIGN_UP -> R.string.auth_action_sign_up
-                AuthViewModel.Mode.FORGOT -> R.string.auth_action_send_reset
-            },
-        )
-        KitButton(
-            text = primaryLabel,
-            onClick = {
-                when (state.mode) {
-                    AuthViewModel.Mode.SIGN_IN -> vm.signIn()
-                    AuthViewModel.Mode.SIGN_UP -> vm.signUp()
-                    AuthViewModel.Mode.FORGOT -> vm.sendReset()
-                }
-            },
-            loading = loading,
-            enabled = state.email.isNotBlank() &&
-                (state.mode == AuthViewModel.Mode.FORGOT || state.password.isNotBlank()),
-        )
-
-        if (state.mode != AuthViewModel.Mode.FORGOT) {
+        val showGoogle = googleEnabled && state.mode != AuthViewModel.Mode.FORGOT
+        if (emailEnabled && showGoogle) {
             OrDivider()
+        }
+        if (showGoogle) {
             KitButton(
                 text = stringResource(R.string.auth_action_continue_with_google),
                 onClick = { vm.signInWithGoogle(activityContext) },
@@ -167,26 +175,28 @@ fun AuthScreen(
 
         Spacer(Modifier.height(KitTheme.spacing.xs))
 
-        ModeSwitchLink(
-            text = stringResource(
-                when (state.mode) {
-                    AuthViewModel.Mode.SIGN_IN -> R.string.auth_link_create_account
-                    AuthViewModel.Mode.SIGN_UP -> R.string.auth_link_have_account
-                    AuthViewModel.Mode.FORGOT -> R.string.auth_link_back_to_sign_in
-                },
-            ),
-            onClick = {
-                vm.setMode(
-                    if (state.mode == AuthViewModel.Mode.SIGN_UP) {
-                        AuthViewModel.Mode.SIGN_IN
-                    } else if (state.mode == AuthViewModel.Mode.FORGOT) {
-                        AuthViewModel.Mode.SIGN_IN
-                    } else {
-                        AuthViewModel.Mode.SIGN_UP
+        if (emailEnabled) {
+            ModeSwitchLink(
+                text = stringResource(
+                    when (state.mode) {
+                        AuthViewModel.Mode.SIGN_IN -> R.string.auth_link_create_account
+                        AuthViewModel.Mode.SIGN_UP -> R.string.auth_link_have_account
+                        AuthViewModel.Mode.FORGOT -> R.string.auth_link_back_to_sign_in
                     },
-                )
-            },
-        )
+                ),
+                onClick = {
+                    vm.setMode(
+                        if (state.mode == AuthViewModel.Mode.SIGN_UP) {
+                            AuthViewModel.Mode.SIGN_IN
+                        } else if (state.mode == AuthViewModel.Mode.FORGOT) {
+                            AuthViewModel.Mode.SIGN_IN
+                        } else {
+                            AuthViewModel.Mode.SIGN_UP
+                        },
+                    )
+                },
+            )
+        }
     }
 }
 

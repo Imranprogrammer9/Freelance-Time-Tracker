@@ -36,6 +36,16 @@ object KitConfig {
     const val AUTH_ENABLED: Boolean = true
     val AUTH_PROVIDER: AuthProvider = AuthProvider.STUB
 
+    /** Show the email + password form on the auth screen. */
+    const val EMAIL_SIGN_IN_ENABLED: Boolean = true
+
+    /**
+     * Show the "Continue with Google" button on the auth screen.
+     * Native Google sign-in also needs [GOOGLE_WEB_CLIENT_ID]; without it the
+     * button falls back to the deeplink OAuth flow.
+     */
+    const val GOOGLE_SIGN_IN_ENABLED: Boolean = true
+
     /**
      * Web OAuth client ID used by Credential Manager for native Google sign-in.
      *

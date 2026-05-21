@@ -37,7 +37,28 @@ Set:
 
 If they chose **Stub**: nothing else to do — confirm and stop.
 
-## Step 3a — Supabase
+## Step 3 — Choose sign-in methods
+
+Ask (AskUserQuestion) which sign-in methods the auth screen should offer:
+
+- **Email + Google (recommended)** — both the email/password form and the
+  "Continue with Google" button.
+- **Email only** — email/password form, no Google button.
+- **Google only** — only the "Continue with Google" button, no email form.
+
+Set the two flags in `KitConfig.kt` to match the answer:
+
+    const val EMAIL_SIGN_IN_ENABLED: Boolean = <true|false>
+    const val GOOGLE_SIGN_IN_ENABLED: Boolean = <true|false>
+
+- Email + Google → both `true`
+- Email only → `EMAIL_SIGN_IN_ENABLED = true`, `GOOGLE_SIGN_IN_ENABLED = false`
+- Google only → `EMAIL_SIGN_IN_ENABLED = false`, `GOOGLE_SIGN_IN_ENABLED = true`
+
+Remember whether Google is enabled — **if it is NOT, skip every Google-related
+instruction in the steps below.**
+
+## Step 4a — Supabase credentials
 
 Show the developer exactly this:
 
@@ -47,8 +68,15 @@ Show the developer exactly this:
 > 3. Open **Project Settings → API** (gear icon, left sidebar).
 > 4. Copy **Project URL** — this becomes your `supabase.url`.
 > 5. Copy the **anon public** key — this becomes your `supabase.key`.
->
-> **Enable Google sign-in** (optional — skip if you only want email/password)
+
+Write the URL + key into `local.properties` (git-ignored — never committed):
+
+    supabase.url=https://YOUR-PROJECT.supabase.co
+    supabase.key=YOUR-ANON-KEY
+
+**Only if Google sign-in is enabled**, also show the developer this:
+
+> **Enable Google sign-in on Supabase**
 > 6. Go to **Authentication → Providers → Google** and toggle it on.
 > 7. Copy the **Authorized Client ID** of type *Web application*.
 >
@@ -56,15 +84,9 @@ Show the developer exactly this:
 > 8. Go to **Authentication → URL Configuration → Redirect URLs**.
 > 9. Add this exact value: `shipkaro://auth-callback`
 
-Then make these edits yourself:
-- Write the URL + key into `local.properties` (git-ignored — never committed):
+Then set the client ID in `KitConfig.kt`:
 
-      supabase.url=https://YOUR-PROJECT.supabase.co
-      supabase.key=YOUR-ANON-KEY
-
-- If they enabled Google sign-in, set the client ID in `KitConfig.kt`:
-
-      const val GOOGLE_WEB_CLIENT_ID: String = "..."
+    const val GOOGLE_WEB_CLIENT_ID: String = "..."
 
 OAuth callback note: the kit uses `shipkaro://auth-callback`, defined in
 `AppModules.kt` (the `authModule` `scheme`/`host`) and `AndroidManifest.xml`. The
@@ -73,13 +95,13 @@ instead of `shipkaro`, edit BOTH files to match.
 
 More detail + screenshots: https://kit.shipkaro.dev/docs/auth/supabase
 
-## Step 3b — Firebase
+## Step 4b — Firebase credentials
 
 Firebase auth needs the Google Services plugin. Read
 `.claude/commands/setup-firebase.md` and follow it to add `google-services.json`
 and apply the plugin, then return here.
 
-Show the developer exactly this:
+**Only if Google sign-in is enabled**, show the developer this:
 
 > **Get your Google Web client ID**
 > 1. Open https://console.firebase.google.com and select your project.
@@ -94,7 +116,7 @@ Then set it in `KitConfig.kt`:
 
 More detail + screenshots: https://kit.shipkaro.dev/docs/auth/firebase
 
-## Step 4 — Verify
+## Step 5 — Verify
 
 **Skip this step if you are running as part of `/start-kit`** — it builds once at
 the end. If this command was run on its own, run
