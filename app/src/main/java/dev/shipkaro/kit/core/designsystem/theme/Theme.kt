@@ -26,6 +26,8 @@ enum class ThemeMode { SYSTEM, LIGHT, DARK }
 private val LightColors = lightColorScheme(
     primary = LightPrimary,
     onPrimary = LightOnPrimary,
+    primaryContainer = LightPrimaryContainer,
+    onPrimaryContainer = LightOnPrimaryContainer,
     secondary = BrandSecondary,
     tertiary = BrandTertiary,
     background = LightBackground,
@@ -35,6 +37,7 @@ private val LightColors = lightColorScheme(
     surfaceVariant = LightSurfaceVariant,
     onSurfaceVariant = LightOnSurfaceVariant,
     outline = LightOutline,
+    outlineVariant = LightOutlineVariant,
     error = LightError,
     onError = LightOnError,
 )
@@ -42,6 +45,8 @@ private val LightColors = lightColorScheme(
 private val DarkColors = darkColorScheme(
     primary = DarkPrimary,
     onPrimary = DarkOnPrimary,
+    primaryContainer = DarkPrimaryContainer,
+    onPrimaryContainer = DarkOnPrimaryContainer,
     secondary = BrandSecondary,
     tertiary = BrandTertiary,
     background = DarkBackground,
@@ -51,6 +56,7 @@ private val DarkColors = darkColorScheme(
     surfaceVariant = DarkSurfaceVariant,
     onSurfaceVariant = DarkOnSurfaceVariant,
     outline = DarkOutline,
+    outlineVariant = DarkOutlineVariant,
     error = DarkError,
     onError = DarkOnError,
 )
@@ -66,7 +72,9 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun ShipKaroTheme(
     themeMode: ThemeMode? = ThemeMode.SYSTEM,
-    dynamicColor: Boolean = true,
+    // Default false so the ShipKaro brand palette is what shows. Flip to true (Android 12+)
+    // if you want Material You device-tinted colors instead.
+    dynamicColor: Boolean = false,
     icons: KitIcons = MaterialKitIcons,
     kitColors: KitColors = KitColors(),
     spacing: KitSpacing = KitSpacing(),

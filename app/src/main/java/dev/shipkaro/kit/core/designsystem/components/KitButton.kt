@@ -61,7 +61,7 @@ fun KitButton(
 
     val sizing = modifier
         .then(if (fillWidth) Modifier.fillMaxWidth() else Modifier)
-        .height(48.dp)
+        .height(52.dp)
 
     when (style) {
         KitButtonStyle.PRIMARY -> Button(

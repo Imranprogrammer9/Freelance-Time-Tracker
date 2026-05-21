@@ -14,14 +14,18 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Warning
@@ -64,6 +68,11 @@ open class MaterialKitIconsImpl : KitIcons {
     override val visibility: ImageVector = Icons.Default.Visibility
     override val visibilityOff: ImageVector = Icons.Default.VisibilityOff
     override val google: ImageVector = Icons.Default.Person // override with a brand vector in your pack
+
+    override val palette: ImageVector = Icons.Default.Palette
+    override val language: ImageVector = Icons.Default.Language
+    override val star: ImageVector = Icons.Default.Star
+    override val shield: ImageVector = Icons.Default.Shield
 
     override val success: ImageVector = Icons.Default.CheckCircle
     override val info: ImageVector = Icons.Default.Info

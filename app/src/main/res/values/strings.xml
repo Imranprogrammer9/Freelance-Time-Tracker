@@ -10,8 +10,14 @@
     <string name="action_get_started">Get Started</string>
 
     <!-- Onboarding -->
-    <string name="onboarding_title">Welcome</string>
-    <string name="onboarding_subtitle">Ship your Android app fast.</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_page1_title">Welcome aboard</string>
+    <string name="onboarding_page1_desc">A clean starting point for your next app — sign-in, payments and more, already wired.</string>
+    <string name="onboarding_page2_title">Built to ship fast</string>
+    <string name="onboarding_page2_desc">Reusable screens and components mean you focus on your idea, not the boilerplate.</string>
+    <string name="onboarding_page3_title">Make it yours</string>
+    <string name="onboarding_page3_desc">Swap colors, icons and copy from one place. Then build the features that matter.</string>
 
     <!-- Auth — titles + subtitles -->
     <string name="auth_title_sign_in">Welcome back</string>
@@ -32,6 +38,7 @@
     <string name="auth_action_sign_up">Sign up</string>
     <string name="auth_action_send_reset">Send reset link</string>
     <string name="auth_action_continue_with_google">Continue with Google</string>
+    <string name="auth_or">or</string>
 
     <!-- Auth — mode-switch links -->
     <string name="auth_link_forgot_password">Forgot password?</string>
@@ -62,10 +69,25 @@
     <string name="paywall_benefit_1">Unlimited access to every feature</string>
     <string name="paywall_benefit_2">An ad-free experience</string>
     <string name="paywall_benefit_3">Priority support</string>
+    <string name="paywall_cta">Continue</string>
     <string name="paywall_restore">Restore purchases</string>
     <string name="paywall_skip">Maybe later</string>
     <string name="paywall_nothing_restored">No previous purchases found to restore.</string>
     <string name="paywall_not_configured">RevenueCat is not configured. Add revenuecat.android.api.key to local.properties to load offerings.</string>
+    <string name="paywall_badge_best_value">Best value</string>
+    <string name="paywall_fine_print">Billed through Google Play. Subscriptions renew automatically until cancelled. Cancel anytime in the Play Store.</string>
+
+    <!-- Paywall — subscription tier labels -->
+    <string name="paywall_tier_weekly">Weekly</string>
+    <string name="paywall_tier_monthly">Monthly</string>
+    <string name="paywall_tier_three_month">3 Months</string>
+    <string name="paywall_tier_six_month">6 Months</string>
+    <string name="paywall_tier_yearly">Yearly</string>
+    <string name="paywall_tier_lifetime">Lifetime</string>
+    <string name="paywall_tier_plan">Plan</string>
+    <string name="paywall_caption_billed_yearly">per year</string>
+    <string name="paywall_caption_billed_monthly">per month</string>
+    <string name="paywall_caption_one_time">one-time</string>
 
     <!-- Billing — error messages (mapped from BillingErrorCode) -->
     <string name="billing_error_not_configured">Purchases are not available right now.</string>

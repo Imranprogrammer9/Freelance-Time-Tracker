@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -21,7 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -29,7 +33,9 @@ import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.analytics.ScreenNames
 import dev.shipkaro.kit.core.data.local.KitDatabase
+import dev.shipkaro.kit.core.designsystem.components.KitBottomSheet
 import dev.shipkaro.kit.core.designsystem.components.KitDialog
+import dev.shipkaro.kit.core.designsystem.components.KitListItem
 import dev.shipkaro.kit.core.designsystem.settings.AccountRow
 import dev.shipkaro.kit.core.designsystem.settings.DangerRow
 import dev.shipkaro.kit.core.designsystem.settings.LegalLinks
@@ -39,6 +45,7 @@ import dev.shipkaro.kit.core.designsystem.settings.SettingsSection
 import dev.shipkaro.kit.core.designsystem.settings.ToggleRow
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 import dev.shipkaro.kit.core.designsystem.theme.ThemeMode
+import dev.shipkaro.kit.core.locale.LocaleManager
 import dev.shipkaro.kit.core.ops.InAppReviewManager
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -61,15 +68,16 @@ fun SettingsScreen(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.SETTINGS) }
-
-    val selectedLabel = stringResource(R.string.settings_value_selected)
-    val privacyLabel = stringResource(R.string.legal_privacy)
-    val termsLabel = stringResource(R.string.legal_terms)
-    val accountFallback = stringResource(R.string.settings_account_default_name)
-
     LaunchedEffect(deleteStatus) {
         if (deleteStatus is SettingsViewModel.DeleteStatus.Done) onBack()
     }
+
+    var themeSheet by remember { mutableStateOf(false) }
+    var languageSheet by remember { mutableStateOf(false) }
+
+    val accountFallback = stringResource(R.string.settings_account_default_name)
+    val privacyLabel = stringResource(R.string.legal_privacy)
+    val termsLabel = stringResource(R.string.legal_terms)
 
     Scaffold(
         topBar = {
@@ -87,7 +95,8 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(top = KitTheme.spacing.sm),
         ) {
             user?.let {
                 AccountRow(
@@ -96,34 +105,34 @@ fun SettingsScreen(
                     avatarUrl = it.avatarUrl,
                     onClick = { /* future: profile screen */ },
                 )
-                SettingsDivider()
+                Spacer(Modifier.height(KitTheme.spacing.lg))
             }
 
             SettingsSection(title = stringResource(R.string.settings_section_appearance)) {
-                ThemeMode.entries.forEach { mode ->
-                    NavRow(
-                        title = stringResource(mode.labelRes()),
-                        valueText = if (theme == mode) selectedLabel else null,
-                        onClick = { vm.setThemeMode(mode) },
-                    )
-                }
-            }
-
-            SettingsSection(title = stringResource(R.string.settings_section_language)) {
-                vm.languages.forEach { lang ->
-                    val current = vm.currentLanguageTag()
-                    NavRow(
-                        title = lang.displayName,
-                        valueText = if (current.startsWith(lang.tag)) selectedLabel else null,
-                        onClick = { vm.setLanguage(lang.tag) },
-                    )
-                }
+                NavRow(
+                    title = stringResource(R.string.settings_theme),
+                    leading = KitTheme.icons.palette,
+                    chipColor = MaterialTheme.colorScheme.primary,
+                    valueText = stringResource(theme.labelRes()),
+                    onClick = { themeSheet = true },
+                )
+                SettingsDivider()
+                NavRow(
+                    title = stringResource(R.string.settings_language),
+                    leading = KitTheme.icons.language,
+                    chipColor = KitTheme.colors.info,
+                    valueText = vm.languages
+                        .firstOrNull { vm.currentLanguageTag().startsWith(it.tag) }?.displayName,
+                    onClick = { languageSheet = true },
+                )
             }
 
             SettingsSection(title = stringResource(R.string.settings_section_privacy)) {
                 ToggleRow(
                     title = stringResource(R.string.settings_analytics),
                     subtitle = stringResource(R.string.settings_analytics_subtitle),
+                    leading = KitTheme.icons.shield,
+                    chipColor = KitTheme.colors.success,
                     checked = analyticsEnabled,
                     onCheckedChange = vm::setAnalyticsEnabled,
                 )
@@ -132,6 +141,8 @@ fun SettingsScreen(
             SettingsSection(title = stringResource(R.string.settings_section_about)) {
                 NavRow(
                     title = stringResource(R.string.settings_rate_app),
+                    leading = KitTheme.icons.star,
+                    chipColor = KitTheme.colors.warning,
                     onClick = {
                         context.findActivity()?.let { act ->
                             scope.launch { reviewManager.requestReview(act) }
@@ -144,8 +155,10 @@ fun SettingsScreen(
                 NavRow(
                     title = stringResource(R.string.settings_sign_out),
                     leading = KitTheme.icons.logout,
+                    chipColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     onClick = { vm.signOut() },
                 )
+                SettingsDivider()
                 DangerRow(
                     title = stringResource(R.string.settings_delete_account),
                     subtitle = stringResource(R.string.settings_delete_account_subtitle),
@@ -154,15 +167,37 @@ fun SettingsScreen(
                 )
             }
 
-            Spacer(Modifier.height(KitTheme.spacing.lg))
-
             LegalLinks(
                 links = listOf(
                     privacyLabel to { /* TODO: open privacy URL */ },
                     termsLabel to { /* TODO: open terms URL */ },
                 ),
             )
+            Spacer(Modifier.height(KitTheme.spacing.lg))
         }
+    }
+
+    if (themeSheet) {
+        ThemePickerSheet(
+            current = theme,
+            onPick = {
+                vm.setThemeMode(it)
+                themeSheet = false
+            },
+            onDismiss = { themeSheet = false },
+        )
+    }
+
+    if (languageSheet) {
+        LanguagePickerSheet(
+            languages = vm.languages,
+            currentTag = vm.currentLanguageTag(),
+            onPick = {
+                vm.setLanguage(it)
+                languageSheet = false
+            },
+            onDismiss = { languageSheet = false },
+        )
     }
 
     if (deleteStatus is SettingsViewModel.DeleteStatus.Confirming ||
@@ -180,6 +215,67 @@ fun SettingsScreen(
         )
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ThemePickerSheet(
+    current: ThemeMode,
+    onPick: (ThemeMode) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    KitBottomSheet(onDismiss = onDismiss) {
+        Text(
+            stringResource(R.string.settings_theme),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = KitTheme.spacing.sm),
+        )
+        ThemeMode.entries.forEach { mode ->
+            KitListItem(
+                headline = stringResource(mode.labelRes()),
+                trailing = checkTrailing(selected = mode == current),
+                onClick = { onPick(mode) },
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun LanguagePickerSheet(
+    languages: List<LocaleManager.Language>,
+    currentTag: String,
+    onPick: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    KitBottomSheet(onDismiss = onDismiss) {
+        Text(
+            stringResource(R.string.settings_language),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = KitTheme.spacing.sm),
+        )
+        languages.forEach { lang ->
+            KitListItem(
+                headline = lang.displayName,
+                trailing = checkTrailing(selected = currentTag.startsWith(lang.tag)),
+                onClick = { onPick(lang.tag) },
+            )
+        }
+    }
+}
+
+/** Trailing check mark for the selected option in a picker sheet, or null. */
+private fun checkTrailing(selected: Boolean): (@Composable () -> Unit)? =
+    if (!selected) {
+        null
+    } else {
+        {
+            Icon(
+                KitTheme.icons.check,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
+    }
 
 @StringRes
 private fun ThemeMode.labelRes(): Int = when (this) {

@@ -59,6 +59,12 @@ interface KitIcons {
     val visibilityOff: ImageVector
     val google: ImageVector
 
+    // Settings / misc
+    val palette: ImageVector
+    val language: ImageVector
+    val star: ImageVector
+    val shield: ImageVector
+
     // State
     val success: ImageVector
     val info: ImageVector

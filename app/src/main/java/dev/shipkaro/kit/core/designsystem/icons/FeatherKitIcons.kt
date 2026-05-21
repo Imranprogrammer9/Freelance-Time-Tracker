@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.AlertCircle
 import compose.icons.feathericons.AlertTriangle
+import compose.icons.feathericons.Aperture
 import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.ArrowRight
 import compose.icons.feathericons.Bell
@@ -13,6 +14,7 @@ import compose.icons.feathericons.ChevronRight
 import compose.icons.feathericons.Edit2
 import compose.icons.feathericons.Eye
 import compose.icons.feathericons.EyeOff
+import compose.icons.feathericons.Globe
 import compose.icons.feathericons.Info
 import compose.icons.feathericons.Lock
 import compose.icons.feathericons.LogOut
@@ -23,6 +25,8 @@ import compose.icons.feathericons.Plus
 import compose.icons.feathericons.Search
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Share2
+import compose.icons.feathericons.Shield
+import compose.icons.feathericons.Star
 import compose.icons.feathericons.Trash2
 import compose.icons.feathericons.User
 import compose.icons.feathericons.X
@@ -57,6 +61,11 @@ open class FeatherKitIconsImpl : KitIcons {
     override val visibility: ImageVector = FeatherIcons.Eye
     override val visibilityOff: ImageVector = FeatherIcons.EyeOff
     override val google: ImageVector = FeatherIcons.User
+
+    override val palette: ImageVector = FeatherIcons.Aperture
+    override val language: ImageVector = FeatherIcons.Globe
+    override val star: ImageVector = FeatherIcons.Star
+    override val shield: ImageVector = FeatherIcons.Shield
 
     override val success: ImageVector = FeatherIcons.CheckCircle
     override val info: ImageVector = FeatherIcons.Info

@@ -1,7 +1,9 @@
 package dev.shipkaro.kit.core.designsystem.settings
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,21 +11,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import dev.shipkaro.kit.core.designsystem.components.KitAvatar
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 
-/** Section header — small uppercase label preceding a group of rows. */
+/**
+ * Section: an uppercase label over a grouped, rounded surface holding the rows
+ * (iOS-style grouped list). Put [SettingsDivider] between rows inside the content.
+ */
 @Composable
 fun SettingsSection(
     title: String,
@@ -34,37 +44,67 @@ fun SettingsSection(
         Text(
             text = title.uppercase(),
             style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(
-                horizontal = KitTheme.spacing.lg,
-                vertical = KitTheme.spacing.sm,
+                start = KitTheme.spacing.lg,
+                bottom = KitTheme.spacing.sm,
             ),
         )
-        content()
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.surface,
+            tonalElevation = 1.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = KitTheme.spacing.lg),
+        ) {
+            Column { content() }
+        }
         Spacer(Modifier.height(KitTheme.spacing.lg))
+    }
+}
+
+/** Tinted rounded-square icon container (Swift-kit settings signature). */
+@Composable
+private fun IconChip(icon: ImageVector, color: Color) {
+    Box(
+        modifier = Modifier
+            .size(30.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(color),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(18.dp),
+        )
     }
 }
 
 @Composable
 private fun BaseRow(
     leading: ImageVector?,
+    chipColor: Color?,
     title: String,
     subtitle: String?,
     onClick: (() -> Unit)?,
     trailing: (@Composable () -> Unit)?,
-    titleColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface,
+    titleColor: Color = MaterialTheme.colorScheme.onSurface,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .padding(horizontal = KitTheme.spacing.lg, vertical = KitTheme.spacing.md),
+            .padding(horizontal = KitTheme.spacing.md, vertical = KitTheme.spacing.md),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(KitTheme.spacing.md),
     ) {
         if (leading != null) {
-            Icon(leading, contentDescription = null, tint = titleColor, modifier = Modifier.size(24.dp))
+            IconChip(icon = leading, color = chipColor ?: MaterialTheme.colorScheme.primary)
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.bodyLarge, color = titleColor)
@@ -88,11 +128,13 @@ fun ToggleRow(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     leading: ImageVector? = null,
+    chipColor: Color? = null,
     subtitle: String? = null,
     enabled: Boolean = true,
 ) {
     BaseRow(
         leading = leading,
+        chipColor = chipColor,
         title = title,
         subtitle = subtitle,
         onClick = if (enabled) { { onCheckedChange(!checked) } } else null,
@@ -101,18 +143,20 @@ fun ToggleRow(
     )
 }
 
-/** Navigation row — chevron trailing, tappable. */
+/** Navigation row — optional value text + chevron, tappable. */
 @Composable
 fun NavRow(
     title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     leading: ImageVector? = null,
+    chipColor: Color? = null,
     subtitle: String? = null,
     valueText: String? = null,
 ) {
     BaseRow(
         leading = leading,
+        chipColor = chipColor,
         title = title,
         subtitle = subtitle,
         onClick = onClick,
@@ -137,7 +181,7 @@ fun NavRow(
     )
 }
 
-/** Account header row — avatar + name + email + nav chevron. Tap to open profile. */
+/** Account header row — avatar + name + email + nav chevron. */
 @Composable
 fun AccountRow(
     name: String,
@@ -146,35 +190,44 @@ fun AccountRow(
     modifier: Modifier = Modifier,
     avatarUrl: String? = null,
 ) {
-    Row(
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 1.dp,
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(KitTheme.spacing.lg),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(KitTheme.spacing.md),
+            .padding(horizontal = KitTheme.spacing.lg),
     ) {
-        KitAvatar(imageUrl = avatarUrl, initials = name.firstInitials(), size = 48.dp)
-        Column(modifier = Modifier.weight(1f)) {
-            Text(name, style = MaterialTheme.typography.titleMedium)
-            Text(
-                email,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(KitTheme.spacing.md),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(KitTheme.spacing.md),
+        ) {
+            KitAvatar(imageUrl = avatarUrl, initials = name.firstInitials(), size = 52.dp)
+            Column(modifier = Modifier.weight(1f)) {
+                Text(name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(
+                    email,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Icon(
+                KitTheme.icons.chevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        Icon(
-            KitTheme.icons.chevronRight,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
     }
 }
 
 private fun String.firstInitials(): String =
     trim().split(" ").filter { it.isNotEmpty() }.take(2).joinToString("") { it.first().toString() }
 
-/** Destructive action row — red text, no chevron (terminal action). */
+/** Destructive action row — red title + icon chip, no chevron. */
 @Composable
 fun DangerRow(
     title: String,
@@ -185,6 +238,7 @@ fun DangerRow(
 ) {
     BaseRow(
         leading = leading,
+        chipColor = MaterialTheme.colorScheme.error,
         title = title,
         subtitle = subtitle,
         onClick = onClick,
@@ -194,7 +248,7 @@ fun DangerRow(
     )
 }
 
-/** Footer row of legal links (privacy / terms). Each entry: label → URL or void callback. */
+/** Footer row of legal links (privacy / terms). */
 @Composable
 fun LegalLinks(
     links: List<Pair<String, () -> Unit>>,
@@ -224,11 +278,11 @@ fun LegalLinks(
     }
 }
 
-/** Thin divider for between rows. */
+/** Hairline divider between rows inside a [SettingsSection]. */
 @Composable
 fun SettingsDivider() {
     HorizontalDivider(
-        modifier = Modifier.padding(horizontal = KitTheme.spacing.lg),
+        modifier = Modifier.padding(start = 56.dp),
         thickness = 0.5.dp,
         color = MaterialTheme.colorScheme.outlineVariant,
     )

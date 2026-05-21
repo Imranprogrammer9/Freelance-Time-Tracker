@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ShipKaro brand mark — the purple "return key" keycap.
+  Flat vector recreation of the logo glyph; pairs with the "shipkaro" wordmark
+  (rendered as bold Text). Used on the Welcome screen + demo splash.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- Keycap -->
+    <path
+        android:fillColor="#7C3AED"
+        android:pathData="M16,7 L32,7 A9,9 0 0 1 41,16 L41,32 A9,9 0 0 1 32,41 L16,41 A9,9 0 0 1 7,32 L7,16 A9,9 0 0 1 16,7 Z" />
+
+    <!-- Return arrow — riser + horizontal -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M32,16 L32,28 L21,28" />
+
+    <!-- Return arrow — arrowhead pointing left -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M18,28 L25,23 L25,33 Z" />
+</vector>

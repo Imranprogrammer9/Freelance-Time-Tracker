@@ -3,6 +3,7 @@ package dev.shipkaro.kit.feature.paywall
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,13 +23,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.revenuecat.purchases.Package
+import com.revenuecat.purchases.PackageType
 import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.analytics.ScreenNames
@@ -35,20 +43,18 @@ import dev.shipkaro.kit.core.billing.messageRes
 import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.designsystem.components.KitBanner
 import dev.shipkaro.kit.core.designsystem.components.KitBannerStyle
+import dev.shipkaro.kit.core.designsystem.components.KitBulletRow
 import dev.shipkaro.kit.core.designsystem.components.KitButton
 import dev.shipkaro.kit.core.designsystem.components.KitButtonStyle
-import dev.shipkaro.kit.core.designsystem.components.KitCard
+import dev.shipkaro.kit.core.designsystem.components.KitPricingCard
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 /**
- * Custom paywall built on kit components. Honors [KitConfig.PAYWALL_MODE]:
- *  - SOFT: shows a skip action ([onDismiss]) so the user can continue free
- *  - HARD: no skip — only purchase or restore advances ([onPurchased])
- *
- * When RevenueCat has no API key ([PurchaseViewModel.isConfigured] false), shows a
- * configuration placeholder instead of live offerings so the kit still runs.
+ * Paywall — hero, benefit list, selectable [KitPricingCard] tiers, CTA, restore.
+ * Honors [KitConfig.PAYWALL_MODE] (SOFT shows a skip action; HARD does not).
+ * Shows a configuration banner instead of tiers when RevenueCat has no API key.
  */
 @Composable
 fun PaywallScreen(
@@ -63,29 +69,51 @@ fun PaywallScreen(
     val isSoft = KitConfig.PAYWALL_MODE == KitConfig.PaywallMode.SOFT
     val analytics = koinInject<AnalyticsManager>()
 
-    LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.PAYWALL) }
+    val packages = offering?.availablePackages.orEmpty()
+    var selected by remember { mutableStateOf<Package?>(null) }
+    LaunchedEffect(packages) {
+        if (selected == null && packages.isNotEmpty()) {
+            selected = packages.firstOrNull { it.packageType == PackageType.ANNUAL } ?: packages.first()
+        }
+    }
 
-    LaunchedEffect(status) {
-        if (status is PurchaseViewModel.Status.Entitled) onPurchased()
-    }
-    // Already-entitled user (e.g. restored elsewhere) never sees the paywall.
-    LaunchedEffect(isPremium) {
-        if (isPremium) onPurchased()
-    }
+    LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.PAYWALL) }
+    LaunchedEffect(status) { if (status is PurchaseViewModel.Status.Entitled) onPurchased() }
+    LaunchedEffect(isPremium) { if (isPremium) onPurchased() }
+
+    val working = status is PurchaseViewModel.Status.Working
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(KitTheme.spacing.lg)
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .padding(KitTheme.spacing.lg),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.md),
     ) {
         Spacer(Modifier.height(KitTheme.spacing.xl))
 
+        // Hero crown chip
+        Column(
+            modifier = Modifier
+                .size(72.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(MaterialTheme.colorScheme.primaryContainer),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Icon(
+                KitTheme.icons.success,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(36.dp),
+            )
+        }
+
         Text(
             text = stringResource(R.string.paywall_headline),
             style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
         )
         Text(
@@ -97,7 +125,14 @@ fun PaywallScreen(
 
         Spacer(Modifier.height(KitTheme.spacing.sm))
 
-        BenefitsList()
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.sm),
+        ) {
+            KitBulletRow(stringResource(R.string.paywall_benefit_1))
+            KitBulletRow(stringResource(R.string.paywall_benefit_2))
+            KitBulletRow(stringResource(R.string.paywall_benefit_3))
+        }
 
         Spacer(Modifier.height(KitTheme.spacing.sm))
 
@@ -109,34 +144,50 @@ fun PaywallScreen(
             else -> Unit
         }
 
-        val working = status is PurchaseViewModel.Status.Working
-
         if (!vm.isConfigured) {
             KitBanner(
                 text = stringResource(R.string.paywall_not_configured),
                 style = KitBannerStyle.WARNING,
             )
-        } else {
-            val packages = offering?.availablePackages.orEmpty()
-            packages.forEach { pkg ->
-                PackageCard(
-                    pkg = pkg,
-                    enabled = !working,
-                    onClick = { activity?.let { vm.purchase(it, pkg) } },
-                )
+        } else if (packages.isNotEmpty()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(KitTheme.spacing.sm),
+            ) {
+                packages.forEach { pkg ->
+                    KitPricingCard(
+                        title = pkg.tierLabel(),
+                        price = pkg.product.price.formatted,
+                        caption = pkg.tierCaption(),
+                        badge = if (pkg.packageType == PackageType.ANNUAL) {
+                            stringResource(R.string.paywall_badge_best_value)
+                        } else {
+                            null
+                        },
+                        selected = selected?.identifier == pkg.identifier,
+                        onClick = { selected = pkg },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
             }
         }
 
         Spacer(Modifier.height(KitTheme.spacing.sm))
 
         KitButton(
+            text = stringResource(R.string.paywall_cta),
+            onClick = { selected?.let { pkg -> activity?.let { vm.purchase(it, pkg) } } },
+            loading = working,
+            enabled = vm.isConfigured && selected != null && !working,
+        )
+
+        KitButton(
             text = stringResource(R.string.paywall_restore),
             onClick = vm::restore,
             style = KitButtonStyle.TEXT,
-            loading = working,
+            enabled = !working,
         )
 
-        // Skip is SOFT-mode only — HARD paywall blocks until purchase/restore.
         if (isSoft) {
             KitButton(
                 text = stringResource(R.string.paywall_skip),
@@ -145,75 +196,42 @@ fun PaywallScreen(
                 enabled = !working,
             )
         }
+
+        Text(
+            text = stringResource(R.string.paywall_fine_print),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = KitTheme.spacing.sm),
+        )
     }
 }
 
 @Composable
-private fun BenefitsList() {
-    // Kit author edits these benefit lines for their app (kept localized in strings.xml).
-    val benefits = listOf(
-        R.string.paywall_benefit_1,
-        R.string.paywall_benefit_2,
-        R.string.paywall_benefit_3,
-    )
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.sm),
-    ) {
-        benefits.forEach { res ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    KitTheme.icons.success,
-                    contentDescription = null,
-                    tint = KitTheme.colors.success,
-                    modifier = Modifier.size(20.dp),
-                )
-                Spacer(Modifier.size(KitTheme.spacing.sm))
-                Text(stringResource(res), style = MaterialTheme.typography.bodyLarge)
-            }
-        }
-    }
-}
+private fun Package.tierLabel(): String = stringResource(
+    when (packageType) {
+        PackageType.LIFETIME -> R.string.paywall_tier_lifetime
+        PackageType.ANNUAL -> R.string.paywall_tier_yearly
+        PackageType.SIX_MONTH -> R.string.paywall_tier_six_month
+        PackageType.THREE_MONTH -> R.string.paywall_tier_three_month
+        PackageType.MONTHLY -> R.string.paywall_tier_monthly
+        PackageType.WEEKLY -> R.string.paywall_tier_weekly
+        else -> R.string.paywall_tier_plan
+    },
+)
 
 @Composable
-private fun PackageCard(
-    pkg: Package,
-    enabled: Boolean,
-    onClick: () -> Unit,
-) {
-    KitCard(onClick = if (enabled) onClick else null) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = pkg.product.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                )
-                pkg.product.description.takeIf { it.isNotBlank() }?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-            Text(
-                text = pkg.product.price.formatted,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        }
-    }
+private fun Package.tierCaption(): String? = when (packageType) {
+    PackageType.ANNUAL -> stringResource(R.string.paywall_caption_billed_yearly)
+    PackageType.MONTHLY -> stringResource(R.string.paywall_caption_billed_monthly)
+    PackageType.LIFETIME -> stringResource(R.string.paywall_caption_one_time)
+    else -> null
 }
 
 /** Walk the Context wrapper chain to the hosting Activity (needed for the billing sheet). */
 @Composable
 private fun LocalActivity(): Activity? {
-    var ctx: Context = androidx.compose.ui.platform.LocalContext.current
+    var ctx: Context = LocalContext.current
     while (ctx is ContextWrapper) {
         if (ctx is Activity) return ctx
         ctx = ctx.baseContext

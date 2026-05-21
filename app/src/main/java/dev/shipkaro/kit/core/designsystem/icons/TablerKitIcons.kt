@@ -16,14 +16,18 @@ import compose.icons.tablericons.Edit
 import compose.icons.tablericons.Eye
 import compose.icons.tablericons.EyeOff
 import compose.icons.tablericons.InfoCircle
+import compose.icons.tablericons.Language
 import compose.icons.tablericons.Lock
 import compose.icons.tablericons.Logout
 import compose.icons.tablericons.Mail
 import compose.icons.tablericons.Menu2
+import compose.icons.tablericons.Palette
 import compose.icons.tablericons.Plus
 import compose.icons.tablericons.Search
 import compose.icons.tablericons.Settings
 import compose.icons.tablericons.Share
+import compose.icons.tablericons.Shield
+import compose.icons.tablericons.Star
 import compose.icons.tablericons.Trash
 import compose.icons.tablericons.User
 import compose.icons.tablericons.X
@@ -59,6 +63,11 @@ open class TablerKitIconsImpl : KitIcons {
     override val visibility: ImageVector = TablerIcons.Eye
     override val visibilityOff: ImageVector = TablerIcons.EyeOff
     override val google: ImageVector = TablerIcons.BrandGoogle
+
+    override val palette: ImageVector = TablerIcons.Palette
+    override val language: ImageVector = TablerIcons.Language
+    override val star: ImageVector = TablerIcons.Star
+    override val shield: ImageVector = TablerIcons.Shield
 
     override val success: ImageVector = TablerIcons.CircleCheck
     override val info: ImageVector = TablerIcons.InfoCircle
