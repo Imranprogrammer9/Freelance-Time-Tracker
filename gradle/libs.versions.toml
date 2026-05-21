@@ -34,6 +34,7 @@ googleid = "1.1.1"
 # purchases-ui drags Compose-Multiplatform deps (same conflict class as supabase compose-auth-ui).
 revenuecat = "9.23.1"
 posthog = "3.44.2"
+playReview = "2.0.2"
 detekt = "1.23.7"
 junit = "4.13.2"
 androidxTestExt = "1.2.1"
@@ -119,6 +120,12 @@ revenuecat-purchases = { group = "com.revenuecat.purchases", name = "purchases",
 posthog-android = { group = "com.posthog", name = "posthog-android", version.ref = "posthog" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+
+# Ops — FCM push, Firebase Remote Config, Play In-App Review.
+# Firebase pieces need google-services.json + plugin; play-review works without.
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+firebase-config = { group = "com.google.firebase", name = "firebase-config" }
+play-review = { group = "com.google.android.play", name = "review", version.ref = "playReview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -29,6 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.revenuecat.purchases.Package
 import dev.shipkaro.kit.R
+import dev.shipkaro.kit.core.analytics.AnalyticsManager
+import dev.shipkaro.kit.core.analytics.ScreenNames
 import dev.shipkaro.kit.core.billing.messageRes
 import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.designsystem.components.KitBanner
@@ -38,6 +40,7 @@ import dev.shipkaro.kit.core.designsystem.components.KitButtonStyle
 import dev.shipkaro.kit.core.designsystem.components.KitCard
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 /**
  * Custom paywall built on kit components. Honors [KitConfig.PAYWALL_MODE]:
@@ -58,6 +61,9 @@ fun PaywallScreen(
     val isPremium by vm.isPremium.collectAsState()
     val activity = LocalActivity()
     val isSoft = KitConfig.PAYWALL_MODE == KitConfig.PaywallMode.SOFT
+    val analytics = koinInject<AnalyticsManager>()
+
+    LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.PAYWALL) }
 
     LaunchedEffect(status) {
         if (status is PurchaseViewModel.Status.Entitled) onPurchased()

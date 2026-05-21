@@ -15,6 +15,7 @@ import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.data.settings.SettingsRepository
 import dev.shipkaro.kit.core.designsystem.theme.ShipKaroTheme
 import dev.shipkaro.kit.core.navigation.KitNavHost
+import dev.shipkaro.kit.core.ops.UpdateGate
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.handleDeeplinks
 import org.koin.android.ext.android.inject
@@ -34,7 +35,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    KitNavHost()
+                    UpdateGate {
+                        KitNavHost()
+                    }
                 }
             }
         }

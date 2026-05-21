@@ -103,6 +103,18 @@
     <string name="settings_analytics">استعمال کے تجزیات شیئر کریں</string>
     <string name="settings_analytics_subtitle">ایپ کو بہتر بنانے میں مدد کرتا ہے۔ کریش رپورٹس ہمیشہ بھیجی جاتی ہیں۔</string>
 
+    <!-- Settings — about -->
+    <string name="settings_section_about">ایپ کے بارے میں</string>
+    <string name="settings_rate_app">اس ایپ کو ریٹ کریں</string>
+
+    <!-- Update gate -->
+    <string name="update_required_title">اپ ڈیٹ ضروری ہے</string>
+    <string name="update_required_message">یہ ورژن اب سپورٹڈ نہیں ہے۔ جاری رکھنے کے لیے تازہ ترین ورژن پر اپ ڈیٹ کریں۔</string>
+    <string name="update_optional_title">اپ ڈیٹ دستیاب ہے</string>
+    <string name="update_optional_message">ایپ کا نیا ورژن بہتری اور درستگیوں کے ساتھ دستیاب ہے۔</string>
+    <string name="update_action">اپ ڈیٹ کریں</string>
+    <string name="update_later">بعد میں</string>
+
     <!-- Settings — account actions -->
     <string name="settings_account_default_name">اکاؤنٹ</string>
     <string name="settings_sign_out">سائن آؤٹ</string>

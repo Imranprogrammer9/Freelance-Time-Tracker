@@ -21,6 +21,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import dev.shipkaro.kit.R
+import dev.shipkaro.kit.core.analytics.AnalyticsManager
+import dev.shipkaro.kit.core.analytics.ScreenNames
 import dev.shipkaro.kit.core.auth.messageRes
 import dev.shipkaro.kit.core.designsystem.components.KitBanner
 import dev.shipkaro.kit.core.designsystem.components.KitBannerStyle
@@ -30,6 +32,7 @@ import dev.shipkaro.kit.core.designsystem.components.KitPasswordField
 import dev.shipkaro.kit.core.designsystem.components.KitTextField
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 /**
  * Single auth screen with mode-switching tabs (SignIn / SignUp / ForgotPassword).
@@ -42,6 +45,9 @@ fun AuthScreen(
 ) {
     val state by vm.state.collectAsState()
     val activityContext = LocalContext.current
+    val analytics = koinInject<AnalyticsManager>()
+
+    LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.AUTH) }
 
     LaunchedEffect(state.status) {
         if (state.status is AuthViewModel.Status.Authenticated) onAuthenticated()

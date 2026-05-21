@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- FCM notifications. Runtime-requested on Android 13+. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".KitApplication"
@@ -40,7 +42,29 @@
                     android:scheme="shipkaro"
                     android:host="auth-callback" />
             </intent-filter>
+
+            <!--
+              App Links for https deep links. Change the host to your domain and host a
+              /.well-known/assetlinks.json file there to get verified (autoVerify) links.
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="shipkaro.dev" />
+            </intent-filter>
         </activity>
+
+        <!-- FCM message receiver. Inert until google-services.json is added. -->
+        <service
+            android:name=".core.push.KitMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <!-- Android 13+ per-app language service. -->
         <service

@@ -1,5 +1,8 @@
 package dev.shipkaro.kit.feature.settings
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,10 +21,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import dev.shipkaro.kit.R
+import dev.shipkaro.kit.core.analytics.AnalyticsManager
+import dev.shipkaro.kit.core.analytics.ScreenNames
 import dev.shipkaro.kit.core.data.local.KitDatabase
+import dev.shipkaro.kit.core.ops.InAppReviewManager
+import kotlinx.coroutines.launch
 import dev.shipkaro.kit.core.designsystem.components.KitDialog
 import dev.shipkaro.kit.core.designsystem.settings.AccountRow
 import dev.shipkaro.kit.core.designsystem.settings.DangerRow
@@ -46,6 +55,12 @@ fun SettingsScreen(
     val analyticsEnabled by vm.analyticsEnabled.collectAsState(initial = true)
     val deleteStatus by vm.deleteStatus.collectAsState()
     val db = koinInject<KitDatabase>()
+    val reviewManager = koinInject<InAppReviewManager>()
+    val analytics = koinInject<AnalyticsManager>()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.SETTINGS) }
 
     val selectedLabel = stringResource(R.string.settings_value_selected)
     val privacyLabel = stringResource(R.string.legal_privacy)
@@ -114,6 +129,17 @@ fun SettingsScreen(
                 )
             }
 
+            SettingsSection(title = stringResource(R.string.settings_section_about)) {
+                NavRow(
+                    title = stringResource(R.string.settings_rate_app),
+                    onClick = {
+                        context.findActivity()?.let { act ->
+                            scope.launch { reviewManager.requestReview(act) }
+                        }
+                    },
+                )
+            }
+
             SettingsSection(title = stringResource(R.string.settings_section_account)) {
                 NavRow(
                     title = stringResource(R.string.settings_sign_out),
@@ -160,4 +186,11 @@ private fun ThemeMode.labelRes(): Int = when (this) {
     ThemeMode.SYSTEM -> R.string.settings_theme_system
     ThemeMode.LIGHT -> R.string.settings_theme_light
     ThemeMode.DARK -> R.string.settings_theme_dark
+}
+
+/** Walk the Context wrapper chain to the hosting Activity (needed by the Play review flow). */
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }

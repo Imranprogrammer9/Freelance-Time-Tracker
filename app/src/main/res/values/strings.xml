@@ -103,6 +103,18 @@
     <string name="settings_analytics">Share usage analytics</string>
     <string name="settings_analytics_subtitle">Helps improve the app. Crash reports are always sent.</string>
 
+    <!-- Settings — about -->
+    <string name="settings_section_about">About</string>
+    <string name="settings_rate_app">Rate this app</string>
+
+    <!-- Update gate -->
+    <string name="update_required_title">Update required</string>
+    <string name="update_required_message">This version is no longer supported. Update to the latest version to continue.</string>
+    <string name="update_optional_title">Update available</string>
+    <string name="update_optional_message">A newer version of the app is available with improvements and fixes.</string>
+    <string name="update_action">Update</string>
+    <string name="update_later">Later</string>
+
     <!-- Settings — account actions -->
     <string name="settings_account_default_name">Account</string>
     <string name="settings_sign_out">Sign out</string>

@@ -144,6 +144,11 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
 
+    // Ops — FCM push, Firebase Remote Config, Play In-App Review.
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.config)
+    implementation(libs.play.review)
+
     testImplementation(libs.junit)
     testImplementation(libs.turbine)
     testImplementation(libs.kotlinx.coroutines.test)

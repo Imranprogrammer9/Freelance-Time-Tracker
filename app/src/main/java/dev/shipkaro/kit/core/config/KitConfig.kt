@@ -71,6 +71,14 @@ object KitConfig {
     /** Wire PostHog / Firebase analytics + Crashlytics. */
     const val ANALYTICS_ENABLED: Boolean = true
 
+    /**
+     * Backend for [RemoteAppConfig] (runtime feature flags + the update gate).
+     *  - [LOCAL]    : no-op, returns defaults. Default — builds & runs offline.
+     *  - [FIREBASE] : Firebase Remote Config. Requires `google-services.json` + plugin.
+     */
+    enum class RemoteConfigProvider { LOCAL, FIREBASE }
+    val REMOTE_CONFIG_PROVIDER: RemoteConfigProvider = RemoteConfigProvider.LOCAL
+
     /** Ship the demo sample feature (turn off before release). */
     const val SAMPLE_FEATURE_ENABLED: Boolean = true
 }

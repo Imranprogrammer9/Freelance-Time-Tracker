@@ -9,11 +9,14 @@ import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.auth.StubAuthRepository
 import dev.shipkaro.kit.core.auth.SupabaseAuthRepository
 import dev.shipkaro.kit.core.billing.PurchaseManager
+import dev.shipkaro.kit.core.config.FirebaseRemoteAppConfig
 import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.config.LocalRemoteAppConfig
 import dev.shipkaro.kit.core.config.RemoteAppConfig
 import dev.shipkaro.kit.core.data.local.KitDatabase
 import dev.shipkaro.kit.core.data.settings.SettingsRepository
+import dev.shipkaro.kit.core.ops.InAppReviewManager
+import dev.shipkaro.kit.core.ops.UpdateManager
 import dev.shipkaro.kit.feature.auth.AuthViewModel
 import dev.shipkaro.kit.feature.paywall.PurchaseViewModel
 import dev.shipkaro.kit.feature.settings.SettingsViewModel
@@ -33,7 +36,12 @@ import retrofit2.Retrofit
  */
 private val coreModule = module {
     single { SettingsRepository(androidContext()) }
-    single<RemoteAppConfig> { LocalRemoteAppConfig() } // swapped in Phase 4 (Ops)
+    single<RemoteAppConfig> {
+        when (KitConfig.REMOTE_CONFIG_PROVIDER) {
+            KitConfig.RemoteConfigProvider.FIREBASE -> FirebaseRemoteAppConfig()
+            KitConfig.RemoteConfigProvider.LOCAL -> LocalRemoteAppConfig()
+        }
+    }
 
     single {
         OkHttpClient.Builder()
@@ -108,10 +116,18 @@ private val analyticsModule = module {
     single { AnalyticsManager(androidContext(), get()) }
 }
 
+/** Ops graph — update gate + in-app review. */
+private val opsModule = module {
+    single { UpdateManager(get()) }
+    single { InAppReviewManager() }
+}
+
 private val featureModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get()) }
     viewModel { PurchaseViewModel(get()) }
 }
 
-val appModules = listOf(coreModule, dataModule, authModule, billingModule, analyticsModule, featureModule)
+val appModules = listOf(
+    coreModule, dataModule, authModule, billingModule, analyticsModule, opsModule, featureModule,
+)
