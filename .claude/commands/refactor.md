@@ -30,15 +30,9 @@ free-form input, so do not use a multiple-choice tool):
 - **New app name** — the display name shown under the launcher icon, e.g.
   `Habit Tracker`. Spaces are allowed.
 
-Then ask one yes/no question with the **AskUserQuestion** tool:
-
-- **Update package declarations too?** (`shouldUpdatePackageName`)
-  - **Yes (recommended)** — also rewrites `package`/`import` statements in every
-    `.kt` file and renames the source directories. This is what almost everyone
-    wants.
-  - **No** — only changes `applicationId` + app name, leaves the `com.shipkaro.*`
-    package untouched. Pick this only if the developer has a specific reason to
-    keep the original package path.
+The refactor always rewrites the `package`/`import` declarations and renames the
+source directories along with the `applicationId` and app name. That is what
+every developer wants, so do NOT ask about it — just do it.
 
 ## Step 2 — Validate
 
@@ -54,7 +48,6 @@ Before running, show the user a short summary and ask them to confirm:
 Old ID   : <detected from app/build.gradle.kts namespace>
 New ID   : <newAppId>
 App Name : <newAppName>
-Package  : <"declarations updated" or "left as-is">
 ```
 
 Note that this rewrites files in the working tree. Recommend the user has a clean
@@ -69,7 +62,8 @@ From the project root, run (quote the app name — it may contain spaces):
 ./gradlew refactorPackage -PnewAppId=<newAppId> -PnewAppName="<newAppName>"
 ```
 
-Append ` -PshouldUpdatePackageName=false` only if the user chose **No** in Step 1.
+The Gradle task updates package declarations and renames directories by default,
+so no extra flag is needed.
 
 ## Step 5 — Report
 
