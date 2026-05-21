@@ -33,6 +33,7 @@ googleid = "1.1.1"
 # excluded: kit ships a custom paywall on its own components (hard + soft variants), and
 # purchases-ui drags Compose-Multiplatform deps (same conflict class as supabase compose-auth-ui).
 revenuecat = "9.23.1"
+posthog = "3.44.2"
 detekt = "1.23.7"
 junit = "4.13.2"
 androidxTestExt = "1.2.1"
@@ -111,6 +112,13 @@ googleid = { group = "com.google.android.libraries.identity.googleid", name = "g
 
 # RevenueCat — in-app purchases / subscriptions. Native Android SDK (no KMP).
 revenuecat-purchases = { group = "com.revenuecat.purchases", name = "purchases", version.ref = "revenuecat" }
+
+# Analytics — PostHog (product analytics) + Firebase Analytics + Crashlytics.
+# Firebase Analytics/Crashlytics need google-services.json + the google-services &
+# firebase-crashlytics Gradle plugins to actually report; deps compile without them.
+posthog-android = { group = "com.posthog", name = "posthog-android", version.ref = "posthog" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

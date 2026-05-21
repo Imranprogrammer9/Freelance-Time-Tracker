@@ -1,6 +1,7 @@
 package dev.shipkaro.kit
 
 import android.app.Application
+import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.billing.PurchaseManager
 import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.di.appModules
@@ -26,6 +27,10 @@ class KitApplication : Application() {
         // RevenueCat init. No-ops when no API key is configured.
         if (KitConfig.PAYWALL_ENABLED) {
             get<PurchaseManager>().configure()
+        }
+        // Analytics init. No-ops when ANALYTICS_ENABLED is off / no providers configured.
+        if (KitConfig.ANALYTICS_ENABLED) {
+            get<AnalyticsManager>().init()
         }
     }
 }

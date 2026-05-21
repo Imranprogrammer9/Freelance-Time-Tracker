@@ -98,6 +98,11 @@
     <!-- Settings — language label -->
     <string name="settings_language">Language</string>
 
+    <!-- Settings — privacy -->
+    <string name="settings_section_privacy">Privacy</string>
+    <string name="settings_analytics">Share usage analytics</string>
+    <string name="settings_analytics_subtitle">Helps improve the app. Crash reports are always sent.</string>
+
     <!-- Settings — account actions -->
     <string name="settings_account_default_name">Account</string>
     <string name="settings_sign_out">Sign out</string>

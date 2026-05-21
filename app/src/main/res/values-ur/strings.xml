@@ -98,6 +98,11 @@
     <!-- Settings — language label -->
     <string name="settings_language">زبان</string>
 
+    <!-- Settings — privacy -->
+    <string name="settings_section_privacy">پرائیویسی</string>
+    <string name="settings_analytics">استعمال کے تجزیات شیئر کریں</string>
+    <string name="settings_analytics_subtitle">ایپ کو بہتر بنانے میں مدد کرتا ہے۔ کریش رپورٹس ہمیشہ بھیجی جاتی ہیں۔</string>
+
     <!-- Settings — account actions -->
     <string name="settings_account_default_name">اکاؤنٹ</string>
     <string name="settings_sign_out">سائن آؤٹ</string>

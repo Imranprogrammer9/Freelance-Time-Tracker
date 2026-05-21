@@ -2,6 +2,9 @@ package dev.shipkaro.kit.feature.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.shipkaro.kit.core.analytics.AnalyticsEvents
+import dev.shipkaro.kit.core.analytics.AnalyticsManager
+import dev.shipkaro.kit.core.analytics.AnalyticsParams
 import dev.shipkaro.kit.core.auth.AuthErrorCode
 import dev.shipkaro.kit.core.auth.AuthRepository
 import dev.shipkaro.kit.core.auth.AuthResult
@@ -20,6 +23,7 @@ import kotlinx.coroutines.withContext
 class SettingsViewModel(
     private val settings: SettingsRepository,
     private val auth: AuthRepository,
+    private val analytics: AnalyticsManager,
 ) : ViewModel() {
 
     sealed interface DeleteStatus {
@@ -35,9 +39,18 @@ class SettingsViewModel(
 
     val themeMode = settings.themeMode
     val currentUser = auth.sessionState.map { auth.currentUser() }
+    val analyticsEnabled = settings.analyticsEnabled
 
     fun setThemeMode(mode: ThemeMode) {
         viewModelScope.launch { settings.setThemeMode(mode) }
+    }
+
+    fun setAnalyticsEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            // Log the toggle while analytics is still on, so an opt-out is captured.
+            analytics.logEvent(AnalyticsEvents.ANALYTICS_TOGGLED, mapOf(AnalyticsParams.ENABLED to enabled))
+            settings.setAnalyticsEnabled(enabled)
+        }
     }
 
     val languages = LocaleManager.supported

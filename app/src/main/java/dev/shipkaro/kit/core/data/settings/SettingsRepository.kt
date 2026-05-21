@@ -1,6 +1,7 @@
 package dev.shipkaro.kit.core.data.settings
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -19,6 +20,7 @@ class SettingsRepository(private val context: Context) {
     private object Keys {
         val THEME_MODE = stringPreferencesKey("theme_mode")
         val ONBOARDING_DONE = stringPreferencesKey("onboarding_done")
+        val ANALYTICS_ENABLED = booleanPreferencesKey("analytics_enabled")
     }
 
     val themeMode: Flow<ThemeMode> = context.dataStore.data.map { prefs ->
@@ -36,6 +38,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setOnboardingDone(done: Boolean) {
         context.dataStore.edit { it[Keys.ONBOARDING_DONE] = done.toString() }
+    }
+
+    /** User opt-in for analytics. Default true. Does NOT gate crash reporting. */
+    val analyticsEnabled: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        prefs[Keys.ANALYTICS_ENABLED] ?: true
+    }
+
+    suspend fun setAnalyticsEnabled(enabled: Boolean) {
+        context.dataStore.edit { it[Keys.ANALYTICS_ENABLED] = enabled }
     }
 
     /** Wipes all stored preferences. Called by the account-deletion flow. */

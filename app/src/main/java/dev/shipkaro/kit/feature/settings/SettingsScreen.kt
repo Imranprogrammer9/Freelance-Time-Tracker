@@ -29,6 +29,7 @@ import dev.shipkaro.kit.core.designsystem.settings.LegalLinks
 import dev.shipkaro.kit.core.designsystem.settings.NavRow
 import dev.shipkaro.kit.core.designsystem.settings.SettingsDivider
 import dev.shipkaro.kit.core.designsystem.settings.SettingsSection
+import dev.shipkaro.kit.core.designsystem.settings.ToggleRow
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 import dev.shipkaro.kit.core.designsystem.theme.ThemeMode
 import org.koin.androidx.compose.koinViewModel
@@ -42,6 +43,7 @@ fun SettingsScreen(
 ) {
     val theme by vm.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
     val user by vm.currentUser.collectAsState(initial = null)
+    val analyticsEnabled by vm.analyticsEnabled.collectAsState(initial = true)
     val deleteStatus by vm.deleteStatus.collectAsState()
     val db = koinInject<KitDatabase>()
 
@@ -101,6 +103,15 @@ fun SettingsScreen(
                         onClick = { vm.setLanguage(lang.tag) },
                     )
                 }
+            }
+
+            SettingsSection(title = stringResource(R.string.settings_section_privacy)) {
+                ToggleRow(
+                    title = stringResource(R.string.settings_analytics),
+                    subtitle = stringResource(R.string.settings_analytics_subtitle),
+                    checked = analyticsEnabled,
+                    onCheckedChange = vm::setAnalyticsEnabled,
+                )
             }
 
             SettingsSection(title = stringResource(R.string.settings_section_account)) {

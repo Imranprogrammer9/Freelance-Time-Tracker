@@ -19,6 +19,9 @@ val supabaseKey: String = localProps.getProperty("supabase.key", "")
 // RevenueCat Android API key (from RevenueCat dashboard > Project > Android app).
 // Empty if not set — PurchaseManager no-ops gracefully so the kit still builds & runs.
 val revenueCatApiKey: String = localProps.getProperty("revenuecat.android.api.key", "")
+// PostHog project API key + host. Empty key = PostHog disabled (AnalyticsManager no-ops it).
+val postHogApiKey: String = localProps.getProperty("posthog.api.key", "")
+val postHogHost: String = localProps.getProperty("posthog.host", "https://us.i.posthog.com")
 
 android {
     namespace = "dev.shipkaro.kit"
@@ -37,6 +40,8 @@ android {
         buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
         buildConfigField("String", "SUPABASE_KEY", "\"$supabaseKey\"")
         buildConfigField("String", "REVENUECAT_API_KEY", "\"$revenueCatApiKey\"")
+        buildConfigField("String", "POSTHOG_API_KEY", "\"$postHogApiKey\"")
+        buildConfigField("String", "POSTHOG_HOST", "\"$postHogHost\"")
     }
 
     // Locales the app ships with. Add a language => add values-XX/strings.xml
@@ -132,6 +137,12 @@ dependencies {
 
     // RevenueCat — subscriptions / paywall. Custom paywall UI, purchases-ui omitted (see catalog note).
     implementation(libs.revenuecat.purchases)
+
+    // Analytics — PostHog + Firebase Analytics + Crashlytics.
+    // Firebase pieces stay inert until google-services.json + plugins are added.
+    implementation(libs.posthog.android)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     testImplementation(libs.junit)
     testImplementation(libs.turbine)

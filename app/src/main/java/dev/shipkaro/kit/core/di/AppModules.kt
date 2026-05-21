@@ -5,6 +5,7 @@ import dev.shipkaro.kit.BuildConfig
 import dev.shipkaro.kit.core.auth.AuthRepository
 import dev.shipkaro.kit.core.auth.FirebaseAuthRepository
 import dev.shipkaro.kit.core.auth.GoogleSignInManager
+import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.auth.StubAuthRepository
 import dev.shipkaro.kit.core.auth.SupabaseAuthRepository
 import dev.shipkaro.kit.core.billing.PurchaseManager
@@ -102,10 +103,15 @@ private val billingModule = module {
     single { PurchaseManager(androidContext()) }
 }
 
+/** Analytics graph. AnalyticsManager is a singleton; backends degrade gracefully. */
+private val analyticsModule = module {
+    single { AnalyticsManager(androidContext(), get()) }
+}
+
 private val featureModule = module {
     viewModel { AuthViewModel(get(), get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get()) }
     viewModel { PurchaseViewModel(get()) }
 }
 
-val appModules = listOf(coreModule, dataModule, authModule, billingModule, featureModule)
+val appModules = listOf(coreModule, dataModule, authModule, billingModule, analyticsModule, featureModule)
