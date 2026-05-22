@@ -25,7 +25,7 @@ fine — they can resume later by running that single command on its own.
 **Speed — important:** do NOT run `./gradlew` compile or build commands between
 steps. They are slow and the wait adds up across the flow. Each sub-command has a
 "Verify" step that compiles — SKIP that step while running inside `/start-kit`. A
-single build runs once at the very end, in Step 8 (`/run-kit`), and it catches
+single build runs once at the very end, in Step 10 (`/run-kit`), and it catches
 any compile error introduced by any earlier step.
 
 ## Step 0 — Orientation
@@ -157,14 +157,35 @@ Configure PostHog and/or Firebase Analytics + Crashlytics.
 
 Configure the remote-config provider, the force/soft update gate, and FCM push.
 
-## Step 8 — Make it yours: remove the demo  →  `.claude/commands/make-it-yours.md`
+## Step 8 — Legal URLs
+
+Settings → Privacy / Terms opens these via Chrome Custom Tabs. Ask the developer
+for both URLs in plain conversational text (free-form input — no multi-choice):
+
+- **Privacy policy URL** — e.g. `https://yourdomain.com/privacy`. Skip if not
+  ready.
+- **Terms of service URL** — e.g. `https://yourdomain.com/terms`. Skip if not
+  ready.
+
+Write the answers into `KitConfig.kt`:
+
+    const val PRIVACY_URL: String = "..."
+    const val TERMS_URL: String = "..."
+
+If they skip either, leave the existing placeholder — the Settings row still
+renders, the link just opens the placeholder URL.
+
+Remind them: **Play Store requires a real privacy policy URL on the store listing
+before publishing.** They must come back and replace placeholders before release.
+
+## Step 9 — Make it yours: remove the demo  →  `.claude/commands/make-it-yours.md`
 
 OPTIONAL, and usually LAST. The kit ships with a demo Habit Tracker app whose
 launcher button sits on `HomeScreen`. Ask whether they want to hide the demo for
 now (recommended while learning) or remove the code entirely. Most people just
 hide it until they start replacing `HomeScreen` with their own screen.
 
-## Step 9 — Build & run  →  `.claude/commands/run-kit.md`
+## Step 10 — Build & run  →  `.claude/commands/run-kit.md`
 
 Build the app and run it on a device or emulator to confirm everything works.
 
