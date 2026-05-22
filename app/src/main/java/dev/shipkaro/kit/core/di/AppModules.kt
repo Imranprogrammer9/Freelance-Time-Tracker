@@ -13,6 +13,7 @@ import dev.shipkaro.kit.core.config.FirebaseRemoteAppConfig
 import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.config.LocalRemoteAppConfig
 import dev.shipkaro.kit.core.config.RemoteAppConfig
+import dev.shipkaro.kit.core.config.SupabaseRemoteAppConfig
 import dev.shipkaro.kit.core.data.local.KitDatabase
 import dev.shipkaro.kit.core.data.settings.SettingsRepository
 import dev.shipkaro.kit.core.ops.ChangelogManager
@@ -25,6 +26,7 @@ import dev.shipkaro.kit.feature.settings.SettingsViewModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.postgrest.Postgrest
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -41,6 +43,7 @@ private val coreModule = module {
     single<RemoteAppConfig> {
         when (KitConfig.REMOTE_CONFIG_PROVIDER) {
             KitConfig.RemoteConfigProvider.FIREBASE -> FirebaseRemoteAppConfig()
+            KitConfig.RemoteConfigProvider.SUPABASE -> SupabaseRemoteAppConfig(get())
             KitConfig.RemoteConfigProvider.LOCAL -> LocalRemoteAppConfig()
         }
     }
@@ -78,23 +81,33 @@ private val dataModule = module {
  * SUPABASE -> creates a SupabaseClient from BuildConfig URL/key, installs Auth plugin
  * FIREBASE -> uses FirebaseAuth.getInstance() — requires google-services.json
  */
+/**
+ * Supabase client graph. Created once and reused for any provider that needs
+ * Postgres / Auth on Supabase — currently Supabase auth and/or the Supabase
+ * `RemoteAppConfig`. Only added to [appModules] when at least one of those uses
+ * Supabase (see [needsSupabaseClient]).
+ */
+private val supabaseClientModule = module {
+    single<SupabaseClient> {
+        createSupabaseClient(
+            supabaseUrl = BuildConfig.SUPABASE_URL,
+            supabaseKey = BuildConfig.SUPABASE_KEY,
+        ) {
+            install(Auth) {
+                // OAuth callback scheme/host — must match AndroidManifest.xml intent-filter
+                // AND your Supabase project's Redirect URL setting.
+                scheme = "shipkaro"
+                host = "auth-callback"
+            }
+            install(Postgrest)
+            // ktor engine auto-resolved to OkHttp via ktor-client-okhttp on classpath.
+        }
+    }
+}
+
 private val authModule = module {
     when (KitConfig.AUTH_PROVIDER) {
         KitConfig.AuthProvider.SUPABASE -> {
-            single<SupabaseClient> {
-                createSupabaseClient(
-                    supabaseUrl = BuildConfig.SUPABASE_URL,
-                    supabaseKey = BuildConfig.SUPABASE_KEY,
-                ) {
-                    install(Auth) {
-                        // OAuth callback scheme/host — must match AndroidManifest.xml intent-filter
-                        // AND your Supabase project's Redirect URL setting.
-                        scheme = "shipkaro"
-                        host = "auth-callback"
-                    }
-                    // ktor engine auto-resolved to OkHttp via ktor-client-okhttp on classpath.
-                }
-            }
             single<AuthRepository> { SupabaseAuthRepository(get()) }
         }
         KitConfig.AuthProvider.FIREBASE -> {
@@ -106,6 +119,10 @@ private val authModule = module {
     }
     single { GoogleSignInManager(androidContext()) }
 }
+
+private fun needsSupabaseClient(): Boolean =
+    KitConfig.AUTH_PROVIDER == KitConfig.AuthProvider.SUPABASE ||
+        KitConfig.REMOTE_CONFIG_PROVIDER == KitConfig.RemoteConfigProvider.SUPABASE
 
 /** Billing graph. PurchaseManager is a singleton; no-ops when no RevenueCat key is set. */
 private val billingModule = module {
@@ -133,6 +150,7 @@ private val featureModule = module {
 val appModules = buildList {
     add(coreModule)
     add(dataModule)
+    if (needsSupabaseClient()) add(supabaseClientModule)
     add(authModule)
     add(billingModule)
     add(analyticsModule)

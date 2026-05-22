@@ -85,8 +85,11 @@ object KitConfig {
      * Backend for [RemoteAppConfig] (runtime feature flags + the update gate).
      *  - [LOCAL]    : no-op, returns defaults. Default — builds & runs offline.
      *  - [FIREBASE] : Firebase Remote Config. Requires `google-services.json` + plugin.
+     *  - [SUPABASE] : reads a public `app_config` Postgres table on Supabase. Reuses
+     *                 `supabase.url` / `supabase.key` from `local.properties`, so no extra
+     *                 credentials are needed if the app already uses Supabase auth.
      */
-    enum class RemoteConfigProvider { LOCAL, FIREBASE }
+    enum class RemoteConfigProvider { LOCAL, FIREBASE, SUPABASE }
     val REMOTE_CONFIG_PROVIDER: RemoteConfigProvider = RemoteConfigProvider.LOCAL
 
     /** Ship the demo sample feature (turn off before release). */

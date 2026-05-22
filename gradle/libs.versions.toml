@@ -98,6 +98,9 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 # signInWith(IDToken) directly, no compose-auth needed.
 supabase-bom = { group = "io.github.jan-tennert.supabase", name = "bom", version.ref = "supabase" }
 supabase-auth = { group = "io.github.jan-tennert.supabase", name = "auth-kt" }
+# postgrest-kt — needed for the optional Supabase-backed RemoteAppConfig
+# (KitConfig.RemoteConfigProvider.SUPABASE reads an `app_config` table).
+supabase-postgrest = { group = "io.github.jan-tennert.supabase", name = "postgrest-kt" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 
 # Firebase Auth (optional alternative — user adds google-services.json + google-services plugin to activate).

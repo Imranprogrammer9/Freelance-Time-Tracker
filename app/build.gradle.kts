@@ -152,6 +152,7 @@ dependencies {
     // which conflict with our AGP 8.5.2. Google sign-in done via Credential Manager + signInWith(IDToken).
     implementation(platform(libs.supabase.bom))
     implementation(libs.supabase.auth)
+    implementation(libs.supabase.postgrest)
     implementation(libs.ktor.client.okhttp)
 
     // Firebase Auth alternative (slot — activate by adding google-services.json + applying google-services plugin).
