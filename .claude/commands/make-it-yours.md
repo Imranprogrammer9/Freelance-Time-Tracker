@@ -19,13 +19,13 @@ blocks is instructions for you, not the developer.
 The demo is genuinely useful while learning: it shows onboarding → auth → paywall
 → settings wired together with real components and real data. Ask
 (AskUserQuestion):
-- **Keep the demo for now** — just set `SAMPLE_FEATURE_ENABLED = false` in
-  `KitConfig.kt` so the demo is off but the code stays. Fully reversible.
-  Recommend this if they are still exploring the kit.
-- **Remove it completely** — delete the demo code. Recommend this once they are
-  ready to build their own app.
+- **Hide the demo for now** — set `SAMPLE_FEATURE_ENABLED = false` in
+  `KitConfig.kt`. The "Launch demo" button on `HomeScreen` disappears, but the
+  demo code stays. Fully reversible.
+- **Remove it completely** — delete the demo code and unwire it from the kit's
+  navigation. Recommend this once they are ready to build their own app.
 
-If they choose "keep for now", set the flag, confirm, and stop.
+If they choose **"Hide for now"**, set the flag, confirm, and stop.
 
 ## Full removal
 
@@ -34,19 +34,22 @@ and revertible. Warn if there are already uncommitted changes.
 
 Show the developer exactly this:
 
-> **Removing the demo — the 3 changes I'll make:**
-> 1. `WelcomeScreen.kt` — remove the "Launch Demo" button and its callback.
-> 2. `AppModules.kt` — remove the `demoModule` import and the line
->    `if (KitConfig.SAMPLE_FEATURE_ENABLED) add(demoModule)`.
-> 3. Delete the whole `feature/demo/` directory. It is self-contained (its own
->    Room database, repository, and screens), so deleting it breaks nothing.
+> **Removing the demo — the 6 changes I'll make:**
+> 1. `KitConfig.kt` — set `SAMPLE_FEATURE_ENABLED = false`.
+> 2. `Route.kt` — remove `Route.Demo`.
+> 3. `KitNavHost.kt` — remove the `composable<Route.Demo> { DemoNavHost() }`
+>    block, the `DemoNavHost` import, and pass `onLaunchDemo = {}` (or drop
+>    it) in the `HomeScreen` call.
+> 4. `HomeScreen.kt` — drop the `onLaunchDemo` parameter and the
+>    `KitConfig.SAMPLE_FEATURE_ENABLED` "Launch demo" button.
+> 5. `AppModules.kt` — remove the `dev.shipkaro.kit.feature.demo.demoModule`
+>    import and the `if (KitConfig.SAMPLE_FEATURE_ENABLED) add(demoModule)`
+>    line.
+> 6. Delete the whole `feature/demo/` directory — it is self-contained (its
+>    own Room database, repository, and screens), so deleting it breaks
+>    nothing else.
 
-Then make those three changes.
-
-After removal, **rewire navigation**: `KitNavHost.kt` currently routes
-`Welcome → Demo`. With the demo gone, `Welcome` should route to the developer's
-own first screen. If they do not have one yet, leave `Welcome` as the start
-destination and tell them to point it at their screen later.
+Then make those six changes yourself.
 
 ## Verify
 
@@ -55,4 +58,4 @@ the end. If this command was run on its own, run
 `./gradlew :app:compileDebugKotlin`.
 
 If it fails, the likely cause is a leftover reference to a `feature/demo/` symbol
-or the `Demo` route — find and fix those. Report what was removed.
+or `Route.Demo` — find and fix those. Report what was removed.

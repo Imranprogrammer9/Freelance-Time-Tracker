@@ -104,38 +104,67 @@ must never be committed — later steps write keys into it.
 Make the kit theirs: new package name, applicationId, app display name. Do this
 first — before any other code is added — so the rename stays clean.
 
-## Step 2 — Brand & theme  →  `.claude/commands/setup-theme.md`
+## Step 2 — Onboarding content
 
-Set their brand color, theme options, and app icon.
+The kit ships a 3-page onboarding (`OnboardingScreen`) with placeholder copy.
+Tailor it to the developer's app now — they only have to answer one question.
 
-## Step 3 — Authentication  →  `.claude/commands/setup-auth.md`
+Ask in plain conversational text (free-form, no multi-choice):
+- **What's your app about?** A single sentence — e.g. "An offline habit tracker
+  with streaks", "Voice-first journaling with AI cleanup".
+
+If they skip / decline, leave the defaults and move on.
+
+Otherwise, write **3 page titles + 3 page descriptions** that introduce the app's
+core value (problem solved → key feature → invitation to start). Each title
+should be 1–4 words; each description should be one short sentence. Update
+**both** locale files:
+
+- `app/src/main/res/values/strings.xml` — English.
+- `app/src/main/res/values-ur/strings.xml` — Urdu (translate the same content).
+
+Replace these existing string IDs in both files:
+
+    onboarding_page1_title       onboarding_page1_desc
+    onboarding_page2_title       onboarding_page2_desc
+    onboarding_page3_title       onboarding_page3_desc
+
+Do NOT add new string IDs — overwrite the existing values. Keep entity escapes
+(`'` → `\'`, `&` → `&amp;`) correct.
+
+## Step 3 — Brand & theme  →  `.claude/commands/setup-theme.md`
+
+Set their brand color and app icon.
+
+## Step 4 — Authentication  →  `.claude/commands/setup-auth.md`
 
 Pick and configure the auth provider (Stub / Supabase / Firebase).
 
-## Step 4 — Paywall & subscriptions  →  `.claude/commands/setup-paywall.md`
+## Step 5 — Paywall & subscriptions  →  `.claude/commands/setup-paywall.md`
 
 If the developer chose **"free app"** in Step 0, SKIP this step entirely — do
 NOT ask. Just tell them the paywall is skipped and they can run `/setup-paywall`
-later if they ever add subscriptions, then move to Step 5.
+later if they ever add subscriptions, then move to Step 6.
 
 Otherwise (paid app, or just exploring), configure RevenueCat via the command
 file.
 
-## Step 5 — Analytics & crash reporting  →  `.claude/commands/setup-analytics.md`
+## Step 6 — Analytics & crash reporting  →  `.claude/commands/setup-analytics.md`
 
 Configure PostHog and/or Firebase Analytics + Crashlytics.
 
-## Step 6 — Ops: remote config, updates, push  →  `.claude/commands/setup-ops.md`
+## Step 7 — Ops: remote config, updates, push  →  `.claude/commands/setup-ops.md`
 
 Configure the remote-config provider, the force/soft update gate, and FCM push.
 
-## Step 7 — Make it yours: remove the demo  →  `.claude/commands/make-it-yours.md`
+## Step 8 — Make it yours: remove the demo  →  `.claude/commands/make-it-yours.md`
 
-OPTIONAL, and usually LAST. The kit ships with a demo Habit Tracker app. Ask
-whether they want to keep it for now (useful while learning) or strip it. Most
-people keep it until they start building their own screens.
+OPTIONAL, and usually LAST. The kit ships with a demo Habit Tracker app whose
+launcher button sits on `HomeScreen`. Ask whether they want to hide the demo for
+now (recommended while learning) or remove the code entirely. Most people just
+hide it until they start replacing `HomeScreen` with their own screen.
 
-## Step 8 — Build & run  →  `.claude/commands/run-kit.md`
+## Step 9 — Build & run  →  `.claude/commands/run-kit.md`
 
 Build the app and run it on a device or emulator to confirm everything works.
 
