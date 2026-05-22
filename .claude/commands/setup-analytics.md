@@ -30,10 +30,10 @@ Show the developer exactly this:
 
 > **Get your PostHog key:**
 > 1. Sign up at https://posthog.com and create a project.
-> 2. Open **Settings → Project** and copy the **Project API Key**
->    (it starts with `phc_`).
-> 3. Note your cloud region — US is `https://us.i.posthog.com`,
->    EU is `https://eu.i.posthog.com`.
+> 2. Open **Settings → General**. Under **Project token & ID**, copy the
+>    **Project token** (it starts with `phc_`).
+> 3. In the same section, check the **Region** — US Cloud uses
+>    `https://us.i.posthog.com`, EU Cloud uses `https://eu.i.posthog.com`.
 
 Write to `local.properties` (git-ignored — never committed):
 
