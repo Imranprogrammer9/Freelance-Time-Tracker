@@ -92,6 +92,21 @@ Then set the client ID in `KitConfig.kt`:
 
     const val GOOGLE_WEB_CLIENT_ID: String = "..."
 
+Native Google sign-in also needs the app's **SHA-1 fingerprint** registered.
+Get the debug SHA-1 by running `./gradlew signingReport` and reading the SHA-1
+under the `debug` variant. Then show the developer this:
+
+> **Register your app's SHA-1** (Google Cloud Console →
+> **APIs & Services → Credentials**):
+> 10. Create an **OAuth client ID → Android** (or open the existing one).
+> 11. Set the package name to your `applicationId` and paste the **debug
+>     SHA-1** from `./gradlew signingReport`.
+
+Before a Play release the app also needs the **release** SHA-1 registered the
+same way — from your release keystore, or Play Console → Test and release → App
+integrity → App signing if you use Play App Signing. Tell the developer that is
+a release-time task, not needed now.
+
 OAuth callback note: the kit uses `shipkaro://auth-callback`, defined in
 `AppModules.kt` (the `authModule` `scheme`/`host`) and `AndroidManifest.xml`. The
 redirect URL from step 9 must match it. If the developer wants a custom scheme
@@ -107,16 +122,28 @@ and apply the plugin, then return here.
 
 **Only if Google sign-in is enabled**, show the developer this:
 
-> **Get your Google Web client ID**
-> 1. Open https://console.firebase.google.com and select your project.
-> 2. Go to **Project settings** (gear icon) → **General**.
-> 3. Scroll to **Your apps** and select the Android app.
-> 4. Copy the **Web client ID**. (Not shown? Open Google Cloud Console →
->    Credentials → the OAuth 2.0 Client of type *Web application*.)
+Native Google sign-in needs the app's **SHA-1 fingerprint** in Firebase. Get the
+debug SHA-1 by running `./gradlew signingReport` and reading the SHA-1 under the
+`debug` variant. Then show the developer this:
+
+> **Add your SHA-1, then get the Web client ID** (Firebase console):
+> 1. Open https://console.firebase.google.com → your project →
+>    **Project settings** (gear icon) → **General**.
+> 2. Under **Your apps**, select the Android app → **Add fingerprint** →
+>    paste the **debug SHA-1** from `./gradlew signingReport`.
+> 3. Click **Download google-services.json** and replace
+>    `app/google-services.json` (it now includes the OAuth client).
+> 4. Copy the **Web client ID** shown for the app. (Not shown? Google Cloud
+>    Console → Credentials → the OAuth 2.0 Client of type *Web application*.)
 
 Then set it in `KitConfig.kt`:
 
     const val GOOGLE_WEB_CLIENT_ID: String = "..."
+
+Before a Play release the app also needs the **release** SHA-1 added the same
+way — from your release keystore, or Play Console → Test and release → App
+integrity → App signing if you use Play App Signing. Tell the developer that is
+a release-time task, not needed now.
 
 More detail + screenshots: https://kit.shipkaro.dev/docs/auth/firebase
 
