@@ -65,14 +65,18 @@ Show the developer exactly this:
 > **Get your Supabase keys**
 > 1. Go to https://supabase.com and sign in.
 > 2. Click **New Project**, give it a name, pick a region, create it.
-> 3. Open **Project Settings → API** (gear icon, left sidebar).
-> 4. Copy **Project URL** — this becomes your `supabase.url`.
+> 3. Open **Project Settings → General** (gear icon, left sidebar). Copy the
+>    **Project ID**. There is no "Project URL" field — your URL is
+>    `https://<Project-ID>.supabase.co`.
+> 4. Open **Project Settings → API Keys**, then click the **Legacy anon,
+>    service_role API keys** tab.
 > 5. Copy the **anon public** key — this becomes your `supabase.key`.
 
-Write the URL + key into `local.properties` (git-ignored — never committed):
+Write the URL + key into `local.properties` (git-ignored — never committed).
+Build the URL from the Project ID:
 
-    supabase.url=https://YOUR-PROJECT.supabase.co
-    supabase.key=YOUR-ANON-KEY
+    supabase.url=https://YOUR-PROJECT-ID.supabase.co
+    supabase.key=YOUR-ANON-PUBLIC-KEY
 
 **Only if Google sign-in is enabled**, also show the developer this:
 
