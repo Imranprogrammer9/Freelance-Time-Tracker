@@ -1,30 +1,173 @@
 package dev.shipkaro.kit.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import dev.shipkaro.kit.core.auth.AuthRepository
+import dev.shipkaro.kit.core.auth.SessionState
+import dev.shipkaro.kit.core.billing.PurchaseManager
+import dev.shipkaro.kit.core.config.KitConfig
+import dev.shipkaro.kit.core.data.settings.SettingsRepository
+import dev.shipkaro.kit.feature.auth.AuthScreen
+import dev.shipkaro.kit.feature.changelog.ChangelogScreen
 import dev.shipkaro.kit.feature.demo.DemoNavHost
-import dev.shipkaro.kit.feature.welcome.WelcomeScreen
+import dev.shipkaro.kit.feature.home.HomeScreen
+import dev.shipkaro.kit.feature.onboarding.OnboardingScreen
+import dev.shipkaro.kit.feature.paywall.PaywallScreen
+import dev.shipkaro.kit.feature.profile.ProfileScreen
+import dev.shipkaro.kit.feature.settings.SettingsScreen
+import dev.shipkaro.kit.feature.splash.SplashScreen
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 /**
- * Top-level navigation. Out of the box the kit shows only [WelcomeScreen]; its
- * "Launch Demo" button enters the bundled demo ([DemoNavHost]).
+ * Top-level navigation.
  *
- * There is intentionally no real app flow here — when you build your app you replace
- * `WelcomeScreen` with your start screen and wire your own graph using the reusable
- * screens under `feature/`. See the "Make it yours" guide.
+ * Default flow:
+ *   Splash (1.5s) → Onboarding (first launch only) → Auth (if `AUTH_ENABLED` + signed
+ *   out) → Paywall (if `PAYWALL_ENABLED` + not premium + first time) → Home → Settings
+ *   / Profile / Changelog. The demo subtree (when `SAMPLE_FEATURE_ENABLED`) is reachable
+ *   from Home via "Launch demo".
+ *
+ * If the user signs out from a post-auth screen (Home / Settings / Profile), the kit
+ * automatically routes back to Auth.
  */
 @Composable
 fun KitNavHost() {
     val navController = rememberNavController()
+    val settings = koinInject<SettingsRepository>()
+    val auth = koinInject<AuthRepository>()
+    val purchases = koinInject<PurchaseManager>()
+    val scope = rememberCoroutineScope()
 
-    NavHost(navController = navController, startDestination = Route.Welcome) {
-        composable<Route.Welcome> {
-            WelcomeScreen(onLaunchDemo = { navController.navigate(Route.Demo) })
+    // Bounce back to Auth on sign-out from a post-auth screen.
+    val session by auth.sessionState.collectAsState(initial = SessionState.Loading)
+    val currentEntry = navController.currentBackStackEntryAsState().value
+    LaunchedEffect(session, currentEntry) {
+        if (!KitConfig.AUTH_ENABLED || session !is SessionState.SignedOut) return@LaunchedEffect
+        val dest = currentEntry?.destination ?: return@LaunchedEffect
+        val isPostAuth = dest.hasRoute<Route.Home>() ||
+            dest.hasRoute<Route.Settings>() ||
+            dest.hasRoute<Route.Profile>() ||
+            dest.hasRoute<Route.Changelog>()
+        if (isPostAuth) {
+            navController.navigate(Route.Auth) {
+                popUpTo<Route.Home> { inclusive = true }
+                launchSingleTop = true
+            }
+        }
+    }
+
+    NavHost(navController = navController, startDestination = Route.Splash) {
+        composable<Route.Splash> {
+            SplashScreen(onReady = {
+                scope.launch {
+                    val next = resolveStartRoute(settings, auth, purchases)
+                    navController.navigate(next) {
+                        popUpTo<Route.Splash> { inclusive = true }
+                    }
+                }
+            })
+        }
+        composable<Route.Onboarding> {
+            OnboardingScreen(onFinished = {
+                scope.launch {
+                    val next = afterOnboarding(settings, auth, purchases)
+                    navController.navigate(next) {
+                        popUpTo<Route.Onboarding> { inclusive = true }
+                    }
+                }
+            })
+        }
+        composable<Route.Auth> {
+            AuthScreen(onAuthenticated = {
+                scope.launch {
+                    val next = afterAuth(settings, purchases)
+                    navController.navigate(next) {
+                        popUpTo<Route.Auth> { inclusive = true }
+                    }
+                }
+            })
+        }
+        composable<Route.Paywall> {
+            val finish: () -> Unit = {
+                scope.launch {
+                    settings.setPaywallSeen(true)
+                    navController.navigate(Route.Home) {
+                        popUpTo<Route.Paywall> { inclusive = true }
+                    }
+                }
+            }
+            PaywallScreen(onPurchased = finish, onDismiss = finish)
+        }
+        composable<Route.Home> {
+            HomeScreen(
+                onOpenSettings = { navController.navigate(Route.Settings) },
+                onLaunchDemo = { navController.navigate(Route.Demo) },
+            )
+        }
+        composable<Route.Settings> {
+            SettingsScreen(
+                onBack = { navController.popBackStack() },
+                onWhatsNew = { navController.navigate(Route.Changelog) },
+                onProfile = { navController.navigate(Route.Profile) },
+            )
+        }
+        composable<Route.Profile> {
+            ProfileScreen(onBack = { navController.popBackStack() })
+        }
+        composable<Route.Changelog> {
+            ChangelogScreen(onBack = { navController.popBackStack() })
         }
         composable<Route.Demo> {
             DemoNavHost()
         }
+    }
+}
+
+/** First-launch route resolution called from Splash. */
+private suspend fun resolveStartRoute(
+    settings: SettingsRepository,
+    auth: AuthRepository,
+    purchases: PurchaseManager,
+): Route {
+    if (KitConfig.ONBOARDING_ENABLED && !settings.onboardingDone.first()) return Route.Onboarding
+    if (KitConfig.AUTH_ENABLED && auth.sessionState.first() is SessionState.SignedOut) {
+        return Route.Auth
+    }
+    return afterAuth(settings, purchases)
+}
+
+/** After onboarding completes — skip auth/paywall as appropriate. */
+private suspend fun afterOnboarding(
+    settings: SettingsRepository,
+    auth: AuthRepository,
+    purchases: PurchaseManager,
+): Route {
+    if (KitConfig.AUTH_ENABLED && auth.sessionState.first() is SessionState.SignedOut) {
+        return Route.Auth
+    }
+    return afterAuth(settings, purchases)
+}
+
+/** After auth completes — show the paywall once, then Home. */
+private suspend fun afterAuth(
+    settings: SettingsRepository,
+    purchases: PurchaseManager,
+): Route {
+    val paywallSeen = settings.paywallSeen.first()
+    val premium = purchases.isPremium.value
+    return if (KitConfig.PAYWALL_ENABLED && !paywallSeen && !premium) {
+        Route.Paywall
+    } else {
+        Route.Home
     }
 }

@@ -99,16 +99,19 @@
     <string name="billing_error_product_unavailable">This product isn\'t available right now.</string>
     <string name="billing_error_unknown">Couldn\'t complete the purchase. Please try again.</string>
 
-    <!-- Welcome (kit entry — placeholder, replace with your real start screen) -->
-    <string name="welcome_tagline">A production-ready Android starter kit. Auth, payments, analytics and launch tooling — already wired.</string>
-    <string name="welcome_feature_auth_title">Authentication</string>
-    <string name="welcome_feature_auth_desc">Email + Google sign-in, sessions and account deletion.</string>
-    <string name="welcome_feature_paywall_title">Payments</string>
-    <string name="welcome_feature_paywall_desc">RevenueCat paywall with subscription tiers and restore.</string>
-    <string name="welcome_feature_ops_title">Analytics &amp; Ops</string>
-    <string name="welcome_feature_ops_desc">Events, crash reporting, remote config and an update gate.</string>
-    <string name="welcome_launch_demo">Launch Demo</string>
-    <string name="welcome_replace_hint">This is a placeholder. Replace WelcomeScreen with your own start screen.</string>
+    <!-- Home — default start destination; replace with your app's main screen -->
+    <string name="home_title">Home</string>
+    <string name="home_heading">Your app starts here</string>
+    <string name="home_subtitle">Replace HomeScreen with your app\'s main screen.</string>
+    <string name="home_open_settings">Open settings</string>
+    <string name="home_launch_demo">Launch demo app</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_sign_out">Sign out</string>
+
+    <!-- Accessibility -->
+    <string name="action_open_settings">Open settings</string>
 
     <!-- Demo — Habit Tracker sample app -->
     <string name="habit_list_title">My Habits</string>

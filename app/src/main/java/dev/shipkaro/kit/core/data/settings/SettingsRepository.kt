@@ -23,6 +23,7 @@ class SettingsRepository(private val context: Context) {
         val ONBOARDING_DONE = stringPreferencesKey("onboarding_done")
         val ANALYTICS_ENABLED = booleanPreferencesKey("analytics_enabled")
         val LAST_SEEN_VERSION = intPreferencesKey("last_seen_version_code")
+        val PAYWALL_SEEN = booleanPreferencesKey("paywall_seen")
     }
 
     val themeMode: Flow<ThemeMode> = context.dataStore.data.map { prefs ->
@@ -61,6 +62,19 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setLastSeenVersionCode(code: Int) {
         context.dataStore.edit { it[Keys.LAST_SEEN_VERSION] = code }
+    }
+
+    /**
+     * Whether the user has already seen the auto-shown paywall once in the initial flow
+     * (Splash → ... → Paywall → Home). After this is true, the kit's default nav does
+     * NOT auto-show the paywall again; premium-gated actions still trigger it in-place.
+     */
+    val paywallSeen: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        prefs[Keys.PAYWALL_SEEN] ?: false
+    }
+
+    suspend fun setPaywallSeen(seen: Boolean) {
+        context.dataStore.edit { it[Keys.PAYWALL_SEEN] = seen }
     }
 
     /** Wipes all stored preferences. Called by the account-deletion flow. */

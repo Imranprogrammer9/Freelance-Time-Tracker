@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.analytics.ScreenNames
+import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.data.local.KitDatabase
 import dev.shipkaro.kit.core.designsystem.components.KitBottomSheet
 import dev.shipkaro.kit.core.designsystem.components.KitDialog
@@ -47,6 +48,7 @@ import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 import dev.shipkaro.kit.core.designsystem.theme.ThemeMode
 import dev.shipkaro.kit.core.locale.LocaleManager
 import dev.shipkaro.kit.core.ops.InAppReviewManager
+import dev.shipkaro.kit.core.util.CustomTabs
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -56,6 +58,7 @@ import org.koin.compose.koinInject
 fun SettingsScreen(
     onBack: () -> Unit,
     onWhatsNew: () -> Unit,
+    onProfile: () -> Unit = {},
     vm: SettingsViewModel = koinViewModel(),
 ) {
     val theme by vm.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
@@ -104,7 +107,7 @@ fun SettingsScreen(
                     name = it.displayName ?: it.email ?: accountFallback,
                     email = it.email.orEmpty(),
                     avatarUrl = it.avatarUrl,
-                    onClick = { /* future: profile screen */ },
+                    onClick = onProfile,
                 )
                 Spacer(Modifier.height(KitTheme.spacing.lg))
             }
@@ -177,8 +180,8 @@ fun SettingsScreen(
 
             LegalLinks(
                 links = listOf(
-                    privacyLabel to { /* TODO: open privacy URL */ },
-                    termsLabel to { /* TODO: open terms URL */ },
+                    privacyLabel to { CustomTabs.openUrl(context, KitConfig.PRIVACY_URL) },
+                    termsLabel to { CustomTabs.openUrl(context, KitConfig.TERMS_URL) },
                 ),
             )
             Spacer(Modifier.height(KitTheme.spacing.lg))

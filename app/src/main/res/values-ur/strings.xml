@@ -99,16 +99,19 @@
     <string name="billing_error_product_unavailable">یہ پروڈکٹ ابھی دستیاب نہیں ہے۔</string>
     <string name="billing_error_unknown">خریداری مکمل نہیں ہو سکی۔ دوبارہ کوشش کریں۔</string>
 
-    <!-- Welcome (kit entry — placeholder) -->
-    <string name="welcome_tagline">پروڈکشن کے لیے تیار Android اسٹارٹر کٹ۔ آتھ، ادائیگیاں، تجزیات اور لانچ ٹولنگ — پہلے سے تیار۔</string>
-    <string name="welcome_feature_auth_title">تصدیق</string>
-    <string name="welcome_feature_auth_desc">ای میل + Google سائن ان، سیشنز اور اکاؤنٹ حذف کرنا۔</string>
-    <string name="welcome_feature_paywall_title">ادائیگیاں</string>
-    <string name="welcome_feature_paywall_desc">سبسکرپشن ٹیئرز اور بحالی کے ساتھ RevenueCat پے وال۔</string>
-    <string name="welcome_feature_ops_title">تجزیات اور آپریشنز</string>
-    <string name="welcome_feature_ops_desc">ایونٹس، کریش رپورٹنگ، ریموٹ کنفگ اور اپ ڈیٹ گیٹ۔</string>
-    <string name="welcome_launch_demo">ڈیمو لانچ کریں</string>
-    <string name="welcome_replace_hint">یہ ایک پلیس ہولڈر ہے۔ WelcomeScreen کو اپنی اسٹارٹ اسکرین سے بدلیں۔</string>
+    <!-- Home — ڈیفالٹ اسٹارٹ ڈیسٹینیشن -->
+    <string name="home_title">ہوم</string>
+    <string name="home_heading">آپ کی ایپ یہاں سے شروع ہوتی ہے</string>
+    <string name="home_subtitle">HomeScreen کو اپنی ایپ کی مرکزی اسکرین سے بدلیں۔</string>
+    <string name="home_open_settings">سیٹنگز کھولیں</string>
+    <string name="home_launch_demo">ڈیمو ایپ لانچ کریں</string>
+
+    <!-- Profile -->
+    <string name="profile_title">پروفائل</string>
+    <string name="profile_sign_out">سائن آؤٹ</string>
+
+    <!-- ایکسیسبیلٹی -->
+    <string name="action_open_settings">سیٹنگز کھولیں</string>
 
     <!-- Demo — Habit Tracker sample app -->
     <string name="habit_list_title">میری عادات</string>

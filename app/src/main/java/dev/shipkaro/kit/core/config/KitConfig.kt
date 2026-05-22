@@ -101,4 +101,16 @@ object KitConfig {
      * leave it as-is; the Retrofit instance is only created when something injects it.
      */
     const val API_BASE_URL: String = "https://example.com/"
+
+    /**
+     * Privacy policy URL. Opened from Settings → Privacy via Chrome Custom Tabs.
+     * Replace with your real published policy before shipping. Empty = link disabled.
+     */
+    const val PRIVACY_URL: String = "https://example.com/privacy"
+
+    /**
+     * Terms of Service URL. Opened from Settings → Terms via Chrome Custom Tabs.
+     * Replace with your real published terms before shipping. Empty = link disabled.
+     */
+    const val TERMS_URL: String = "https://example.com/terms"
 }
