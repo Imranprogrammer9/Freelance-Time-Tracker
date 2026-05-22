@@ -77,13 +77,10 @@ so no extra flag is needed.
 Relay the task's "Refactor complete!" output (it lists every changed file). Then
 show the developer exactly this:
 
-> **After the rename — finish in Android Studio:**
-> 1. Sync Gradle: File → Sync Project with Gradle Files.
-> 2. Invalidate Caches / Restart (the package path changed).
-> 3. If you use Firebase, re-download `google-services.json` for the new
->    package name and replace `app/google-services.json`.
-> 4. If you use Supabase Google sign-in, update the OAuth deeplink scheme/host
->    in `AndroidManifest.xml` and `KitConfig` if you based it on the old name.
+> **Rename done.** Your next build picks up the new package automatically — no
+> further action needed.
+> *(If you have the project open in Android Studio: File → Sync Project, so the
+> IDE re-indexes the renamed files.)*
 
 A sanity build — **only if this command was run on its own**, not as part of
 `/start-kit` (that flow builds once at the end). Standalone, run:

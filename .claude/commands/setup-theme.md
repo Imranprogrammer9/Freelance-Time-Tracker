@@ -1,5 +1,5 @@
 ---
-description: Set the kit's brand color, theme options, and app icon
+description: Set the kit's brand color and app icon
 argument-hint: [#hexcolor]
 ---
 
@@ -27,34 +27,25 @@ Ask the developer for their brand color as a hex value (e.g. `#7C3AED`). If they
 passed one in `$ARGUMENTS`, use that. Convert `#RRGGBB` into the
 `Color(0xFFRRGGBB)` form and replace the `BrandPrimary` value.
 
-Tell them the light and dark color schemes derive from this single value; for a
-fully hand-tuned palette they can later edit the other values in the same file.
-Do not auto-edit those other values.
+Tell them the light and dark color schemes both derive from this single value;
+for a fully hand-tuned palette they can later edit the other values in the same
+file. Do not auto-edit those other values.
 
-## Step 2 — Dynamic color (Material You)
+## Step 2 — App icon
 
-Find `Theme.kt` in the same package. The theme composable has a parameter
-`dynamicColor: Boolean = false`. Explain: when true, on Android 12+ the app
-adopts the user's wallpaper colors instead of the brand color. The kit ships
-`false` so branding stays consistent across devices. Ask if they want it on;
-flip the default only if they say yes.
+A launcher icon needs image assets that cannot be generated here. Point the
+developer to a free online generator. Show them exactly this:
 
-## Step 3 — App icon
+> **Make your app icon online:**
+> 1. Go to https://icon.kitchen
+> 2. Upload your logo (or pick an emoji / text) and set the background color.
+> 3. Click **Download** — you get a ZIP containing `res/mipmap-*` folders.
+> 4. Unzip it and copy those `mipmap-*` folders into `app/src/main/res/`,
+>    replacing the existing ones.
 
-A real launcher icon needs image assets that cannot be generated here. Show the
-developer exactly this:
+The kit ships a placeholder icon — fine to leave for now and do this later.
 
-> **Set your app icon in Android Studio:**
-> 1. Right-click the `res` folder → New → Image Asset.
-> 2. Choose **Launcher Icons (Adaptive and Legacy)**.
-> 3. Set the **Foreground Layer** to your logo image (or text).
-> 4. Set the **Background Layer** to your brand color.
-> 5. Click **Next → Finish** — it overwrites the `mipmap-*` folders.
-
-The kit ships a placeholder icon. Only offer to drop in a brand-tinted
-placeholder yourself if the developer explicitly asks.
-
-## Step 4 — Verify
+## Step 3 — Verify
 
 **Skip this step if you are running as part of `/start-kit`** — it builds once at
 the end. If this command was run on its own, run
