@@ -108,9 +108,10 @@ integrity → App signing if you use Play App Signing. Tell the developer that i
 a release-time task, not needed now.
 
 OAuth callback note: the kit uses `shipkaro://auth-callback`, defined in
-`AppModules.kt` (the `authModule` `scheme`/`host`) and `AndroidManifest.xml`. The
-redirect URL from step 9 must match it. If the developer wants a custom scheme
-instead of `shipkaro`, edit BOTH files to match.
+`AppModules.kt` (the `supabaseClientModule` `install(Auth) { scheme/host }`
+block) and `AndroidManifest.xml`. The redirect URL from step 9 must match it.
+If the developer wants a custom scheme instead of `shipkaro`, edit BOTH files
+to match.
 
 More detail + screenshots: https://kit.shipkaro.dev/docs/auth/supabase
 

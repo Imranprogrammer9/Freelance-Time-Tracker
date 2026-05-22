@@ -50,10 +50,13 @@ Or simply tell the developer to tap the app icon on the device.
 Show the developer exactly this:
 
 > **First run — what to expect:**
-> ShipKit opens on the **Welcome** screen with a "Launch Demo" button (unless
-> you removed the demo with `/make-it-yours`). The demo runs splash → onboarding
-> → paywall → auth → habit tracker → settings. Click through it to confirm auth,
-> theme, and the paywall behave the way you configured them.
+> ShipKit opens with a 1.5s **Splash**, then walks the default flow based on
+> what you configured: **Onboarding** (first launch only) → **Auth** (if you
+> enabled it and are signed out) → **Paywall** (if you enabled it and you are
+> not premium yet, shown once) → **Home**. From Home you can open **Settings**
+> or — while the demo is enabled — tap **Launch demo app** to run the bundled
+> Habit Tracker. Click through it to confirm auth, theme, and the paywall
+> behave the way you configured them.
 
 Report the build result. If something fails on the device but compiles cleanly,
 say so plainly — runtime testing on screen is the developer's job; you cannot see
