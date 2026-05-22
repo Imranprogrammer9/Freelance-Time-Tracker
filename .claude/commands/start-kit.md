@@ -55,8 +55,9 @@ Then ask, with the **AskUserQuestion** tool, **what they are building**:
 - A paid / subscription app
 - Just exploring the kit
 
-Use the answer to recommend which steps matter (e.g. skip the paywall for a free
-app) — but let them override any recommendation.
+Use the answer to decide which steps to run: a **free app** skips the paywall
+step (Step 4) entirely; a **paid / subscription app** includes it; **just
+exploring** walks through everything.
 
 Confirm prerequisites. This is where first-time developers — **especially on
 Windows** — get stuck, so do it carefully and verify, never guess.
@@ -113,7 +114,12 @@ Pick and configure the auth provider (Stub / Supabase / Firebase).
 
 ## Step 4 — Paywall & subscriptions  →  `.claude/commands/setup-paywall.md`
 
-Configure RevenueCat. If they said "free app", ask whether to skip this.
+If the developer chose **"free app"** in Step 0, SKIP this step entirely — do
+NOT ask. Just tell them the paywall is skipped and they can run `/setup-paywall`
+later if they ever add subscriptions, then move to Step 5.
+
+Otherwise (paid app, or just exploring), configure RevenueCat via the command
+file.
 
 ## Step 5 — Analytics & crash reporting  →  `.claude/commands/setup-analytics.md`
 
