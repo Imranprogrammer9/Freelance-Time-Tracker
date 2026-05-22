@@ -17,13 +17,20 @@ blocks is instructions for you, not the developer.
 ## Step 1 — Remote config provider
 
 The update gate, maintenance mode, and the changelog all read their values from
-`RemoteAppConfig`. Ask (AskUserQuestion):
+`RemoteAppConfig`. Ask (AskUserQuestion) — present these options exactly:
 - **Local (recommended to start)** — returns defaults, no backend. The update
   gate and maintenance screen exist but never trigger. The app builds offline.
 - **Firebase Remote Config** — values controlled live from the Firebase console.
+  Needs Firebase set up (`google-services.json` + plugins). If the developer has
+  not set up Firebase yet — for example they chose Supabase for auth — this step
+  sets it up.
 
-Set `REMOTE_CONFIG_PROVIDER` in `KitConfig.kt` accordingly. If they pick
-Firebase, read `.claude/commands/setup-firebase.md`, follow it, then return here.
+Set `REMOTE_CONFIG_PROVIDER` in `KitConfig.kt` accordingly.
+
+If they pick **Firebase Remote Config**, first check whether Firebase is already
+configured: does `app/google-services.json` exist? If it does NOT, read
+`.claude/commands/setup-firebase.md`, follow it to set Firebase up, then return
+here. If it already exists, do not repeat that — just continue.
 
 If they picked Firebase, show the developer exactly this:
 
