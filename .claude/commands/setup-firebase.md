@@ -31,9 +31,13 @@ Then show the developer exactly this:
 
 ## Step 2 — Place google-services.json
 
-The file goes at `app/google-services.json` (next to `app/build.gradle.kts`).
-Ask the developer to confirm they moved it there, then verify the file exists.
-Do NOT continue until it does.
+Do NOT make the developer move the file themselves. Ask them to paste the full
+path to the `google-services.json` they just downloaded — it is usually in their
+Downloads folder (e.g. `~/Downloads/google-services.json`).
+
+Once they give you the path, copy the file yourself to `app/google-services.json`
+(next to `app/build.gradle.kts`) and verify it landed. Do NOT continue until the
+copy succeeds.
 
 `google-services.json` holds project identifiers — recommend keeping it out of
 any public repo.
