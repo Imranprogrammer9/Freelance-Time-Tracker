@@ -19,6 +19,41 @@ When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim** — do not paraphrase or improvise. Prose outside those
 blocks is instructions for you.
 
+## Progress tracking
+
+Before Step 1 runs, call **TaskCreate** with just one task: `Step 1 — Pick
+release path`. Mark it `in_progress` immediately.
+
+After the developer picks first-version vs update, mark that task `completed`
+and immediately call **TaskCreate** again to append the **path-specific**
+tasks below (only the ones for the chosen path). Mark each `in_progress`
+when entering it, `completed` when done. If a step is **skipped** (e.g.
+update path's "Screenshots if UI changed" when the developer says UI did not
+change), mark the task `completed` and prefix its content with `[skipped] `
+via **TaskUpdate**.
+
+First-version path tasks (verbatim):
+
+- A — Pre-flight check
+- B — App icon
+- C — Release keystore
+- D — Screenshots
+- E — Store listing copy
+- F — Data Safety form
+- G — Create Play Console app
+- H — Build signed AAB
+- I — Manual upload
+
+Update path tasks (verbatim):
+
+- A — Pre-flight check
+- B — Bump version
+- C — Update RemoteAppConfig (if wired)
+- D — Release notes
+- E — Screenshots (if UI changed)
+- F — Build signed AAB
+- G — Manual upload
+
 ## Step 1 — First version or update?
 
 Ask (AskUserQuestion):

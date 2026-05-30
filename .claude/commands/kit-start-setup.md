@@ -28,6 +28,28 @@ steps. They are slow and the wait adds up across the flow. Each sub-command has 
 single build runs once at the very end, in Step 8 (`/kit-run-app`), and it catches
 any compile error introduced by any earlier step.
 
+## Progress tracking
+
+Before you greet the developer, call **TaskCreate** with one task per Step
+below, in order, all `pending`. As you enter each Step, mark its task
+`in_progress`; when the Step finishes, mark it `completed`. If a Step is
+**skipped** (e.g. "free app" hard-skips Step 5 Paywall; "no auth" stops Step 4
+early; the developer skips a question), still mark the task `completed` but
+prefix the task content with `[skipped] ` via **TaskUpdate** so the developer
+can tell skips from real completions at a glance.
+
+Use these task titles verbatim:
+
+- Step 0 — Orientation + prereqs
+- Step 1 — Rename kit
+- Step 2 — Onboarding content
+- Step 3 — Brand & theme
+- Step 4 — Authentication
+- Step 5 — Paywall
+- Step 6 — Analytics
+- Step 7 — Ops (remote config, updates, push)
+- Step 8 — Build & run
+
 ## Step 0 — Orientation
 
 Open with one line: **ShipKit** is a starter kit from **ShipKaro**, a community

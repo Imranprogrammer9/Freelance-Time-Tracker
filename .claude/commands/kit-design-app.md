@@ -30,6 +30,28 @@ Before starting:
 
 ---
 
+## Progress tracking
+
+Before Phase 1 starts, call **TaskCreate** with the five tasks below, all
+`pending`. Mark each `in_progress` when you enter it and `completed` when
+done. If the developer skips a sub-step (e.g. they say "no design source,
+just describe the app" — Phase 1A still completes but with a different
+branch), mark the task `completed` and prefix its content with `[skipped] `
+via **TaskUpdate**.
+
+Once Phase 1 is approved and the screen list is locked, call **TaskCreate**
+again to append one "Phase 2 — Wire <ScreenName>" task per screen. Mark
+each `in_progress` when you start wiring that screen and `completed` when the
+developer approves it on device.
+
+Initial task titles (verbatim):
+
+- Phase 1A — Pick design source
+- Phase 1B — Approve screen list
+- Phase 1C — Generate screens
+- Phase 1D — Compile + present for approval
+- Phase 2 — Wire functionality (per-screen tasks added after Phase 1)
+
 # Phase 1 — Screens with dummy data
 
 ## 1A — Pick a design source
