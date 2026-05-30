@@ -58,7 +58,7 @@ android {
     // and append the tag here. Per-app language picker reads this set.
     androidResources {
         @Suppress("UnstableApiUsage")
-        localeFilters += setOf("en", "ur")
+        localeFilters += setOf("en")
     }
 
     // Release signing — reads from RELEASE_* env vars (set in CI). When they're absent

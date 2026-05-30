@@ -14,10 +14,14 @@ import androidx.core.os.LocaleListCompat
  */
 object LocaleManager {
 
-    /** Languages the kit ships with. Keep in sync with locales_config.xml. */
+    /**
+     * Languages the app supports. The kit ships English-only; `/kit-translate`
+     * adds new entries to this list when the developer translates the app.
+     * Keep in sync with `res/xml/locales_config.xml` and `localeFilters` in
+     * `app/build.gradle.kts`.
+     */
     val supported: List<Language> = listOf(
         Language(tag = "en", displayName = "English"),
-        Language(tag = "ur", displayName = "اردو"),
     )
 
     data class Language(val tag: String, val displayName: String)

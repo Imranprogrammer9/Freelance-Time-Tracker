@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Languages the app supports. Add a <locale> here AND a values-<tag>/strings.xml
-     AND the tag in resourceConfigurations (app/build.gradle.kts). -->
+<!-- Languages the app supports. The kit ships with English only; add more by
+     running the /kit-translate slash command, which writes new
+     values-<tag>/strings.xml files AND updates this file, LocaleManager, and
+     the localeFilters in app/build.gradle.kts in one shot. -->
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
     <locale android:name="en" />
-    <locale android:name="ur" />
 </locale-config>

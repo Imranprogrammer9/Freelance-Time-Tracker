@@ -122,15 +122,17 @@ fun SettingsScreen(
                     valueText = stringResource(theme.labelRes()),
                     onClick = { themeSheet = true },
                 )
-                SettingsDivider()
-                NavRow(
-                    title = stringResource(R.string.settings_language),
-                    leading = KitTheme.icons.language,
-                    chipColor = KitTheme.colors.info,
-                    valueText = vm.languages
-                        .firstOrNull { vm.currentLanguageTag().startsWith(it.tag) }?.displayName,
-                    onClick = { languageSheet = true },
-                )
+                if (vm.languages.size > 1) {
+                    SettingsDivider()
+                    NavRow(
+                        title = stringResource(R.string.settings_language),
+                        leading = KitTheme.icons.language,
+                        chipColor = KitTheme.colors.info,
+                        valueText = vm.languages
+                            .firstOrNull { vm.currentLanguageTag().startsWith(it.tag) }?.displayName,
+                        onClick = { languageSheet = true },
+                    )
+                }
             }
 
             SettingsSection(title = stringResource(R.string.settings_section_privacy)) {
