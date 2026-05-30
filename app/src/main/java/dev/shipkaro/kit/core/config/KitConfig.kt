@@ -32,8 +32,17 @@ object KitConfig {
     /** Show onboarding flow on first launch. */
     const val ONBOARDING_ENABLED: Boolean = true
 
-    /** Wire auth screens + auth-gated navigation. Set false to ship a no-auth app. */
-    const val AUTH_ENABLED: Boolean = true
+    /**
+     * Wire auth screens + auth-gated navigation.
+     *
+     * Ships **false** by default so a fresh clone runs without showing a sign-in
+     * screen. `/kit-setup-auth` flips this to `true` and sets [AUTH_PROVIDER] to a
+     * real backend (Supabase or Firebase) at the same time. The [STUB] provider is
+     * an internal fallback used when [AUTH_ENABLED] is true but no real provider
+     * has been configured yet — it should NOT be picked deliberately for a
+     * production app.
+     */
+    const val AUTH_ENABLED: Boolean = false
     val AUTH_PROVIDER: AuthProvider = AuthProvider.STUB
 
     /** Show the email + password form on the auth screen. */
