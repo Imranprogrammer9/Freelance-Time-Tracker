@@ -102,14 +102,16 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(top = KitTheme.spacing.sm),
         ) {
-            user?.let {
-                AccountRow(
-                    name = it.displayName ?: it.email ?: accountFallback,
-                    email = it.email.orEmpty(),
-                    avatarUrl = it.avatarUrl,
-                    onClick = onProfile,
-                )
-                Spacer(Modifier.height(KitTheme.spacing.lg))
+            if (KitConfig.AUTH_ENABLED) {
+                user?.let {
+                    AccountRow(
+                        name = it.displayName ?: it.email ?: accountFallback,
+                        email = it.email.orEmpty(),
+                        avatarUrl = it.avatarUrl,
+                        onClick = onProfile,
+                    )
+                    Spacer(Modifier.height(KitTheme.spacing.lg))
+                }
             }
 
             SettingsSection(title = stringResource(R.string.settings_section_appearance)) {
@@ -162,20 +164,22 @@ fun SettingsScreen(
                 )
             }
 
-            SettingsSection(title = stringResource(R.string.settings_section_account)) {
-                NavRow(
-                    title = stringResource(R.string.settings_sign_out),
-                    leading = KitTheme.icons.logout,
-                    chipColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = { vm.signOut() },
-                )
-                SettingsDivider()
-                DangerRow(
-                    title = stringResource(R.string.settings_delete_account),
-                    subtitle = stringResource(R.string.settings_delete_account_subtitle),
-                    leading = KitTheme.icons.delete,
-                    onClick = { vm.askDeleteAccount() },
-                )
+            if (KitConfig.AUTH_ENABLED) {
+                SettingsSection(title = stringResource(R.string.settings_section_account)) {
+                    NavRow(
+                        title = stringResource(R.string.settings_sign_out),
+                        leading = KitTheme.icons.logout,
+                        chipColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        onClick = { vm.signOut() },
+                    )
+                    SettingsDivider()
+                    DangerRow(
+                        title = stringResource(R.string.settings_delete_account),
+                        subtitle = stringResource(R.string.settings_delete_account_subtitle),
+                        leading = KitTheme.icons.delete,
+                        onClick = { vm.askDeleteAccount() },
+                    )
+                }
             }
 
             LegalLinks(
