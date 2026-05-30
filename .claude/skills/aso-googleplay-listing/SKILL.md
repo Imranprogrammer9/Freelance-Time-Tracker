@@ -126,9 +126,9 @@ emphasis, brand mention, etc.). Refine and re-show. Loop until they approve.
 
 When approved, write the three files (overwriting any existing content):
 
-- `fastlane/metadata/android/en-US/title.txt` — app name.
-- `fastlane/metadata/android/en-US/short_description.txt` — short description.
-- `fastlane/metadata/android/en-US/full_description.txt` — long description.
+- `playstore/title.txt` — app name.
+- `playstore/short_description.txt` — short description.
+- `playstore/full_description.txt` — long description.
 
 Each file is **plain text only** — no surrounding quotes, no Markdown wrappers,
 no trailing newlines except a single one at end of file.

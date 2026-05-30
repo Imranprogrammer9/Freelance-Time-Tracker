@@ -25,7 +25,7 @@ Ask (AskUserQuestion):
 - **First version (never published)** — set up signing, generate assets, create
   the Play Console app, build the first AAB, upload manually.
 - **Update an existing app** — bump version, write release notes, build, and
-  upload via Fastlane.
+  upload manually in Play Console.
 
 Then branch to the matching path below. Skip the path the developer did not
 pick.
@@ -100,12 +100,12 @@ Play requires at least 2 phone screenshots. Ask (AskUserQuestion):
   available in this Claude Code install. The skill reads the app's code,
   derives the core benefits, and produces ASO-optimised screenshot images.
 - **I'll provide my own** — they drop PNGs into
-  `fastlane/metadata/android/en-US/images/phoneScreenshots/` named
+  `playstore/screenshots/` named
   `1.png`, `2.png`, … (1080×1920 portrait, up to 8 images).
 
 If **generate**: invoke the `aso-appstore-screenshots` skill and let it drive
 the screenshot flow. When it finishes, copy the produced images into
-`fastlane/metadata/android/en-US/images/phoneScreenshots/`.
+`playstore/screenshots/`.
 
 If **provide**: wait for confirmation, then `ls` the directory and report the
 count back to the developer (Play needs ≥ 2).
@@ -128,9 +128,9 @@ multi-choice):
 - **Long description** (max 4000 chars) — features, benefits, why install.
 
 Either way, the three files end up at:
-- App name → `fastlane/metadata/android/en-US/title.txt`
-- Short description → `fastlane/metadata/android/en-US/short_description.txt`
-- Long description → `fastlane/metadata/android/en-US/full_description.txt`
+- App name → `playstore/title.txt`
+- Short description → `playstore/short_description.txt`
+- Long description → `playstore/full_description.txt`
 
 ## F. Data Safety form
 
@@ -184,11 +184,11 @@ Show this:
 >    internal testing first; you can promote to Production later from the
 >    same screen).
 > 2. Drop in `app/build/outputs/bundle/release/app-release.aab`.
-> 3. Open `fastlane/metadata/android/en-US/title.txt`,
->    `short_description.txt`, and `full_description.txt` and paste each into
->    the matching Play Console field (Main store listing).
+> 3. Open `playstore/title.txt`, `playstore/short_description.txt`, and
+>    `playstore/full_description.txt` and paste each into the matching Play
+>    Console field (Main store listing).
 > 4. Upload the PNGs from
->    `fastlane/metadata/android/en-US/images/phoneScreenshots/` to the
+>    `playstore/screenshots/` to the
 >    **Phone screenshots** section.
 > 5. Add release notes (a few short bullets of what's in this version).
 > 6. **Save → Review release → Start rollout to Internal testing**.
@@ -241,7 +241,7 @@ Show this:
 
 Ask the developer for 3–5 short bullet points of what changed. Write them to:
 
-    fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
+    playstore/changelogs/<versionCode>.txt
 
 where `<versionCode>` is the new value from step B. Plain text, one bullet per
 line (no Markdown), max 500 chars total (Play's limit).
@@ -266,10 +266,10 @@ Show this:
 >    track you ship from — Closed / Open testing / Production).
 > 2. Drop in `app/build/outputs/bundle/release/app-release.aab`.
 > 3. Paste the release notes from
->    `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` into the
+>    `playstore/changelogs/<versionCode>.txt` into the
 >    **Release notes** field.
 > 4. If you re-did screenshots in step E, upload the new PNGs from
->    `fastlane/metadata/android/en-US/images/phoneScreenshots/`.
+>    `playstore/screenshots/`.
 > 5. **Save → Review release → Start rollout**.
 
 ---
