@@ -19,23 +19,25 @@ prose outside those blocks is instructions for you, not for the developer.
 First ask (AskUserQuestion) whether the app needs auth at all. If they pick "no
 auth", set `AUTH_ENABLED = false` in `KitConfig` and stop here.
 
-Otherwise ask (AskUserQuestion) which provider — present these three options:
+Otherwise ask (AskUserQuestion) which provider — present these two options:
 
-- **Stub (recommended to start)** — in-memory fake auth, no backend, no
-  credentials. Sign-in always succeeds. Lets the app build and run instantly;
-  switch to a real provider anytime by re-running this command.
-- **Supabase** — real email/password + Google sign-in, backed by a Supabase
-  project. Needs a Supabase project URL and anon key.
-- **Firebase** — Firebase Authentication. Needs a `google-services.json` file.
+- **Supabase (recommended)** — real email/password + Google sign-in, backed
+  by a Supabase project. Needs a Supabase project URL and anon key. Smoother
+  dev experience (no Gradle plugins to wire).
+- **Firebase** — Firebase Authentication. Needs a `google-services.json`
+  file and the Google Services Gradle plugin (the command sets this up).
 
 ## Step 2 — Set the provider in KitConfig
 
 Find `KitConfig.kt` (search under `app/src/main/java`, package `...core.config`).
-Set:
+Set both:
 
-    val AUTH_PROVIDER: AuthProvider = AuthProvider.<STUB|SUPABASE|FIREBASE>
+    const val AUTH_ENABLED: Boolean = true
+    val AUTH_PROVIDER: AuthProvider = AuthProvider.<SUPABASE|FIREBASE>
 
-If they chose **Stub**: nothing else to do — confirm and stop.
+`AUTH_ENABLED` ships `false` by default so a fresh clone runs without an auth
+screen — flipping it to `true` here turns the kit's auth flow back on for
+this app.
 
 ## Step 3 — Choose sign-in methods
 
