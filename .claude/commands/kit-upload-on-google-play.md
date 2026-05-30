@@ -112,15 +112,22 @@ count back to the developer (Play needs ≥ 2).
 
 ## E. Store listing copy
 
-Show this:
+Ask (AskUserQuestion):
+- **Generate them automatically** — uses the `aso-googleplay-listing` skill
+  shipped with this kit. The skill builds a keyword strategy and writes app
+  name, short description, and long description tuned for Play SEO.
+- **I'll write my own** — they hand you the three fields conversationally.
 
-> **Listing copy I need (each line goes into Play Console):**
-> 1. **App name** (max 30 chars). Usually your app's display name.
-> 2. **Short description** (max 80 chars) — one-line elevator pitch.
-> 3. **Long description** (max 4000 chars) — features, benefits, why install.
+If **generate**: invoke the `aso-googleplay-listing` skill and let it drive the
+flow. It writes the three files at the paths below when done.
 
-Collect each in plain conversational text (free-form, no multi-choice). Write
-each to the matching file:
+If **write own**: ask for each in plain conversational text (free-form, no
+multi-choice):
+- **App name** (max 30 chars). Usually your app's display name.
+- **Short description** (max 80 chars) — one-line elevator pitch.
+- **Long description** (max 4000 chars) — features, benefits, why install.
+
+Either way, the three files end up at:
 - App name → `fastlane/metadata/android/en-US/title.txt`
 - Short description → `fastlane/metadata/android/en-US/short_description.txt`
 - Long description → `fastlane/metadata/android/en-US/full_description.txt`
