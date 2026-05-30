@@ -34,13 +34,14 @@ the language list is visible):
   actually want translations.)
 
 - **Label:** `Right-to-Left (RTL)`
-  **Description:** Arabic (ar), Hebrew (he). Adds RTL layout support to the
-  app for free as a side effect.
+  **Description:** Arabic (ar), Hebrew (he), Urdu (ur). Adds RTL layout support
+  to the app for free as a side effect. (Hindi is NOT RTL — it lives in the
+  Asia bucket below.)
 
-- **Label:** `East & Southeast Asia`
+- **Label:** `Asia (East / Southeast / South)`
   **Description:** Simplified Chinese (zh-CN), Traditional Chinese (zh-TW),
-  Japanese (ja), Korean (ko), Thai (th), Vietnamese (vi), Indonesian (id),
-  Malay (ms), Filipino (fil).
+  Japanese (ja), Korean (ko), Hindi (hi), Thai (th), Vietnamese (vi),
+  Indonesian (id), Malay (ms), Filipino (fil).
 
 - **Label:** `Europe`
   **Description:** German (de), Spanish (es), French (fr), Italian (it),
@@ -100,6 +101,7 @@ For each picked language, do the following:
 | Filipino | `fil` |
 | French | `fr` |
 | Hebrew | `iw` (Android legacy code for he) |
+| Hindi | `hi` |
 | Croatian | `hr` |
 | Hungarian | `hu` |
 | Indonesian | `in` (Android legacy code for id) |
@@ -118,6 +120,7 @@ For each picked language, do the following:
 | Thai | `th` |
 | Turkish | `tr` |
 | Ukrainian | `uk` |
+| Urdu | `ur` |
 | Vietnamese | `vi` |
 | Simplified Chinese | `zh-rCN` |
 | Traditional Chinese | `zh-rTW` |
@@ -136,6 +139,7 @@ For each picked language, do the following:
 | Filipino | `fil` | Filipino |
 | French | `fr` | Français |
 | Hebrew | `he` | עברית |
+| Hindi | `hi` | हिन्दी |
 | Croatian | `hr` | Hrvatski |
 | Hungarian | `hu` | Magyar |
 | Indonesian | `id` | Bahasa Indonesia |
@@ -154,6 +158,7 @@ For each picked language, do the following:
 | Thai | `th` | ไทย |
 | Turkish | `tr` | Türkçe |
 | Ukrainian | `uk` | Українська |
+| Urdu | `ur` | اردو |
 | Vietnamese | `vi` | Tiếng Việt |
 | Simplified Chinese | `zh-CN` | 简体中文 |
 | Traditional Chinese | `zh-TW` | 繁體中文 |
