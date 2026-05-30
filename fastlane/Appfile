@@ -1,7 +1,0 @@
-# Google Play service-account JSON — create one in Play Console → Setup → API access,
-# download the key, and place it here. It is git-ignored (never commit it).
-json_key_file("fastlane/play-store-service-account.json")
-
-# Must match applicationId in app/build.gradle.kts. The refactorPackage task does NOT
-# touch this file — update it by hand after renaming the package.
-package_name("dev.shipkaro.kit")

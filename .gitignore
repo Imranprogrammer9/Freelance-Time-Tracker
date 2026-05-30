@@ -15,12 +15,6 @@ local.properties
 /app/release
 .session/
 
-# Fastlane / Play Store secrets
-fastlane/play-store-service-account.json
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots/
-
 # Firebase config — app-specific, not committed to the kit
 google-services.json
 
