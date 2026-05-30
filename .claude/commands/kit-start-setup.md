@@ -2,7 +2,7 @@
 description: Guided end-to-end setup of ShipKit — run this first
 ---
 
-You are running **`/start-kit`**, the master setup command for ShipKit.
+You are running **`/kit-start-setup`**, the master setup command for ShipKit.
 
 This is the FIRST command a developer runs after cloning the kit. Your job: walk
 them through turning the starter kit into their own app — renaming, branding, and
@@ -24,8 +24,8 @@ fine — they can resume later by running that single command on its own.
 
 **Speed — important:** do NOT run `./gradlew` compile or build commands between
 steps. They are slow and the wait adds up across the flow. Each sub-command has a
-"Verify" step that compiles — SKIP that step while running inside `/start-kit`. A
-single build runs once at the very end, in Step 9 (`/run-kit`), and it catches
+"Verify" step that compiles — SKIP that step while running inside `/kit-start-setup`. A
+single build runs once at the very end, in Step 9 (`/kit-run-app`), and it catches
 any compile error introduced by any earlier step.
 
 ## Step 0 — Orientation
@@ -99,7 +99,7 @@ If anything fails, help fix it before continuing. Tell the developer that
 `local.properties` holds their SDK path and all secret keys, is git-ignored, and
 must never be committed — later steps write keys into it.
 
-## Step 1 — Rename the kit  →  `.claude/commands/refactor.md`
+## Step 1 — Rename the kit  →  `.claude/commands/kit-change-app-id.md`
 
 Make the kit theirs: new package name, applicationId, app display name. Do this
 first — before any other code is added — so the rename stays clean.
@@ -132,44 +132,49 @@ Replace these existing string IDs in both files:
 Do NOT add new string IDs — overwrite the existing values. Keep entity escapes
 (`'` → `\'`, `&` → `&amp;`) correct.
 
-## Step 3 — Brand & theme  →  `.claude/commands/setup-theme.md`
+## Step 3 — Brand & theme  →  `.claude/commands/kit-kit-setup-theme.md`
 
 Set their brand color and app icon.
 
-## Step 4 — Authentication  →  `.claude/commands/setup-auth.md`
+## Step 4 — Authentication  →  `.claude/commands/kit-kit-setup-auth.md`
 
 Pick and configure the auth provider (Stub / Supabase / Firebase).
 
-## Step 5 — Paywall & subscriptions  →  `.claude/commands/setup-paywall.md`
+## Step 5 — Paywall & subscriptions  →  `.claude/commands/kit-kit-setup-paywall.md`
 
 If the developer chose **"free app"** in Step 0, SKIP this step entirely — do
-NOT ask. Just tell them the paywall is skipped and they can run `/setup-paywall`
+NOT ask. Just tell them the paywall is skipped and they can run `/kit-setup-paywall`
 later if they ever add subscriptions, then move to Step 6.
 
 Otherwise (paid app, or just exploring), configure RevenueCat via the command
 file.
 
-## Step 6 — Analytics & crash reporting  →  `.claude/commands/setup-analytics.md`
+## Step 6 — Analytics & crash reporting  →  `.claude/commands/kit-kit-setup-analytics.md`
 
 Configure PostHog and/or Firebase Analytics + Crashlytics.
 
-## Step 7 — Ops: remote config, updates, push  →  `.claude/commands/setup-ops.md`
+## Step 7 — Ops: remote config, updates, push  →  `.claude/commands/kit-setup-updates.md`
 
 Configure the remote-config provider, the force/soft update gate, and FCM push.
 
-## Step 8 — Make it yours: remove the demo  →  `.claude/commands/make-it-yours.md`
+## Step 8 — Make it yours: remove the demo  →  `.claude/commands/kit-remove-demo.md`
 
 OPTIONAL, and usually LAST. The kit ships with a demo Habit Tracker app whose
 launcher button sits on `HomeScreen`. Ask whether they want to hide the demo for
 now (recommended while learning) or remove the code entirely. Most people just
 hide it until they start replacing `HomeScreen` with their own screen.
 
-## Step 9 — Build & run  →  `.claude/commands/run-kit.md`
+## Step 9 — Build & run  →  `.claude/commands/kit-run-app.md`
 
-Build the app and run it on a device or emulator to confirm everything works.
+Final verification. Run **`/kit-run-app`** — it compiles the app, installs it on
+the connected device, and launches it. This is the single build that runs
+during `/kit-start-setup` (every earlier step skipped its own verify).
+
+If the developer just wants a compile check without installing, they can use
+`/kit-compile-app` instead.
 
 ## Wrap up
 
 Summarise what was configured, what was skipped, and the obvious next move (e.g.
-"run `/setup-paywall` later when you add subscriptions", or "start building your
+"run `/kit-setup-paywall` later when you add subscriptions", or "start building your
 first screen"). Keep it to a few lines.

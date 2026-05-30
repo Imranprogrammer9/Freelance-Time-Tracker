@@ -2,7 +2,7 @@
 description: Configure the RevenueCat paywall and subscriptions
 ---
 
-You are running **`/setup-paywall`** for ShipKit. Goal: wire RevenueCat so the
+You are running **`/kit-setup-paywall`** for ShipKit. Goal: wire RevenueCat so the
 app can sell subscriptions.
 
 Audience: first-time mobile developers. Be brief; you make the edits.
@@ -49,7 +49,7 @@ In `KitConfig.kt`, set:
 
 ## Step 4 — Verify
 
-**Skip this step if you are running as part of `/start-kit`** — it builds once at
+**Skip this step if you are running as part of `/kit-start-setup`** — it builds once at
 the end. If this command was run on its own, run
 `./gradlew :app:compileDebugKotlin`.
 

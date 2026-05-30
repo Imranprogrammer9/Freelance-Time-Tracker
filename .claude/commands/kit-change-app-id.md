@@ -3,7 +3,7 @@ description: Rename the kit — package, applicationId, and app display name —
 argument-hint: [newAppId] [newAppName]
 ---
 
-You are running the ShipKit **`/refactor`** setup command.
+You are running the ShipKit **`/kit-change-app-id`** setup command.
 
 Goal: turn this starter kit into the developer's own app by renaming the package
 name, `applicationId`, and display name. This is usually the very first thing a
@@ -72,7 +72,23 @@ From the project root, run (quote the app name — it may contain spaces):
 The Gradle task updates package declarations and renames directories by default,
 so no extra flag is needed.
 
-## Step 5 — Report
+## Step 5 — Update `/kit-run-app` with the new App ID
+
+After the Gradle task succeeds, the new applicationId is now in
+`app/build.gradle.kts`. The `/kit-run-app` slash command launches the app by
+that ID via `adb shell monkey`, so its file needs the new value.
+
+Edit `.claude/commands/kit-run-app.md` and replace **every occurrence** of the
+old applicationId with the new one. There are two places:
+
+1. The line `**App ID for this app:** \`<oldAppId>\`` near the top.
+2. The `adb shell monkey -p <oldAppId> ...` line in Step 3.
+
+Use the `oldAppId` and `newAppId` values from this run. After this, the
+developer can run `/kit-run-app` and it will install and launch the renamed app
+without any further configuration.
+
+## Step 6 — Report
 
 Relay the task's "Refactor complete!" output (it lists every changed file). Then
 show the developer exactly this:
@@ -83,7 +99,7 @@ show the developer exactly this:
 > IDE re-indexes the renamed files.)*
 
 A sanity build — **only if this command was run on its own**, not as part of
-`/start-kit` (that flow builds once at the end). Standalone, run:
+`/kit-start-setup` (that flow builds once at the end). Standalone, run:
 `./gradlew :app:compileDebugKotlin`.
 
 Keep messages short and beginner-friendly — explain *why* each step matters in

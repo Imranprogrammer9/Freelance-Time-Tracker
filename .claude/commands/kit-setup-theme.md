@@ -3,7 +3,7 @@ description: Set the kit's brand color
 argument-hint: [#hexcolor]
 ---
 
-You are running **`/setup-theme`** for ShipKit. Goal: make the app look like the
+You are running **`/kit-setup-theme`** for ShipKit. Goal: make the app look like the
 developer's brand.
 
 Audience: first-time mobile developers. Be brief and concrete; you make the
@@ -33,7 +33,7 @@ file. Do not auto-edit those other values.
 
 ## Step 2 — Verify
 
-**Skip this step if you are running as part of `/start-kit`** — it builds once at
+**Skip this step if you are running as part of `/kit-start-setup`** — it builds once at
 the end. If this command was run on its own, run
 `./gradlew :app:compileDebugKotlin` to confirm the color change compiles.
 

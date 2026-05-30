@@ -2,8 +2,8 @@
 description: Add google-services.json and apply the Firebase Gradle plugins (shared helper)
 ---
 
-You are running **`/setup-firebase`** for ShipKit. This is a shared helper used
-by `/setup-auth`, `/setup-analytics`, and `/setup-ops`. It makes the Firebase
+You are running **`/kit-setup-firebase`** for ShipKit. This is a shared helper used
+by `/kit-setup-auth`, `/kit-setup-analytics`, and `/kit-setup-updates`. It makes the Firebase
 SDKs (already on the classpath) connect to a Firebase project.
 
 Audience: first-time mobile developers. Be brief; you make the edits.
@@ -74,7 +74,7 @@ declared (check `gradle/libs.versions.toml`), skip this step.
 
 ## Step 4 — Verify
 
-**Skip the build if you are running as part of `/start-kit`** — it builds once at
+**Skip the build if you are running as part of `/kit-start-setup`** — it builds once at
 the end. If this command was run on its own, run
 `./gradlew :app:compileDebugKotlin`.
 

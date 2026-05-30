@@ -2,7 +2,7 @@
 description: Configure remote config, the update gate, and push notifications
 ---
 
-You are running **`/setup-ops`** for ShipKit. Goal: wire the "operations"
+You are running **`/kit-setup-updates`** for ShipKit. Goal: wire the "operations"
 features — remote config / feature flags, the force/soft update gate, maintenance
 mode, and FCM push notifications.
 
@@ -55,7 +55,7 @@ If they picked **Supabase**, show the developer exactly this:
 
 If they picked **Firebase Remote Config**, first check whether Firebase is
 already configured: does `app/google-services.json` exist? If it does NOT, read
-`.claude/commands/setup-firebase.md`, follow it to set Firebase up, then return
+`.claude/commands/kit-kit-setup-firebase.md`, follow it to set Firebase up, then return
 here. If it already exists, do not repeat that — just continue.
 
 Then show the developer exactly this:
@@ -74,13 +74,13 @@ Then show the developer exactly this:
 Ask whether the app needs push notifications.
 - **No** — nothing to do. The `POST_NOTIFICATIONS` permission and
   `KitMessagingService` declared in the manifest are harmless when unused.
-- **Yes** — FCM needs Firebase. Read `.claude/commands/setup-firebase.md` and
+- **Yes** — FCM needs Firebase. Read `.claude/commands/kit-kit-setup-firebase.md` and
   follow it. The kit already declares `KitMessagingService` and a notification
   channel in `AndroidManifest.xml`, so no further code wiring is needed.
 
 ## Verify
 
-**Skip this step if you are running as part of `/start-kit`** — it builds once at
+**Skip this step if you are running as part of `/kit-start-setup`** — it builds once at
 the end. If this command was run on its own, run
 `./gradlew :app:compileDebugKotlin`.
 

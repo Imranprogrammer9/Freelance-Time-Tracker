@@ -2,7 +2,7 @@
 description: Choose and configure the kit's authentication provider
 ---
 
-You are running **`/setup-auth`** for ShipKit. Goal: pick and wire the
+You are running **`/kit-setup-auth`** for ShipKit. Goal: pick and wire the
 authentication provider.
 
 Audience: first-time mobile developers. Be brief; you make the edits, they answer
@@ -118,7 +118,7 @@ More detail + screenshots: https://kit.shipkaro.dev/docs/auth/supabase
 ## Step 4b — Firebase credentials
 
 Firebase auth needs the Google Services plugin. Read
-`.claude/commands/setup-firebase.md` and follow it to add `google-services.json`
+`.claude/commands/kit-kit-setup-firebase.md` and follow it to add `google-services.json`
 and apply the plugin, then return here.
 
 **Only if Google sign-in is enabled**, show the developer this:
@@ -150,10 +150,10 @@ More detail + screenshots: https://kit.shipkaro.dev/docs/auth/firebase
 
 ## Step 5 — Verify
 
-**Skip this step if you are running as part of `/start-kit`** — it builds once at
+**Skip this step if you are running as part of `/kit-start-setup`** — it builds once at
 the end. If this command was run on its own, run
 `./gradlew :app:compileDebugKotlin`.
 
 If they configured Supabase or Firebase, remind them the real test is signing in
-on a device (covered by `/run-kit`). Report what was set, and that any secrets
+on a device (covered by `/kit-run-app`). Report what was set, and that any secrets
 live in `local.properties`, which is never committed.

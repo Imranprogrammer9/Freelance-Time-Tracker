@@ -2,13 +2,13 @@
 description: Remove the bundled demo app so only your own app remains
 ---
 
-You are running **`/make-it-yours`** for ShipKit. Goal: strip the bundled demo
+You are running **`/kit-remove-demo`** for ShipKit. Goal: strip the bundled demo
 (a Habit Tracker app) so the kit becomes a clean base for the developer's own
 app.
 
 Audience: first-time mobile developers. Be brief and careful — this deletes code.
 
-**Docs:** https://kit.shipkaro.dev/docs/make-it-yours
+**Docs:** https://kit.shipkaro.dev/docs/kit-remove-demo
 
 When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim** — do not paraphrase or improvise. Prose outside those
@@ -53,7 +53,7 @@ Then make those six changes yourself.
 
 ## Verify
 
-**Skip the build if you are running as part of `/start-kit`** — it builds once at
+**Skip the build if you are running as part of `/kit-start-setup`** — it builds once at
 the end. If this command was run on its own, run
 `./gradlew :app:compileDebugKotlin`.
 

@@ -2,7 +2,7 @@
 description: Configure PostHog and Firebase analytics + crash reporting
 ---
 
-You are running **`/setup-analytics`** for ShipKit. Goal: wire product analytics
+You are running **`/kit-setup-analytics`** for ShipKit. Goal: wire product analytics
 and crash reporting.
 
 Audience: first-time mobile developers. Be brief; you make the edits.
@@ -42,13 +42,13 @@ Write to `local.properties` (git-ignored — never committed):
 
 ## Step 3 — Firebase Analytics / Crashlytics
 
-These need the Firebase plugins. Read `.claude/commands/setup-firebase.md` and
+These need the Firebase plugins. Read `.claude/commands/kit-kit-setup-firebase.md` and
 follow it (include the Crashlytics plugin if they chose crash reporting), then
 return here. No extra keys are needed beyond `google-services.json`.
 
 ## Step 4 — Verify
 
-**Skip this step if you are running as part of `/start-kit`** — it builds once at
+**Skip this step if you are running as part of `/kit-start-setup`** — it builds once at
 the end. If this command was run on its own, run
 `./gradlew :app:compileDebugKotlin`.
 
