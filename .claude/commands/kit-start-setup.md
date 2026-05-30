@@ -140,20 +140,18 @@ If they skip / decline, leave the defaults and move on.
 
 Otherwise, write **3 page titles + 3 page descriptions** that introduce the app's
 core value (problem solved → key feature → invitation to start). Each title
-should be 1–4 words; each description should be one short sentence. Update
-**both** locale files:
+should be 1–4 words; each description should be one short sentence.
 
-- `app/src/main/res/values/strings.xml` — English.
-- `app/src/main/res/values-ur/strings.xml` — Urdu (translate the same content).
-
-Replace these existing string IDs in both files:
+Edit only `app/src/main/res/values/strings.xml`. Overwrite the existing string
+IDs in place:
 
     onboarding_page1_title       onboarding_page1_desc
     onboarding_page2_title       onboarding_page2_desc
     onboarding_page3_title       onboarding_page3_desc
 
-Do NOT add new string IDs — overwrite the existing values. Keep entity escapes
-(`'` → `\'`, `&` → `&amp;`) correct.
+Do NOT add new string IDs, and do NOT bring up other locales — the kit ships
+English-only and `/kit-translate` handles every other language later. Keep
+entity escapes (`'` → `\'`, `&` → `&amp;`) correct.
 
 ## Step 3 — Brand & theme  →  `.claude/commands/kit-kit-setup-theme.md`
 
