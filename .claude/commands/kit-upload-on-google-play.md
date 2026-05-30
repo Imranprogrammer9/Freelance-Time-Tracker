@@ -168,22 +168,25 @@ The signed Android App Bundle lands at:
 If it fails, the usual cause is the signing env vars not being picked up — open
 a new terminal and re-check `echo $RELEASE_STORE_FILE`.
 
-## I. Upload — manual for the first release
+## I. Upload — manual
 
-Fastlane upload needs a Play Console service-account JSON key, which the
-developer has not set up yet. For the first release, upload manually:
+Show this:
 
-> **Upload your first release manually:**
-> 1. In Play Console, open your app → **Internal testing → Create new
->    release** (recommend internal first, promote to Production later).
+> **Upload your release manually in Play Console:**
+> 1. Open your app → **Internal testing → Create new release** (recommend
+>    internal testing first; you can promote to Production later from the
+>    same screen).
 > 2. Drop in `app/build/outputs/bundle/release/app-release.aab`.
-> 3. Add release notes (a few short bullet points of what's in this version).
-> 4. **Save → Review release → Start rollout to Internal testing**.
+> 3. Open `fastlane/metadata/android/en-US/title.txt`,
+>    `short_description.txt`, and `full_description.txt` and paste each into
+>    the matching Play Console field (Main store listing).
+> 4. Upload the PNGs from
+>    `fastlane/metadata/android/en-US/images/phoneScreenshots/` to the
+>    **Phone screenshots** section.
+> 5. Add release notes (a few short bullets of what's in this version).
+> 6. **Save → Review release → Start rollout to Internal testing**.
 >
-> Once it's stable, promote to Production from the Play Console UI.
-
-After the first release ships, set up Fastlane for future automated uploads
-(see the Update path below for the service-account JSON setup).
+> Once you've smoke-tested it, promote to Production from the same screen.
 
 ---
 
@@ -247,28 +250,20 @@ Ask (AskUserQuestion):
 
     ./gradlew bundleRelease
 
-## G. Upload via Fastlane
+## G. Upload — manual
 
-If `fastlane/play-publisher-key.json` does **not** exist yet, show this:
+Show this:
 
-> **One-time: set up Fastlane Play upload:**
-> 1. In Play Console: **Setup → API access**.
-> 2. Click **Create new service account** — Play links to Google Cloud Console.
-> 3. In Google Cloud Console, create the service account, then create a JSON
->    key for it.
-> 4. Back in Play Console, grant the service account the **Release manager**
->    role on your app.
-> 5. Save the downloaded JSON as `fastlane/play-publisher-key.json` in this
->    project. `.gitignore` already covers it.
-
-Then run:
-
-    bundle exec fastlane internal
-
-This uploads the AAB to the **Internal testing** track. After the developer has
-smoke-tested it, promote to Production:
-
-    bundle exec fastlane promote
+> **Upload this update manually in Play Console:**
+> 1. Open your app → **Internal testing → Create new release** (or whichever
+>    track you ship from — Closed / Open testing / Production).
+> 2. Drop in `app/build/outputs/bundle/release/app-release.aab`.
+> 3. Paste the release notes from
+>    `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` into the
+>    **Release notes** field.
+> 4. If you re-did screenshots in step E, upload the new PNGs from
+>    `fastlane/metadata/android/en-US/images/phoneScreenshots/`.
+> 5. **Save → Review release → Start rollout**.
 
 ---
 
@@ -277,9 +272,9 @@ smoke-tested it, promote to Production:
 Summarise:
 - Which path ran (first version / update).
 - What was set up vs skipped (e.g. "screenshots generated", "data safety form
-  pending in Play Console", "Fastlane key still to be created").
+  pending in Play Console", "release notes file written").
 - The single next action — usually one of:
-  - "Smoke-test on Internal testing, then promote to Production."
+  - "Smoke-test on Internal testing, then promote to Production in Play Console."
   - "Bump `latest_version` / `app_changelog` in your backend RemoteAppConfig now."
   - "Complete the Play Console **Set up your app** checklist before your
     release can roll out."
