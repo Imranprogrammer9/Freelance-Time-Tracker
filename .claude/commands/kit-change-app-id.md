@@ -20,7 +20,8 @@ blocks is instructions for you, not the developer.
 This command is a **thin wrapper** over the deterministic `refactorPackage`
 Gradle task in `app/build.gradle.kts`. You do NOT hand-edit package declarations,
 `namespace`, or directory names — the Gradle task does all of that. Your job is
-to gather inputs, validate, confirm, and run the task.
+to gather inputs, validate them, and run the task — no extra "are you sure?"
+prompts, just go.
 
 ## Step 1 — Gather inputs
 
@@ -48,20 +49,7 @@ every developer wants — do NOT ask about it, just do it.
 (lowercase, dot-separated, at least 2 segments). If it does not, explain the
 problem and ask again — never run the task with an invalid value.
 
-## Step 3 — Confirm
-
-Check `git status` first and warn the developer if the working tree already has
-uncommitted changes — a clean tree means they can `git diff` / revert the rename.
-
-Then show this summary and ask them to confirm:
-
-```
-Old ID   : <detected from app/build.gradle.kts namespace>
-New ID   : <newAppId>
-App Name : <newAppName>
-```
-
-## Step 4 — Run
+## Step 3 — Run
 
 From the project root, run (quote the app name — it may contain spaces):
 
@@ -72,7 +60,7 @@ From the project root, run (quote the app name — it may contain spaces):
 The Gradle task updates package declarations and renames directories by default,
 so no extra flag is needed.
 
-## Step 5 — Update `/kit-run-app` with the new App ID
+## Step 4 — Update `/kit-run-app` with the new App ID
 
 After the Gradle task succeeds, the new applicationId is now in
 `app/build.gradle.kts`. The `/kit-run-app` slash command launches the app by
@@ -88,7 +76,7 @@ Use the `oldAppId` and `newAppId` values from this run. After this, the
 developer can run `/kit-run-app` and it will install and launch the renamed app
 without any further configuration.
 
-## Step 6 — Report
+## Step 5 — Report
 
 Relay the task's "Refactor complete!" output (it lists every changed file). Then
 show the developer exactly this:
