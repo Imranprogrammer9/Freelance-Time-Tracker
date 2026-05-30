@@ -23,10 +23,6 @@ you do. They describe what they want and approve / redirect.
 Before starting:
 - Run `/kit-compile-app` once. If it fails, fix the build before continuing —
   design is pointless on a broken codebase.
-- Recommend the developer has run `/kit-remove-demo` (full removal) so the demo
-  is not in the way. If not, ask whether to hide the demo (set
-  `KitConfig.SAMPLE_FEATURE_ENABLED = false`) for now. The demo can come back
-  by flipping the flag.
 - The kit's default nav flow already gives Splash → Onboarding → Auth → Paywall
   → Home. **Your screens live downstream of Home**, or replace `HomeScreen` as
   the post-Paywall start destination. Do NOT touch Splash / Onboarding / Auth /

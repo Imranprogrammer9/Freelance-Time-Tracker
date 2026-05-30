@@ -24,7 +24,4 @@ sealed interface Route {
     @Serializable data object Settings : Route
     @Serializable data object Profile : Route
     @Serializable data object Changelog : Route
-
-    /** Hosts the self-contained demo nav graph ([dev.shipkaro.kit.feature.demo.DemoNavHost]). */
-    @Serializable data object Demo : Route
 }

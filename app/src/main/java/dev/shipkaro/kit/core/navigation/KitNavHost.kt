@@ -17,7 +17,6 @@ import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.data.settings.SettingsRepository
 import dev.shipkaro.kit.feature.auth.AuthScreen
 import dev.shipkaro.kit.feature.changelog.ChangelogScreen
-import dev.shipkaro.kit.feature.demo.DemoNavHost
 import dev.shipkaro.kit.feature.home.HomeScreen
 import dev.shipkaro.kit.feature.onboarding.OnboardingScreen
 import dev.shipkaro.kit.feature.paywall.PaywallScreen
@@ -34,8 +33,7 @@ import org.koin.compose.koinInject
  * Default flow:
  *   Splash (1.5s) → Onboarding (first launch only) → Auth (if `AUTH_ENABLED` + signed
  *   out) → Paywall (if `PAYWALL_ENABLED` + not premium + first time) → Home → Settings
- *   / Profile / Changelog. The demo subtree (when `SAMPLE_FEATURE_ENABLED`) is reachable
- *   from Home via "Launch demo".
+ *   / Profile / Changelog.
  *
  * If the user signs out from a post-auth screen (Home / Settings / Profile), the kit
  * automatically routes back to Auth.
@@ -111,7 +109,6 @@ fun KitNavHost() {
         composable<Route.Home> {
             HomeScreen(
                 onOpenSettings = { navController.navigate(Route.Settings) },
-                onLaunchDemo = { navController.navigate(Route.Demo) },
             )
         }
         composable<Route.Settings> {
@@ -126,9 +123,6 @@ fun KitNavHost() {
         }
         composable<Route.Changelog> {
             ChangelogScreen(onBack = { navController.popBackStack() })
-        }
-        composable<Route.Demo> {
-            DemoNavHost()
         }
     }
 }

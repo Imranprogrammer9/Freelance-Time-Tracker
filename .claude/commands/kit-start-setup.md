@@ -25,7 +25,7 @@ fine — they can resume later by running that single command on its own.
 **Speed — important:** do NOT run `./gradlew` compile or build commands between
 steps. They are slow and the wait adds up across the flow. Each sub-command has a
 "Verify" step that compiles — SKIP that step while running inside `/kit-start-setup`. A
-single build runs once at the very end, in Step 9 (`/kit-run-app`), and it catches
+single build runs once at the very end, in Step 8 (`/kit-run-app`), and it catches
 any compile error introduced by any earlier step.
 
 ## Step 0 — Orientation
@@ -157,14 +157,7 @@ Configure PostHog and/or Firebase Analytics + Crashlytics.
 
 Configure the remote-config provider, the force/soft update gate, and FCM push.
 
-## Step 8 — Make it yours: remove the demo  →  `.claude/commands/kit-remove-demo.md`
-
-OPTIONAL, and usually LAST. The kit ships with a demo Habit Tracker app whose
-launcher button sits on `HomeScreen`. Ask whether they want to hide the demo for
-now (recommended while learning) or remove the code entirely. Most people just
-hide it until they start replacing `HomeScreen` with their own screen.
-
-## Step 9 — Build & run  →  `.claude/commands/kit-run-app.md`
+## Step 8 — Build & run  →  `.claude/commands/kit-run-app.md`
 
 Final verification. Run **`/kit-run-app`** — it compiles the app, installs it on
 the connected device, and launches it. This is the single build that runs

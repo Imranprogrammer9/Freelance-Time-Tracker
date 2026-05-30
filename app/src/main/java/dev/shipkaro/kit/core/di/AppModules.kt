@@ -20,7 +20,6 @@ import dev.shipkaro.kit.core.ops.ChangelogManager
 import dev.shipkaro.kit.core.ops.InAppReviewManager
 import dev.shipkaro.kit.core.ops.UpdateManager
 import dev.shipkaro.kit.feature.auth.AuthViewModel
-import dev.shipkaro.kit.feature.demo.demoModule
 import dev.shipkaro.kit.feature.paywall.PurchaseViewModel
 import dev.shipkaro.kit.feature.settings.SettingsViewModel
 import io.github.jan.supabase.SupabaseClient
@@ -156,6 +155,4 @@ val appModules = buildList {
     add(analyticsModule)
     add(opsModule)
     add(featureModule)
-    // DEMO — remove this line, then delete feature/demo/, to strip the bundled demo.
-    if (KitConfig.SAMPLE_FEATURE_ENABLED) add(demoModule)
 }

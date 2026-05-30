@@ -104,7 +104,23 @@
     <string name="home_heading">Your app starts here</string>
     <string name="home_subtitle">Replace HomeScreen with your app\'s main screen.</string>
     <string name="home_open_settings">Open settings</string>
-    <string name="home_launch_demo">Launch demo app</string>
+
+    <!-- Home — system status panel -->
+    <string name="home_status_section_title">System status</string>
+    <string name="home_status_auth">Authentication</string>
+    <string name="home_status_paywall">Paywall</string>
+    <string name="home_status_analytics">Analytics</string>
+    <string name="home_status_remote_config">Remote config</string>
+    <string name="home_status_disabled">Disabled</string>
+    <string name="home_status_enabled">Enabled</string>
+    <string name="home_status_auth_signed_in">Signed in as %1$s</string>
+    <string name="home_status_auth_signed_out">Signed out</string>
+    <string name="home_status_paywall_premium">Premium active</string>
+    <string name="home_status_paywall_soft">Soft paywall</string>
+    <string name="home_status_paywall_hard">Hard paywall</string>
+    <string name="home_status_remote_local">Local (defaults)</string>
+    <string name="home_status_remote_firebase">Firebase Remote Config</string>
+    <string name="home_status_remote_supabase">Supabase app_config</string>
 
     <!-- Profile -->
     <string name="profile_title">Profile</string>
@@ -112,17 +128,6 @@
 
     <!-- Accessibility -->
     <string name="action_open_settings">Open settings</string>
-
-    <!-- Demo — Habit Tracker sample app -->
-    <string name="habit_list_title">My Habits</string>
-    <string name="habit_empty_title">No habits yet</string>
-    <string name="habit_empty_message">Add your first habit to start a streak.</string>
-    <string name="habit_streak">%d day streak</string>
-    <string name="habit_free_limit_hint">%1$d of %2$d free habits used — upgrade for unlimited</string>
-    <string name="habit_add">Add habit</string>
-    <string name="habit_add_title">New habit</string>
-    <string name="habit_name_label">Habit name</string>
-    <string name="habit_save">Save habit</string>
 
     <string name="nav_settings">Settings</string>
 
