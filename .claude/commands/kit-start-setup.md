@@ -46,7 +46,8 @@ Then show the developer what ShipKit gives them — present this list as-is:
 - 💳 **Paywall + subscriptions** — RevenueCat
 - 📊 **Analytics + crash reporting**
 - 🔧 **Ops** — remote config, force/soft updates, push notifications
-- 🎯 **Bundled demo** Habit Tracker app to explore
+- 🌐 **Localization** — English by default; add more languages anytime with `/kit-translate`
+- 🚀 **Release** — Play Store assets + listing + upload via `/kit-upload-on-google-play`
 
 Then say you will now configure it together.
 
