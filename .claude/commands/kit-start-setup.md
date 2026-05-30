@@ -163,9 +163,15 @@ Pick and configure the auth provider (Stub / Supabase / Firebase).
 
 ## Step 5 — Paywall & subscriptions  →  `.claude/commands/kit-kit-setup-paywall.md`
 
-If the developer chose **"free app"** in Step 0, SKIP this step entirely — do
-NOT ask. Just tell them the paywall is skipped and they can run `/kit-setup-paywall`
-later if they ever add subscriptions, then move to Step 6.
+If the developer chose **"free app"** in Step 0, SKIP the full setup but DO
+flip the kit's paywall switch off — otherwise the kit's nav still shows the
+default Paywall screen after Auth on first launch. Find `KitConfig.kt`
+(under `app/src/main/java`, package `...core.config`) and set:
+
+    const val PAYWALL_ENABLED: Boolean = false
+
+Then tell the developer the paywall is disabled and they can run
+`/kit-setup-paywall` later if they ever add subscriptions. Move to Step 6.
 
 Otherwise (paid app, or just exploring), configure RevenueCat via the command
 file.

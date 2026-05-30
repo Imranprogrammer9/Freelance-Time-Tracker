@@ -27,9 +27,33 @@ Ask the developer for their brand color as a hex value (e.g. `#7C3AED`). If they
 passed one in `$ARGUMENTS`, use that. Convert `#RRGGBB` into the
 `Color(0xFFRRGGBB)` form and replace the `BrandPrimary` value.
 
-Tell them the light and dark color schemes both derive from this single value;
-for a fully hand-tuned palette they can later edit the other values in the same
-file. Do not auto-edit those other values.
+### Derive the dark-mode + container variants
+
+`LightPrimary = BrandPrimary` is set automatically, but the Light container
+colours and the entire Dark scheme are hardcoded. Without deriving them, dark
+mode keeps the old purple even after the brand color changes. Update these
+six values in `Color.kt` based on the new brand hex, using the heuristic
+below (convert the brand to HSL, then re-emit as `0xFFRRGGBB`):
+
+    val LightPrimaryContainer   = BrandPrimary HSL → lightness ≈ 92%, sat ≈ 60%
+    val LightOnPrimaryContainer = BrandPrimary HSL → lightness ≈ 12%, sat ≈ 80%
+    val DarkPrimary             = BrandPrimary HSL → lightness ≈ 78%, sat ≈ 70%
+    val DarkOnPrimary           = BrandPrimary HSL → lightness ≈ 18%, sat ≈ 70%
+    val DarkPrimaryContainer    = BrandPrimary HSL → lightness ≈ 32%, sat ≈ 65%
+    val DarkOnPrimaryContainer  = BrandPrimary HSL → lightness ≈ 90%, sat ≈ 55%
+
+Hue stays at the brand's hue throughout. Lightness percentages are targets,
+not exact — adjust by ±5% if the brand is already very light (lightness > 70%)
+or very dark (lightness < 25%) so contrast stays AA-readable. Always keep
+`LightOnPrimary` at white (`Color(0xFFFFFFFF)`) since `LightPrimary` is the
+brand at its natural lightness.
+
+Also update `BrandPrimaryBright` to a lighter accent of the brand
+(lightness ≈ 70%, sat ≈ 80%). Leave `BrandSecondary` and `BrandTertiary`
+alone — they are intentionally complementary accents, not brand-derived.
+
+Do not touch any other values in `Color.kt`. For a fully hand-tuned palette
+the developer can edit them later.
 
 ## Step 2 — Icon pack
 

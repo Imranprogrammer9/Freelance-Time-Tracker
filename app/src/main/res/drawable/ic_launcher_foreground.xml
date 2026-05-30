@@ -1,9 +1,9 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M54,34l16,28h-32z M38,66h32v8h-32z" />
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Adaptive-icon foreground. Wraps the ShipKit brand mark in a 19% inset so the
+  logo sits inside Android's safe zone (66 of 108 dp). Replace with your own
+  logo via `/kit-upload-on-google-play` (icon.kitchen flow) before release.
+-->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_shipkaro_mark"
+    android:inset="19%" />
