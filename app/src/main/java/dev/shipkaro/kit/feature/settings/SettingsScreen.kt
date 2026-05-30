@@ -72,9 +72,11 @@ fun SettingsScreen(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.SETTINGS) }
-    LaunchedEffect(deleteStatus) {
-        if (deleteStatus is SettingsViewModel.DeleteStatus.Done) onBack()
-    }
+    // Intentionally NO LaunchedEffect on DeleteStatus.Done → calling onBack() here
+    // raced with KitNavHost's sign-out redirect (both popped the back stack, leaving
+    // an empty stack and a blank screen). After deletion the session flips to
+    // SignedOut and KitNavHost routes back to Auth automatically; we don't need to
+    // pop from this screen.
 
     var themeSheet by remember { mutableStateOf(false) }
     var languageSheet by remember { mutableStateOf(false) }

@@ -116,6 +116,8 @@ googleid = { group = "com.google.android.libraries.identity.googleid", name = "g
 
 # RevenueCat — in-app purchases / subscriptions. Native Android SDK (no KMP).
 revenuecat-purchases = { group = "com.revenuecat.purchases", name = "purchases", version.ref = "revenuecat" }
+# RevenueCat's prebuilt Paywall Composable (standard Jetpack Compose for Android — NOT Compose Multiplatform).
+revenuecat-purchases-ui = { group = "com.revenuecat.purchases", name = "purchases-ui", version.ref = "revenuecat" }
 
 # Analytics — PostHog (product analytics) + Firebase Analytics + Crashlytics.
 # Firebase Analytics/Crashlytics need google-services.json + the google-services &

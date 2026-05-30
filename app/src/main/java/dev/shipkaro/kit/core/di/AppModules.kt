@@ -20,7 +20,6 @@ import dev.shipkaro.kit.core.ops.ChangelogManager
 import dev.shipkaro.kit.core.ops.InAppReviewManager
 import dev.shipkaro.kit.core.ops.UpdateManager
 import dev.shipkaro.kit.feature.auth.AuthViewModel
-import dev.shipkaro.kit.feature.paywall.PurchaseViewModel
 import dev.shipkaro.kit.feature.settings.SettingsViewModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
@@ -143,7 +142,6 @@ private val opsModule = module {
 private val featureModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get()) }
-    viewModel { PurchaseViewModel(get()) }
 }
 
 val appModules = buildList {

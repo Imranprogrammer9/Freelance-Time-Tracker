@@ -161,8 +161,10 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
 
-    // RevenueCat — subscriptions / paywall. Custom paywall UI, purchases-ui omitted (see catalog note).
+    // RevenueCat — subscriptions + prebuilt Paywall composable from purchases-ui
+    // (Jetpack Compose for Android; NOT Compose Multiplatform).
     implementation(libs.revenuecat.purchases)
+    implementation(libs.revenuecat.purchases.ui)
 
     // Analytics — PostHog + Firebase Analytics + Crashlytics.
     // Firebase pieces stay inert until google-services.json + plugins are added.
