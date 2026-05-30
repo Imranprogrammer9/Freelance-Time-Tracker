@@ -22,52 +22,46 @@ Confirm:
   and tell the developer to fix the build first — translations are pointless
   on a broken codebase.
 
-## Step 2 — Pick languages
+## Step 2 — Pick language buckets
 
-Show the developer the full supported list, verbatim and numbered:
+Ask the developer with the **AskUserQuestion** tool, **multi-select**, with
+exactly these four options (use the labels and descriptions below verbatim so
+the language list is visible):
 
-> **Pick the languages you want to translate the app into.** Reply with the
-> numbers (e.g. `1, 7, 16`) or the names — whichever is easier.
->
-> ```
->  1. Arabic               (ar)
->  2. Czech                (cs)
->  3. Danish               (da)
->  4. German               (de)
->  5. Greek                (el)
->  6. Spanish              (es)
->  7. Finnish              (fi)
->  8. Filipino             (fil)
->  9. French               (fr)
-> 10. Hebrew               (he)
-> 11. Croatian             (hr)
-> 12. Hungarian            (hu)
-> 13. Indonesian           (id)
-> 14. Italian              (it)
-> 15. Japanese             (ja)
-> 16. Korean               (ko)
-> 17. Malay                (ms)
-> 18. Dutch                (nl)
-> 19. Norwegian (Bokmål)   (nb)
-> 20. Polish               (pl)
-> 21. Portuguese           (pt)
-> 22. Romanian             (ro)
-> 23. Russian              (ru)
-> 24. Slovak               (sk)
-> 25. Swedish              (sv)
-> 26. Thai                 (th)
-> 27. Turkish              (tr)
-> 28. Ukrainian            (uk)
-> 29. Vietnamese           (vi)
-> 30. Simplified Chinese   (zh-CN)
-> 31. Traditional Chinese  (zh-TW)
-> ```
+- **Label:** `Keep English only`
+  **Description:** No translations — the app stays English-only. (If you pick
+  this together with any bucket below, the buckets win — uncheck this if you
+  actually want translations.)
 
-Wait for the reply, parse the picks, and confirm back as a short list before
-proceeding. (English is always the base — never asked.)
+- **Label:** `Right-to-Left (RTL)`
+  **Description:** Arabic (ar), Hebrew (he). Adds RTL layout support to the
+  app for free as a side effect.
 
-Note: AskUserQuestion is intentionally NOT used here — its 4-option limit
-cannot show 30+ languages in one prompt.
+- **Label:** `East & Southeast Asia`
+  **Description:** Simplified Chinese (zh-CN), Traditional Chinese (zh-TW),
+  Japanese (ja), Korean (ko), Thai (th), Vietnamese (vi), Indonesian (id),
+  Malay (ms), Filipino (fil).
+
+- **Label:** `Europe`
+  **Description:** German (de), Spanish (es), French (fr), Italian (it),
+  Portuguese (pt), Dutch (nl), Russian (ru), Polish (pl), Ukrainian (uk),
+  Turkish (tr), Czech (cs), Hungarian (hu), Danish (da), Swedish (sv),
+  Finnish (fi), Norwegian (nb), Greek (el), Romanian (ro), Slovak (sk),
+  Croatian (hr).
+
+### Resolving the picks
+
+- If only **Keep English only** is selected (or nothing at all): tell the
+  developer there's nothing to translate, do NOT touch any file, and stop.
+- If any other bucket is selected, **ignore Keep English only** — the buckets
+  win. Translate every language inside every selected bucket.
+- The auto-added **Other** option (added by AskUserQuestion) lets the
+  developer name specific languages instead of whole buckets. If they use it,
+  parse the free-text answer against the language tables in Step 3 and
+  translate only those.
+
+Confirm the resolved language list back to the developer as a short bulleted
+summary before proceeding.
 
 ## Step 3 — Translate
 
