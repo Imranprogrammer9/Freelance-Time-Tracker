@@ -16,7 +16,6 @@ import kotlinx.serialization.Serializable
  * stable type-safe Navigation Compose. Recorded as a deviation; revisit when Nav3 ships.
  */
 sealed interface Route {
-    @Serializable data object Splash : Route
     @Serializable data object Onboarding : Route
     @Serializable data object Auth : Route
     @Serializable data object Paywall : Route

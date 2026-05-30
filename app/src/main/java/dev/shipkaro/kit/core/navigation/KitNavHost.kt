@@ -1,10 +1,18 @@
 package dev.shipkaro.kit.core.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,7 +30,6 @@ import dev.shipkaro.kit.feature.onboarding.OnboardingScreen
 import dev.shipkaro.kit.feature.paywall.PaywallScreen
 import dev.shipkaro.kit.feature.profile.ProfileScreen
 import dev.shipkaro.kit.feature.settings.SettingsScreen
-import dev.shipkaro.kit.feature.splash.SplashScreen
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -30,13 +37,14 @@ import org.koin.compose.koinInject
 /**
  * Top-level navigation.
  *
- * Default flow:
- *   Splash (1.5s) → Onboarding (first launch only) → Auth (if `AUTH_ENABLED` + signed
- *   out) → Paywall (if `PAYWALL_ENABLED` + not premium + first time) → Home → Settings
- *   / Profile / Changelog.
+ * Default flow: Onboarding (first launch only) → Auth (if `AUTH_ENABLED` + signed
+ * out) → Paywall (if `PAYWALL_ENABLED` + not premium + first time) → Home →
+ * Settings / Profile / Changelog.
  *
- * If the user signs out from a post-auth screen (Home / Settings / Profile), the kit
- * automatically routes back to Auth.
+ * No in-app splash composable — the Android OS cold-start splash covers the
+ * brief window while [resolveStartRoute] reads DataStore on first composition.
+ * If the user signs out from a post-auth screen (Home / Settings / Profile),
+ * the kit automatically routes back to Auth.
  */
 @Composable
 fun KitNavHost() {
@@ -45,6 +53,17 @@ fun KitNavHost() {
     val auth = koinInject<AuthRepository>()
     val purchases = koinInject<PurchaseManager>()
     val scope = rememberCoroutineScope()
+
+    var startRoute by remember { mutableStateOf<Route?>(null) }
+    LaunchedEffect(Unit) {
+        startRoute = resolveStartRoute(settings, auth, purchases)
+    }
+    val start = startRoute
+    if (start == null) {
+        // System splash is still visible while DataStore resolves the first route.
+        Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
+        return
+    }
 
     // Bounce back to Auth on sign-out from a post-auth screen.
     val session by auth.sessionState.collectAsState(initial = SessionState.Loading)
@@ -64,17 +83,7 @@ fun KitNavHost() {
         }
     }
 
-    NavHost(navController = navController, startDestination = Route.Splash) {
-        composable<Route.Splash> {
-            SplashScreen(onReady = {
-                scope.launch {
-                    val next = resolveStartRoute(settings, auth, purchases)
-                    navController.navigate(next) {
-                        popUpTo<Route.Splash> { inclusive = true }
-                    }
-                }
-            })
-        }
+    NavHost(navController = navController, startDestination = start) {
         composable<Route.Onboarding> {
             OnboardingScreen(onFinished = {
                 scope.launch {
@@ -127,7 +136,7 @@ fun KitNavHost() {
     }
 }
 
-/** First-launch route resolution called from Splash. */
+/** First-launch route resolution. Runs once on app start before NavHost composes. */
 private suspend fun resolveStartRoute(
     settings: SettingsRepository,
     auth: AuthRepository,
