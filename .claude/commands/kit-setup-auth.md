@@ -105,25 +105,95 @@ Confirm what you wrote, then continue.
 
 **If Google sign-in is NOT enabled, skip the rest of Step 4a and go to Step 5.**
 
-### Sub-step 4a.3 — Enable the Google provider on Supabase
+**Before you continue, tell the developer this verbatim** so they know what's
+coming:
 
-Show this verbatim. Then **STOP and wait** for "done":
-
-> **Enable Google on Supabase**
-> 1. In your Supabase project, go to **Authentication → Providers → Google**.
-> 2. Toggle it **on**.
-> 3. Copy the **Authorized Client ID** field of type *Web application* (you'll
->    paste it here in the next sub-step — keep it open).
+> Heads up — Google sign-in needs two things wired together:
 >
-> Say "done" once Google is toggled on.
+> 1. A **Web OAuth client** in Google Cloud Console → which you paste into
+>    Supabase's Google provider so Supabase trusts Google.
+> 2. An **Android OAuth client** in Google Cloud Console (with your debug
+>    SHA-1) → so the native sign-in sheet works on your device.
+>
+> We'll do them in that order, one at a time. Don't worry about memorising
+> any of it — I'll walk each sub-step.
 
-### Sub-step 4a.4 — Add the redirect URL
+### Sub-step 4a.3 — Create the OAuth consent screen
 
 Show this verbatim. Then **STOP and wait** for "done":
 
-> **Add the redirect URL**
+> **OAuth consent screen** (one-time per Google Cloud project)
+> 1. Open https://console.cloud.google.com — sign in with the same Google
+>    account that owns the Supabase project (easier later) or a separate
+>    Google Cloud account, either works.
+> 2. Top bar → project picker → **New Project** → name it (e.g. "shipkit
+>    auth") → **Create**.
+> 3. Left sidebar → **APIs & Services → OAuth consent screen**.
+> 4. Pick **External** → **Create**.
+> 5. Fill the required fields:
+>    - App name: your app's display name.
+>    - User support email: your email.
+>    - Developer contact email: your email.
+> 6. Click **Save and continue** through the next pages (no scopes / test
+>    users needed for now). Submit back to dashboard.
+>
+> Say "done" when the consent screen page reads **Testing** status.
+
+### Sub-step 4a.4 — Create the Web OAuth client
+
+Show this verbatim. Then **STOP and wait** for the Client ID + Secret:
+
+> **Web OAuth client** — what Supabase will use to talk to Google
+> 1. Still in https://console.cloud.google.com (your new project).
+> 2. **APIs & Services → Credentials → + Create credentials → OAuth client ID**.
+> 3. Application type: **Web application**.
+> 4. Name: `Supabase Web` (anything — for your reference).
+> 5. **Authorized redirect URIs → + Add URI** → paste this exactly:
+>
+>        https://YOUR-PROJECT-ID.supabase.co/auth/v1/callback
+>
+>    (replace `YOUR-PROJECT-ID` with the Project ID from sub-step 4a.2).
+> 6. Click **Create**.
+> 7. A modal appears with **Client ID** + **Client secret** — copy BOTH and
+>    paste them back here.
+>
+> Don't close the modal until you have both values pasted.
+
+Replace `YOUR-PROJECT-ID` with the actual Project ID in the printed text
+before showing it to the developer.
+
+When the developer pastes the Client ID + Secret, remember both. Edit
+`KitConfig.kt` now:
+
+    const val GOOGLE_WEB_CLIENT_ID: String = "<the Client ID just pasted>"
+
+Confirm what you wrote.
+
+### Sub-step 4a.5 — Connect Supabase to that Web client
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **Tell Supabase about Google**
+> 1. Back in your Supabase project → **Authentication → Providers → Google**.
+> 2. Toggle **Enable Sign in with Google** → on.
+> 3. Paste the **Client ID** (from sub-step 4a.4) into the **Client ID (for
+>    OAuth)** field.
+> 4. Paste the **Client Secret** (from sub-step 4a.4) into the **Client Secret
+>    (for OAuth)** field.
+> 5. Click **Save**.
+>
+> Say "done" once Supabase confirms the provider is saved.
+
+### Sub-step 4a.6 — Add the in-app redirect URL
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **In-app redirect URL** (so Supabase knows to bounce sign-in back to the app)
 > 1. In Supabase, open **Authentication → URL Configuration → Redirect URLs**.
-> 2. Add this **exact** value (copy-paste, no edits): `shipkaro://auth-callback`
+> 2. **+ Add URL** → paste this **exact** value (no edits):
+>
+>        shipkaro://auth-callback
+>
 > 3. Save.
 >
 > Say "done" when the redirect URL is saved.
@@ -134,21 +204,14 @@ OAuth callback note (for you, not the developer): the kit uses
 `AndroidManifest.xml`. If the developer asks to use a custom scheme, edit
 BOTH files to match before this sub-step is "done".
 
-### Sub-step 4a.5 — Save the Web client ID
-
-Ask the developer to paste the **Web Client ID** they copied in 4a.3. When
-they paste it, edit `KitConfig.kt`:
-
-    const val GOOGLE_WEB_CLIENT_ID: String = "..."
-
-Confirm what you wrote. Then continue.
-
-### Sub-step 4a.6 — Grab the debug SHA-1
+### Sub-step 4a.7 — Grab the debug SHA-1
 
 Tell the developer:
 
-> Next we need your app's **debug SHA-1 fingerprint** so Google trusts this
-> build. I'll run a Gradle command to read it — say "yes" when you're ready.
+> Next we need your app's **debug SHA-1 fingerprint**. It's a unique string
+> that identifies *this build of your app on this machine* — Google uses it
+> to confirm sign-in requests are really coming from your app and not a
+> copycat. I'll run a Gradle command to read it. Say "yes" when ready.
 
 **STOP and wait for the developer to say "yes" / "ready" / "go".** Do not run
 the command before then. When confirmed, run:
@@ -158,26 +221,28 @@ the command before then. When confirmed, run:
 (or the equivalent for their shell). Extract the SHA-1 line printed under the
 `debug` variant and show it to the developer. Confirm they have it copied.
 
-### Sub-step 4a.7 — Register the SHA-1 in Google Cloud Console
+### Sub-step 4a.8 — Create the Android OAuth client
 
 Show this verbatim. Then **STOP and wait** for "done":
 
-> **Register your app's SHA-1**
-> 1. Open https://console.cloud.google.com → **APIs & Services → Credentials**
->    (pick the same Google Cloud project that owns the Web client ID from 4a.3).
-> 2. Click **Create credentials → OAuth client ID → Android** (or open an
->    existing Android client).
-> 3. Set the **Package name** to your `applicationId`.
-> 4. Paste the **debug SHA-1** from 4a.6 into the **SHA-1 certificate
->    fingerprint** field.
-> 5. Save.
+> **Android OAuth client** — what your phone/emulator uses for native sign-in
+> 1. Back in https://console.cloud.google.com (the same project as 4a.4).
+> 2. **APIs & Services → Credentials → + Create credentials → OAuth client ID**.
+> 3. Application type: **Android**.
+> 4. Name: `Android (debug)`.
+> 5. Package name: paste your `applicationId` (e.g. `dev.shipkaro.kit` if you
+>    haven't renamed; otherwise the new ID from `/kit-change-app-id`).
+> 6. **SHA-1 certificate fingerprint**: paste the SHA-1 from sub-step 4a.7.
+> 7. Click **Create**.
 >
-> Say "done" once the Android OAuth client is saved.
+> Say "done" once the Android client is saved. You don't need to copy any
+> values from this one — Google links it to your app via the SHA-1.
 
-Before a Play release the app also needs the **release** SHA-1 added the same
-way — from your release keystore, or Play Console → Test and release → App
-integrity → App signing if you use Play App Signing. Mention this as a
-release-time task only — do NOT walk through it now.
+Before a Play release the app also needs a **second** Android OAuth client
+with the **release** SHA-1 added the same way — from your release keystore,
+or Play Console → Test and release → App integrity → App signing if you use
+Play App Signing. Mention this as a release-time task only — do NOT walk
+through it now.
 
 More detail + screenshots: https://kit.shipkaro.dev/docs/auth/supabase
 
