@@ -24,29 +24,50 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.designsystem.components.KitAvatar
+import dev.shipkaro.kit.core.designsystem.components.KitBadge
 import dev.shipkaro.kit.core.designsystem.components.KitBanner
 import dev.shipkaro.kit.core.designsystem.components.KitBannerStyle
+import dev.shipkaro.kit.core.designsystem.components.KitBottomNavBar
+import dev.shipkaro.kit.core.designsystem.components.KitBottomNavItem
 import dev.shipkaro.kit.core.designsystem.components.KitBottomSheet
 import dev.shipkaro.kit.core.designsystem.components.KitBulletRow
 import dev.shipkaro.kit.core.designsystem.components.KitButton
 import dev.shipkaro.kit.core.designsystem.components.KitButtonStyle
 import dev.shipkaro.kit.core.designsystem.components.KitCard
 import dev.shipkaro.kit.core.designsystem.components.KitChip
+import dev.shipkaro.kit.core.designsystem.components.KitDatePicker
 import dev.shipkaro.kit.core.designsystem.components.KitDialog
+import dev.shipkaro.kit.core.designsystem.components.KitDisclosureGroup
+import dev.shipkaro.kit.core.designsystem.components.KitDropdownMenu
+import dev.shipkaro.kit.core.designsystem.components.KitFab
 import dev.shipkaro.kit.core.designsystem.components.KitFeatureRow
 import dev.shipkaro.kit.core.designsystem.components.KitFilterChip
+import dev.shipkaro.kit.core.designsystem.components.KitIndeterminateLinearProgress
+import dev.shipkaro.kit.core.designsystem.components.KitLinearProgress
 import dev.shipkaro.kit.core.designsystem.components.KitListItem
+import dev.shipkaro.kit.core.designsystem.components.KitOtpField
 import dev.shipkaro.kit.core.designsystem.components.KitPasswordField
 import dev.shipkaro.kit.core.designsystem.components.KitPricingCard
+import dev.shipkaro.kit.core.designsystem.components.KitRatingBar
+import dev.shipkaro.kit.core.designsystem.components.KitSearchField
+import dev.shipkaro.kit.core.designsystem.components.KitSegmentedButton
+import dev.shipkaro.kit.core.designsystem.components.KitSkeletonListItem
+import dev.shipkaro.kit.core.designsystem.components.KitSlider
 import dev.shipkaro.kit.core.designsystem.components.KitSnackbarHost
+import dev.shipkaro.kit.core.designsystem.components.KitStepper
+import dev.shipkaro.kit.core.designsystem.components.KitSwipeableRow
 import dev.shipkaro.kit.core.designsystem.components.KitTextField
 import dev.shipkaro.kit.core.designsystem.components.rememberKitSnackbarController
+import dev.shipkaro.kit.core.util.EmailLauncher
+import dev.shipkaro.kit.core.util.rememberKitHaptics
 import dev.shipkaro.kit.core.designsystem.ops.KitUpdateSheet
 import dev.shipkaro.kit.core.designsystem.ops.KitWhatsNewSheet
 import dev.shipkaro.kit.core.designsystem.settings.AccountRow
@@ -115,6 +136,12 @@ fun ComponentsCatalogScreen(onBack: () -> Unit) {
             SettingsRowsSection()
             DialogsAndSheetsSection()
             SnackbarsSection(snackbar)
+            PickersSection()
+            ListPatternsSection()
+            ProgressAndShimmerSection()
+            BadgeAndRatingSection()
+            LayoutScaffoldsSection()
+            UtilitiesSection()
             OpsSheetsSection()
             Spacer(Modifier.height(KitTheme.spacing.xxl))
         }
@@ -587,6 +614,265 @@ private fun SnackbarsSection(
                     )
                 },
                 style = KitButtonStyle.SECONDARY,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PickersSection() {
+    Section(
+        stringResource(R.string.catalog_section_pickers),
+        "KitSlider · KitStepper · KitSegmentedButton · KitDropdownMenu · KitSearchField · KitOtpField · KitDatePicker",
+    ) {
+        var slider by remember { mutableStateOf(0.6f) }
+        var steps by remember { mutableStateOf(2) }
+        var segIndex by remember { mutableStateOf(0) }
+        var dropdown by remember { mutableStateOf("Daily") }
+        var search by remember { mutableStateOf("") }
+        var otp by remember { mutableStateOf("") }
+        var dateVisible by remember { mutableStateOf(false) }
+        var pickedDate by remember { mutableStateOf<Long?>(null) }
+        Column(verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.md)) {
+            KitSlider(
+                label = stringResource(R.string.catalog_slider_label),
+                value = slider,
+                onValueChange = { slider = it },
+            )
+            KitStepper(
+                label = stringResource(R.string.catalog_stepper_label),
+                value = steps,
+                onValueChange = { steps = it },
+                valueRange = 0..10,
+            )
+            KitSegmentedButton(
+                options = listOf(
+                    stringResource(R.string.catalog_segmented_a),
+                    stringResource(R.string.catalog_segmented_b),
+                    stringResource(R.string.catalog_segmented_c),
+                ),
+                selectedIndex = segIndex,
+                onSelectedChange = { segIndex = it },
+            )
+            KitDropdownMenu(
+                label = stringResource(R.string.catalog_dropdown_label),
+                selected = dropdown,
+                options = listOf("Daily", "Weekly", "Monthly", "Yearly"),
+                onSelectedChange = { dropdown = it },
+            )
+            KitSearchField(
+                value = search,
+                onValueChange = { search = it },
+                placeholder = stringResource(R.string.catalog_search_placeholder),
+            )
+            Text(
+                stringResource(R.string.catalog_otp_label),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            KitOtpField(value = otp, onValueChange = { otp = it }, length = 6)
+            KitButton(
+                text = stringResource(R.string.catalog_datepicker_show),
+                onClick = { dateVisible = true },
+                style = KitButtonStyle.SECONDARY,
+            )
+            if (pickedDate != null) {
+                Text(
+                    text = stringResource(R.string.catalog_datepicker_selected, pickedDate ?: 0L),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            KitDatePicker(
+                visible = dateVisible,
+                onDismiss = { dateVisible = false },
+                onDateSelected = { pickedDate = it },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ListPatternsSection() {
+    Section(
+        stringResource(R.string.catalog_section_list_patterns),
+        "KitSwipeableRow · KitDisclosureGroup",
+    ) {
+        var swipedAway by remember { mutableStateOf(false) }
+        Column(verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.md)) {
+            if (!swipedAway) {
+                KitSwipeableRow(
+                    onSwipeEndToStart = { swipedAway = true },
+                    onSwipeStartToEnd = { swipedAway = true },
+                ) {
+                    KitListItem(
+                        headline = stringResource(R.string.catalog_swipe_row_title),
+                        supporting = stringResource(R.string.catalog_swipe_row_hint),
+                        leading = KitTheme.icons.notification,
+                    )
+                }
+            } else {
+                KitButton(
+                    text = stringResource(R.string.catalog_swipe_restore),
+                    onClick = { swipedAway = false },
+                    style = KitButtonStyle.TEXT,
+                    fillWidth = false,
+                )
+            }
+            KitDisclosureGroup(
+                title = stringResource(R.string.catalog_disclosure_title),
+                subtitle = stringResource(R.string.catalog_disclosure_subtitle),
+                leading = KitTheme.icons.info,
+            ) {
+                Text(
+                    stringResource(R.string.catalog_disclosure_body),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProgressAndShimmerSection() {
+    Section(
+        stringResource(R.string.catalog_section_progress),
+        "KitLinearProgress · KitIndeterminateLinearProgress · KitSkeleton (shimmer)",
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.md)) {
+            KitLinearProgress(
+                progress = 0.42f,
+                label = stringResource(R.string.catalog_linear_label),
+            )
+            KitIndeterminateLinearProgress()
+            KitCard {
+                KitSkeletonListItem()
+            }
+        }
+    }
+}
+
+@Composable
+private fun BadgeAndRatingSection() {
+    Section(
+        stringResource(R.string.catalog_section_badge_rating),
+        "KitBadge · KitRatingBar",
+    ) {
+        var rating by remember { mutableStateOf(4) }
+        Column(verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.md)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(KitTheme.spacing.lg),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                KitBadge(count = 3) {
+                    Icon(KitTheme.icons.notification, contentDescription = null)
+                }
+                KitBadge(count = 142) {
+                    Icon(KitTheme.icons.email, contentDescription = null)
+                }
+                KitBadge(text = "NEW") {
+                    Icon(KitTheme.icons.star, contentDescription = null)
+                }
+                KitBadge {
+                    Icon(KitTheme.icons.shield, contentDescription = null)
+                }
+            }
+            KitRatingBar(rating = rating, onRatingChange = { rating = it })
+        }
+    }
+}
+
+@Composable
+private fun LayoutScaffoldsSection() {
+    Section(
+        stringResource(R.string.catalog_section_scaffolds),
+        "KitFab · KitBottomNavBar",
+    ) {
+        var navIndex by remember { mutableStateOf(0) }
+        Column(verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.md)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(KitTheme.spacing.lg)) {
+                KitFab(
+                    onClick = {},
+                    icon = KitTheme.icons.add,
+                    contentDescription = stringResource(R.string.catalog_fab_desc),
+                )
+                KitFab(
+                    onClick = {},
+                    icon = KitTheme.icons.edit,
+                    label = stringResource(R.string.catalog_fab_extended_label),
+                )
+            }
+            KitBottomNavBar(
+                items = listOf(
+                    KitBottomNavItem(
+                        label = stringResource(R.string.catalog_bottomnav_home),
+                        icon = KitTheme.icons.account,
+                        onClick = { navIndex = 0 },
+                    ),
+                    KitBottomNavItem(
+                        label = stringResource(R.string.catalog_bottomnav_search),
+                        icon = KitTheme.icons.search,
+                        onClick = { navIndex = 1 },
+                    ),
+                    KitBottomNavItem(
+                        label = stringResource(R.string.catalog_bottomnav_inbox),
+                        icon = KitTheme.icons.email,
+                        badge = "5",
+                        onClick = { navIndex = 2 },
+                    ),
+                    KitBottomNavItem(
+                        label = stringResource(R.string.catalog_bottomnav_settings),
+                        icon = KitTheme.icons.settings,
+                        onClick = { navIndex = 3 },
+                    ),
+                ),
+                selectedIndex = navIndex,
+            )
+        }
+    }
+}
+
+@Composable
+private fun UtilitiesSection() {
+    Section(
+        stringResource(R.string.catalog_section_utilities),
+        "EmailLauncher · rememberKitHaptics · KitWebView",
+    ) {
+        val context = LocalContext.current
+        val haptics = rememberKitHaptics()
+        Column(verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.sm)) {
+            KitButton(
+                text = stringResource(R.string.catalog_email_send),
+                onClick = {
+                    EmailLauncher.send(
+                        context = context,
+                        to = "hello@shipkaro.dev",
+                        subject = "Kit feedback",
+                        body = "I love...",
+                    )
+                },
+                style = KitButtonStyle.SECONDARY,
+                icon = KitTheme.icons.email,
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(KitTheme.spacing.sm)) {
+                KitButton(
+                    text = stringResource(R.string.catalog_haptic_light),
+                    onClick = { haptics.lightTap() },
+                    style = KitButtonStyle.SECONDARY,
+                    fillWidth = false,
+                )
+                KitButton(
+                    text = stringResource(R.string.catalog_haptic_success),
+                    onClick = { haptics.success() },
+                    style = KitButtonStyle.SECONDARY,
+                    fillWidth = false,
+                )
+            }
+            Text(
+                stringResource(R.string.catalog_webview_note),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

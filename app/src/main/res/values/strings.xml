@@ -84,6 +84,10 @@
     <string name="home_open_settings">Open settings</string>
     <string name="home_browse_components">Browse kit components</string>
 
+    <!-- Generic kit-component labels (re-used by callers) -->
+    <string name="kit_datepicker_confirm">OK</string>
+    <string name="kit_datepicker_dismiss">Cancel</string>
+
     <!-- Components catalog -->
     <string name="catalog_title">Components</string>
     <string name="catalog_intro_heading">Every component in this kit</string>
@@ -197,6 +201,51 @@
     <string name="catalog_snackbar_error_title">Failed</string>
     <string name="catalog_snackbar_error_message">Couldn\'t reach the server.</string>
     <string name="catalog_snackbar_error_action">Retry</string>
+
+    <!-- Pickers & advanced inputs -->
+    <string name="catalog_section_pickers">Pickers &amp; advanced inputs</string>
+    <string name="catalog_slider_label">Volume</string>
+    <string name="catalog_stepper_label">Reminders per day</string>
+    <string name="catalog_segmented_a">Day</string>
+    <string name="catalog_segmented_b">Week</string>
+    <string name="catalog_segmented_c">Month</string>
+    <string name="catalog_dropdown_label">Frequency</string>
+    <string name="catalog_search_placeholder">Search habits…</string>
+    <string name="catalog_otp_label">Enter the 6-digit code we sent you</string>
+    <string name="catalog_datepicker_show">Show date picker</string>
+    <string name="catalog_datepicker_selected">Selected (epoch millis): %1$d</string>
+
+    <!-- List patterns -->
+    <string name="catalog_section_list_patterns">List patterns</string>
+    <string name="catalog_swipe_row_title">Swipe me sideways</string>
+    <string name="catalog_swipe_row_hint">Left for delete, right for archive.</string>
+    <string name="catalog_swipe_restore">Restore row</string>
+    <string name="catalog_disclosure_title">Tap to expand</string>
+    <string name="catalog_disclosure_subtitle">Hides large content blocks until needed.</string>
+    <string name="catalog_disclosure_body">This area is collapsed by default — perfect for FAQs, advanced settings, or anything that would otherwise clutter the screen.</string>
+
+    <!-- Progress + shimmer -->
+    <string name="catalog_section_progress">Progress &amp; shimmer</string>
+    <string name="catalog_linear_label">Uploading</string>
+
+    <!-- Badge + rating -->
+    <string name="catalog_section_badge_rating">Badges &amp; rating</string>
+
+    <!-- Scaffolds -->
+    <string name="catalog_section_scaffolds">Scaffolds (FAB &amp; bottom nav)</string>
+    <string name="catalog_fab_desc">Add item</string>
+    <string name="catalog_fab_extended_label">Compose</string>
+    <string name="catalog_bottomnav_home">Home</string>
+    <string name="catalog_bottomnav_search">Search</string>
+    <string name="catalog_bottomnav_inbox">Inbox</string>
+    <string name="catalog_bottomnav_settings">Settings</string>
+
+    <!-- Utilities -->
+    <string name="catalog_section_utilities">Utilities</string>
+    <string name="catalog_email_send">Open email composer</string>
+    <string name="catalog_haptic_light">Light tap</string>
+    <string name="catalog_haptic_success">Success buzz</string>
+    <string name="catalog_webview_note">KitWebView embeds web content inline — drop it in any layout with `KitWebView(url = \"…\")`. Use Chrome Custom Tabs (CustomTabs.openUrl) for external links.</string>
 
     <string name="catalog_section_ops">Ops sheets</string>
     <string name="catalog_action_show_required_update">Show required-update sheet</string>

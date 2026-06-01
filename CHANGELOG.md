@@ -9,6 +9,47 @@ command handles this).
 
 ## [Unreleased]
 
+### Added (2026-06-02 — 19-component SwiftStarterKits-parity pass)
+- **KitSnackbar (Light-style)** — 4-variant severity-tagged snackbars (INFO /
+  SUCCESS / WARNING / ERROR). `KitSnackbarController` w/ `.info()/.success()
+  /.warning()/.error()` helpers + `rememberKitSnackbarController()` + drop-in
+  `KitSnackbarHost`. Falls back to Material default for plain-string callers.
+- **KitPullToRefresh** — wrapper over Material 3 `PullToRefreshBox`.
+- **KitFab** — single-mode + extended FAB.
+- **KitBottomNavScaffold + KitBottomNavBar + KitBottomNavItem** — Scaffold w/
+  `NavigationBar` slot, badged items supported.
+- **kitShimmer modifier + KitSkeleton + KitSkeletonListItem** — looping linear
+  gradient sweep; canonical loading-placeholder pattern.
+- **KitSlider** — Material 3 Slider w/ label + value read-out.
+- **KitStepper** — integer +/- stepper, clamped to a range.
+- **KitSegmentedButton** — single-choice segmented row (SwiftUI Picker
+  `.segmented` equivalent).
+- **KitDatePicker + KitInlineDatePicker** — Material 3 DatePickerDialog
+  wrapper + inline variant.
+- **KitDropdownMenu** — exposed-dropdown picker (SwiftUI Picker `.menu`
+  equivalent).
+- **KitSearchField** — single-line search w/ leading magnifier + clear button
+  + IME Search action.
+- **KitSwipeableRow** — SwipeToDismissBox wrapper, left/right callbacks,
+  state auto-resets per swipe.
+- **KitLinearProgress + KitIndeterminateLinearProgress**.
+- **KitDisclosureGroup** — expandable / collapsible group (SwiftUI
+  DisclosureGroup equivalent), stateless + stateful overloads.
+- **KitLazyGrid + KitAdaptiveLazyGrid** — fixed-column + adaptive-column
+  vertical grids w/ kit defaults.
+- **KitBadge** — number / text / dot badge overlaid on a target via
+  `BadgedBox`.
+- **KitRatingBar** — 5-star tappable rating, tap same star to clear.
+- **KitOtpField** — N-cell OTP code entry, transparent BasicTextField over
+  rendered cells.
+- **KitWebView** — embedded WebView; JS off by default. Use
+  `CustomTabs.openUrl` for external links.
+- **EmailLauncher** — `mailto:` intent w/ subject + body + chooser-title.
+- **KitHaptics + rememberKitHaptics** — semantic haptic helpers
+  (`lightTap()` / `mediumTap()` / `longPress()` / `success()`).
+- 7 new `Components catalog` sections live-preview every addition above.
+- `kit_datepicker_*` and 40+ catalog strings.
+
 ### Added (2026-06-01 — Components catalog screen)
 - New `feature/catalog/ComponentsCatalogScreen.kt` — live preview of every kit
   component grouped by section (buttons, inputs, chips, cards/lists, banners,
