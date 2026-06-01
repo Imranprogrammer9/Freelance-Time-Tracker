@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.oss.licenses)
+    alias(libs.plugins.about.libraries)
     alias(libs.plugins.detekt)
 }
 
@@ -192,9 +192,10 @@ dependencies {
     // KitConfig.SENTRY_ENABLED is true AND BuildConfig.SENTRY_DSN is non-empty.
     implementation(libs.sentry.android)
 
-    // OSS licenses — pairs with the oss-licenses-plugin above. Settings → About → Open source
-    // licenses launches OssLicensesMenuActivity which renders the build-time-generated list.
-    implementation(libs.play.services.oss.licenses)
+    // AboutLibraries — pairs with the aboutLibraries plugin above. Compose-M3 module ships
+    // a `LibrariesContainer` composable that renders the build-time-generated dep list.
+    // Settings → About → Open source licenses navigates to a kit-owned screen that uses it.
+    implementation(libs.aboutlibraries.compose.m3)
 
     detektPlugins(libs.detekt.formatting)
 

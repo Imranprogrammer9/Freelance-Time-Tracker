@@ -25,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.analytics.ScreenNames
@@ -55,6 +54,7 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onWhatsNew: () -> Unit,
     onProfile: () -> Unit = {},
+    onOssLicenses: () -> Unit = {},
     vm: SettingsViewModel = koinViewModel(),
 ) {
     val theme by vm.themeMode.collectAsState(initial = ThemeMode.SYSTEM)
@@ -157,17 +157,11 @@ fun SettingsScreen(
                     onClick = { PlayStoreLauncher.openListing(context) },
                 )
                 SettingsDivider()
-                val ossLicensesTitle = stringResource(R.string.settings_oss_licenses)
                 NavRow(
-                    title = ossLicensesTitle,
+                    title = stringResource(R.string.settings_oss_licenses),
                     leading = KitTheme.icons.info,
                     chipColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = {
-                        OssLicensesMenuActivity.setActivityTitle(ossLicensesTitle)
-                        context.startActivity(
-                            android.content.Intent(context, OssLicensesMenuActivity::class.java),
-                        )
-                    },
+                    onClick = onOssLicenses,
                 )
             }
 

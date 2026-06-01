@@ -27,6 +27,7 @@ import dev.shipkaro.kit.feature.auth.AuthScreen
 import dev.shipkaro.kit.feature.catalog.ComponentsCatalogScreen
 import dev.shipkaro.kit.feature.changelog.ChangelogScreen
 import dev.shipkaro.kit.feature.home.HomeScreen
+import dev.shipkaro.kit.feature.licenses.OssLicensesScreen
 import dev.shipkaro.kit.feature.onboarding.OnboardingScreen
 import dev.shipkaro.kit.feature.paywall.PaywallScreen
 import dev.shipkaro.kit.feature.profile.ProfileScreen
@@ -76,7 +77,8 @@ fun KitNavHost() {
             dest.hasRoute<Route.Settings>() ||
             dest.hasRoute<Route.Profile>() ||
             dest.hasRoute<Route.Changelog>() ||
-            dest.hasRoute<Route.ComponentsCatalog>()
+            dest.hasRoute<Route.ComponentsCatalog>() ||
+            dest.hasRoute<Route.OssLicenses>()
         if (isPostAuth) {
             navController.navigate(Route.Auth) {
                 popUpTo<Route.Home> { inclusive = true }
@@ -131,7 +133,11 @@ fun KitNavHost() {
                 onBack = { navController.popBackStack() },
                 onWhatsNew = { navController.navigate(Route.Changelog) },
                 onProfile = { navController.navigate(Route.Profile) },
+                onOssLicenses = { navController.navigate(Route.OssLicenses) },
             )
+        }
+        composable<Route.OssLicenses> {
+            OssLicensesScreen(onBack = { navController.popBackStack() })
         }
         composable<Route.Profile> {
             ProfileScreen(onBack = { navController.popBackStack() })
