@@ -44,7 +44,9 @@ import dev.shipkaro.kit.core.designsystem.components.KitFilterChip
 import dev.shipkaro.kit.core.designsystem.components.KitListItem
 import dev.shipkaro.kit.core.designsystem.components.KitPasswordField
 import dev.shipkaro.kit.core.designsystem.components.KitPricingCard
+import dev.shipkaro.kit.core.designsystem.components.KitSnackbarHost
 import dev.shipkaro.kit.core.designsystem.components.KitTextField
+import dev.shipkaro.kit.core.designsystem.components.rememberKitSnackbarController
 import dev.shipkaro.kit.core.designsystem.ops.KitUpdateSheet
 import dev.shipkaro.kit.core.designsystem.ops.KitWhatsNewSheet
 import dev.shipkaro.kit.core.designsystem.settings.AccountRow
@@ -76,6 +78,7 @@ import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ComponentsCatalogScreen(onBack: () -> Unit) {
+    val snackbar = rememberKitSnackbarController()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -90,6 +93,7 @@ fun ComponentsCatalogScreen(onBack: () -> Unit) {
                 },
             )
         },
+        snackbarHost = { KitSnackbarHost(snackbar.hostState) },
     ) { padding ->
         Column(
             modifier = Modifier
@@ -110,6 +114,7 @@ fun ComponentsCatalogScreen(onBack: () -> Unit) {
             StateViewsSection()
             SettingsRowsSection()
             DialogsAndSheetsSection()
+            SnackbarsSection(snackbar)
             OpsSheetsSection()
             Spacer(Modifier.height(KitTheme.spacing.xxl))
         }
@@ -532,6 +537,57 @@ private fun DialogsAndSheetsSection() {
                 )
                 Spacer(Modifier.height(KitTheme.spacing.md))
             }
+        }
+    }
+}
+
+@Composable
+private fun SnackbarsSection(
+    snackbar: dev.shipkaro.kit.core.designsystem.components.KitSnackbarController,
+) {
+    val infoMessage = stringResource(R.string.catalog_snackbar_info_message)
+    val infoTitle = stringResource(R.string.catalog_snackbar_info_title)
+    val successMessage = stringResource(R.string.catalog_snackbar_success_message)
+    val warningMessage = stringResource(R.string.catalog_snackbar_warning_message)
+    val warningAction = stringResource(R.string.catalog_snackbar_warning_action)
+    val errorMessage = stringResource(R.string.catalog_snackbar_error_message)
+    val errorTitle = stringResource(R.string.catalog_snackbar_error_title)
+    val errorAction = stringResource(R.string.catalog_snackbar_error_action)
+    Section(stringResource(R.string.catalog_section_snackbars), "KitSnackbar · 4 styles · INFO / SUCCESS / WARNING / ERROR") {
+        Column(verticalArrangement = Arrangement.spacedBy(KitTheme.spacing.sm)) {
+            KitButton(
+                text = stringResource(R.string.catalog_snackbar_show_info),
+                onClick = { snackbar.info(message = infoMessage, title = infoTitle) },
+                style = KitButtonStyle.SECONDARY,
+            )
+            KitButton(
+                text = stringResource(R.string.catalog_snackbar_show_success),
+                onClick = { snackbar.success(message = successMessage) },
+                style = KitButtonStyle.SECONDARY,
+            )
+            KitButton(
+                text = stringResource(R.string.catalog_snackbar_show_warning),
+                onClick = {
+                    snackbar.warning(
+                        message = warningMessage,
+                        actionLabel = warningAction,
+                        onAction = {},
+                    )
+                },
+                style = KitButtonStyle.SECONDARY,
+            )
+            KitButton(
+                text = stringResource(R.string.catalog_snackbar_show_error),
+                onClick = {
+                    snackbar.error(
+                        title = errorTitle,
+                        message = errorMessage,
+                        actionLabel = errorAction,
+                        onAction = {},
+                    )
+                },
+                style = KitButtonStyle.SECONDARY,
+            )
         }
     }
 }

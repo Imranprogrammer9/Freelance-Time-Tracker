@@ -184,6 +184,20 @@
     <string name="catalog_sheet_body">Bottom sheets are good for short pickers and quick actions.</string>
     <string name="catalog_sheet_dismiss">Close</string>
 
+    <string name="catalog_section_snackbars">Snackbars (toasts)</string>
+    <string name="catalog_snackbar_show_info">Show info snackbar</string>
+    <string name="catalog_snackbar_show_success">Show success snackbar</string>
+    <string name="catalog_snackbar_show_warning">Show warning snackbar</string>
+    <string name="catalog_snackbar_show_error">Show error snackbar</string>
+    <string name="catalog_snackbar_info_title">Heads up</string>
+    <string name="catalog_snackbar_info_message">Sync starting in the background.</string>
+    <string name="catalog_snackbar_success_message">Saved.</string>
+    <string name="catalog_snackbar_warning_message">You\'re close to your free quota.</string>
+    <string name="catalog_snackbar_warning_action">Upgrade</string>
+    <string name="catalog_snackbar_error_title">Failed</string>
+    <string name="catalog_snackbar_error_message">Couldn\'t reach the server.</string>
+    <string name="catalog_snackbar_error_action">Retry</string>
+
     <string name="catalog_section_ops">Ops sheets</string>
     <string name="catalog_action_show_required_update">Show required-update sheet</string>
     <string name="catalog_action_show_optional_update">Show optional-update sheet</string>
