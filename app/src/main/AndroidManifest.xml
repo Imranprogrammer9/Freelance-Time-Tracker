@@ -75,5 +75,18 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
+
+        <!--
+          Sentry — disable the SDK's auto-init ContentProvider. KitApplication
+          calls SentryAndroid.init manually, gated on KitConfig.SENTRY_ENABLED +
+          a non-blank BuildConfig.SENTRY_DSN. Without this opt-out, Sentry's
+          SentryInitProvider runs at process start (before KitApplication),
+          finds no DSN in AndroidManifest meta-data, and throws
+          IllegalArgumentException("DSN is required") — crashing the app at
+          launch for any clone that hasn't set sentry.dsn yet.
+        -->
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
     </application>
 </manifest>
