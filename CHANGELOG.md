@@ -9,6 +9,65 @@ command handles this).
 
 ## [Unreleased]
 
+### Added (2026-06-02 — runtime feedback pass)
+- `/kit-env-check` command — cross-platform per-machine env probe (JDK 17,
+  `ANDROID_HOME`, adb, android CLI, Android Skills, optional scrcpy + Holo).
+  `uname`-branched install commands for macOS / Windows / Linux. References
+  `shipkaro.dev/mobile-docs/getting-started/setup-macos` + `.../setup-windows`.
+- `/kit-upload-on-google-play` Step D — release SHA-1 register for Google
+  sign-in. Detects `KitConfig.GOOGLE_SIGN_IN_ENABLED` + `AUTH_PROVIDER`;
+  3 sub-steps (Play App Signing vs self-managed → keytool / Play Console SHA-1
+  read → register in Google Cloud Console or Firebase). First-version path
+  only.
+- `Step 0 — Detect existing state` preamble added to every `/kit-setup-*`
+  command (8 files). Re-runs now resume from where they left off instead of
+  re-asking every question.
+- `feature/licenses/OssLicensesScreen.kt` — Compose-native OSS licenses
+  screen using `LibrariesContainer` from `aboutlibraries-compose-m3:11.6.2`.
+  `Route.OssLicenses` wired in `KitNavHost`. `SettingsScreen` takes new
+  `onOssLicenses` callback.
+- Holo (`measure-sh/holo`) added as recommended optional terminal-first
+  Android profiler in `/kit-env-check` and `/kit-start-setup` outro.
+
+### Changed (2026-06-02 — runtime feedback pass)
+- `/kit-setup-auth` Step 4a (Supabase + Google) rewritten with the correct
+  flow: two Google Cloud OAuth clients (Web for Supabase + Android for
+  Credential Manager). Previous copy wrongly implied Supabase generates the
+  Web Client ID. Now 6 paced sub-steps: OAuth consent screen → Create Web
+  client (with Supabase callback as Authorized redirect URI) → Connect
+  Supabase to that Web client → Add in-app redirect URL → Grab debug SHA-1
+  (wait for "yes") → Create Android client.
+- `/kit-setup-auth` Steps 4a + 4b: paced sub-steps with stop-and-wait gates;
+  no shell command runs before explicit "yes".
+- `/kit-setup-paywall` Step 2 rewritten for current RevenueCat dashboard
+  (Apps + API keys are top-level sidebar items, not under Project Settings).
+  6 paced sub-steps including release-time info block covering Play Console
+  products + service account JSON + offerings + paywall design.
+- `/kit-setup-analytics` Steps 2/3/4 paced with per-provider waits;
+  PostHog / Firebase / Sentry never chained in one message.
+- `/kit-start-setup` task list 8 → 7 steps. Step 7 Ops removed; Step 8 Build
+  promoted to Step 7. Step 0 feature-list Ops bullet removed. Wrap-up gained
+  optional-commands outro listing 8 commands (kit-env-check, kit-setup-updates,
+  kit-setup-review-dialog, kit-setup-ai, kit-translate, kit-design-onboarding,
+  kit-design-app, kit-upload-on-google-play). Step 0 prereq block top points
+  at `/kit-env-check` for env-level failures.
+- `/kit-start-setup` task list `Brand & theme` → `Brand and theme` and
+  `Build & run` → `Build and run` (TaskList HTML-encodes `&` in subjects).
+- `/kit-upload-on-google-play` task list renumbered D–K (Step D inserted).
+- OSS Licenses swapped from `play-services-oss-licenses` (Google Play
+  Services only — blank for kit deps) to `mikepenz/aboutlibraries-compose-m3`
+  (scans full Gradle dep tree).
+- Removed `play-services-oss-licenses` lib + `oss-licenses` plugin +
+  `settings.gradle.kts` plugin-resolution mapping for the gms plugin.
+
+### Fixed (2026-06-02 — runtime feedback pass)
+- App crash at launch on any clone without `sentry.dsn` configured: added
+  `<meta-data android:name="io.sentry.auto-init" android:value="false" />`
+  to `<application>` so Sentry's `SentryInitProvider` ContentProvider stops
+  trying to init before `KitApplication.onCreate` runs.
+- `OssLicensesMenuActivity` blank screen — root cause was the gms plugin
+  not generating entries for non-Google deps. Replaced w/ AboutLibraries.
+
 ### Added (2026-06-02 — 19-component SwiftStarterKits-parity pass)
 - **KitSnackbar (Light-style)** — 4-variant severity-tagged snackbars (INFO /
   SUCCESS / WARNING / ERROR). `KitSnackbarController` w/ `.info()/.success()
