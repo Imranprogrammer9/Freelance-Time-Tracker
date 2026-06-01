@@ -82,6 +82,118 @@
     <string name="home_heading">Your app starts here</string>
     <string name="home_subtitle">Replace HomeScreen with your app\'s main screen.</string>
     <string name="home_open_settings">Open settings</string>
+    <string name="home_browse_components">Browse kit components</string>
+
+    <!-- Components catalog -->
+    <string name="catalog_title">Components</string>
+    <string name="catalog_intro_heading">Every component in this kit</string>
+    <string name="catalog_intro_body">A live preview of the design system. Useful right after picking your brand color or icon pack — scroll through to see how everything looks together.</string>
+
+    <string name="catalog_section_buttons">Buttons</string>
+    <string name="catalog_button_primary">Primary</string>
+    <string name="catalog_button_secondary">Secondary</string>
+    <string name="catalog_button_text">Text only</string>
+    <string name="catalog_button_loading">Loading…</string>
+    <string name="catalog_button_with_icon">With icon</string>
+    <string name="catalog_button_disabled">Disabled</string>
+
+    <string name="catalog_section_inputs">Inputs</string>
+    <string name="catalog_input_label">Your name</string>
+    <string name="catalog_input_placeholder">e.g. Wajahat</string>
+    <string name="catalog_input_helper">Helper text appears under the field.</string>
+    <string name="catalog_input_error_label">Email</string>
+    <string name="catalog_input_error_helper">Enter a valid email address.</string>
+
+    <string name="catalog_section_chips">Chips</string>
+    <string name="catalog_chip_plain">Tag</string>
+    <string name="catalog_chip_iconed">Featured</string>
+    <string name="catalog_chip_filter_a">All</string>
+    <string name="catalog_chip_filter_b">Premium only</string>
+
+    <string name="catalog_section_cards">Cards &amp; list items</string>
+    <string name="catalog_card_title">Plain card</string>
+    <string name="catalog_card_body">A padded surface with rounded corners and a hint of elevation.</string>
+    <string name="catalog_card_clickable_title">Clickable card</string>
+    <string name="catalog_card_clickable_body">Same look, plus a ripple when tapped.</string>
+    <string name="catalog_listitem_headline">Notification preference</string>
+    <string name="catalog_listitem_supporting">Tap to change how you get reminders.</string>
+
+    <string name="catalog_section_banners">Banners</string>
+    <string name="catalog_banner_info_title">Heads up</string>
+    <string name="catalog_banner_info_body">This is informational context.</string>
+    <string name="catalog_banner_success_title">Saved</string>
+    <string name="catalog_banner_success_body">Your changes were saved.</string>
+    <string name="catalog_banner_warning_title">Heads up</string>
+    <string name="catalog_banner_warning_body">Storage is almost full. Free space soon.</string>
+    <string name="catalog_banner_error_title">Something went wrong</string>
+    <string name="catalog_banner_error_body">Couldn\'t reach the server. Try again in a moment.</string>
+    <string name="catalog_banner_dismissible">Dismissible banner — tap the × to close.</string>
+    <string name="catalog_banner_restore">Restore banner</string>
+
+    <string name="catalog_section_avatars">Avatars</string>
+
+    <string name="catalog_section_paywall">Paywall pieces</string>
+    <string name="catalog_pricing_monthly_title">MONTHLY</string>
+    <string name="catalog_pricing_monthly_caption">Billed monthly</string>
+    <string name="catalog_pricing_yearly_title">YEARLY</string>
+    <string name="catalog_pricing_yearly_caption">Save 50%</string>
+    <string name="catalog_pricing_lifetime_title">LIFETIME</string>
+    <string name="catalog_pricing_lifetime_caption">One-time</string>
+    <string name="catalog_pricing_badge">Best value</string>
+    <string name="catalog_feature_premium_title">Unlock premium</string>
+    <string name="catalog_feature_premium_body">Pro features, no ads, faster sync.</string>
+    <string name="catalog_feature_private_title">Privacy first</string>
+    <string name="catalog_feature_private_body">Your data is encrypted on device.</string>
+    <string name="catalog_bullet_one">Everything in the free plan</string>
+    <string name="catalog_bullet_two">Cloud backup across devices</string>
+    <string name="catalog_bullet_three">Cancel anytime</string>
+
+    <string name="catalog_section_states">State views</string>
+    <string name="catalog_state_loading_label">Loading items…</string>
+    <string name="catalog_state_empty_title">Nothing here yet</string>
+    <string name="catalog_state_empty_body">Add your first item to get started.</string>
+    <string name="catalog_state_empty_action">Add item</string>
+    <string name="catalog_state_error_title">Couldn\'t load</string>
+    <string name="catalog_state_error_body">Check your connection and try again.</string>
+    <string name="catalog_state_error_action">Retry</string>
+    <string name="catalog_state_success_title">All set</string>
+    <string name="catalog_state_success_body">Your changes are saved.</string>
+
+    <string name="catalog_section_settings">Settings rows</string>
+    <string name="catalog_account_name">Wajahat Karim</string>
+    <string name="catalog_settings_section_general">General</string>
+    <string name="catalog_toggle_title">Notifications</string>
+    <string name="catalog_toggle_subtitle">Daily reminders &amp; product updates.</string>
+    <string name="catalog_nav_title">Language</string>
+    <string name="catalog_nav_subtitle">Pick the language used by the app.</string>
+    <string name="catalog_danger_title">Delete account</string>
+    <string name="catalog_danger_subtitle">Removes your data permanently.</string>
+
+    <string name="catalog_section_dialogs">Dialogs &amp; sheets</string>
+    <string name="catalog_action_show_dialog">Show dialog</string>
+    <string name="catalog_action_show_destructive_dialog">Show destructive dialog</string>
+    <string name="catalog_action_show_sheet">Show bottom sheet</string>
+    <string name="catalog_dialog_title">Save changes?</string>
+    <string name="catalog_dialog_body">You have unsaved edits. Save them before leaving?</string>
+    <string name="catalog_dialog_confirm">Save</string>
+    <string name="catalog_dialog_dismiss">Cancel</string>
+    <string name="catalog_dialog_destructive_title">Delete forever?</string>
+    <string name="catalog_dialog_destructive_body">This item can\'t be recovered after delete.</string>
+    <string name="catalog_dialog_destructive_confirm">Delete</string>
+    <string name="catalog_sheet_title">Pick an option</string>
+    <string name="catalog_sheet_body">Bottom sheets are good for short pickers and quick actions.</string>
+    <string name="catalog_sheet_dismiss">Close</string>
+
+    <string name="catalog_section_ops">Ops sheets</string>
+    <string name="catalog_action_show_required_update">Show required-update sheet</string>
+    <string name="catalog_action_show_optional_update">Show optional-update sheet</string>
+    <string name="catalog_action_show_whats_new">Show What\'s new sheet</string>
+    <string name="catalog_whatsnew_title">What\'s new</string>
+    <string name="catalog_whatsnew_version">Version %1$s</string>
+    <string name="catalog_whatsnew_section">What\'s changed</string>
+    <string name="catalog_whatsnew_one">Faster startup</string>
+    <string name="catalog_whatsnew_two">New components catalog screen</string>
+    <string name="catalog_whatsnew_three">Bug fixes and polish</string>
 
     <!-- Home — system status panel -->
     <string name="home_status_section_title">System status</string>

@@ -23,4 +23,5 @@ sealed interface Route {
     @Serializable data object Settings : Route
     @Serializable data object Profile : Route
     @Serializable data object Changelog : Route
+    @Serializable data object ComponentsCatalog : Route
 }

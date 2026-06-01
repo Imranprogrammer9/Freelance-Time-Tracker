@@ -53,6 +53,7 @@ import org.koin.compose.koinInject
 @Composable
 fun HomeScreen(
     onOpenSettings: () -> Unit,
+    onBrowseComponents: () -> Unit = {},
 ) {
     val auth = koinInject<AuthRepository>()
     val purchases = koinInject<PurchaseManager>()
@@ -133,6 +134,16 @@ fun HomeScreen(
             }
 
             Spacer(Modifier.height(KitTheme.spacing.xl))
+
+            KitButton(
+                text = stringResource(R.string.home_browse_components),
+                onClick = onBrowseComponents,
+                style = KitButtonStyle.PRIMARY,
+                icon = KitTheme.icons.palette,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(Modifier.height(KitTheme.spacing.sm))
 
             KitButton(
                 text = stringResource(R.string.home_open_settings),

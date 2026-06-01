@@ -9,6 +9,17 @@ command handles this).
 
 ## [Unreleased]
 
+### Added (2026-06-01 — Components catalog screen)
+- New `feature/catalog/ComponentsCatalogScreen.kt` — live preview of every kit
+  component grouped by section (buttons, inputs, chips, cards/lists, banners,
+  avatars, paywall pieces, state views, settings rows, dialogs/sheets, ops
+  sheets). Pure dummy data; every onClick is a no-op or local state.
+- `Route.ComponentsCatalog` + wiring in `KitNavHost` (treated as post-auth for
+  the sign-out redirect).
+- `HomeScreen` adds a primary "Browse kit components" button above the
+  existing "Open settings" button.
+- 80+ new `catalog_*` strings.
+
 ### Added (2026-06-01 — Sentry pass)
 - Sentry crash + breadcrumb reporting (`io.sentry:sentry-android:7.20.0`) +
   new `core/log/SentryTree.kt`. Plants alongside `CrashlyticsTree` in release

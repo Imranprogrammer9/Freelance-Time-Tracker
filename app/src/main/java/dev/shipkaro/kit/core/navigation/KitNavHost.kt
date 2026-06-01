@@ -24,6 +24,7 @@ import dev.shipkaro.kit.core.billing.PurchaseManager
 import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.data.settings.SettingsRepository
 import dev.shipkaro.kit.feature.auth.AuthScreen
+import dev.shipkaro.kit.feature.catalog.ComponentsCatalogScreen
 import dev.shipkaro.kit.feature.changelog.ChangelogScreen
 import dev.shipkaro.kit.feature.home.HomeScreen
 import dev.shipkaro.kit.feature.onboarding.OnboardingScreen
@@ -74,7 +75,8 @@ fun KitNavHost() {
         val isPostAuth = dest.hasRoute<Route.Home>() ||
             dest.hasRoute<Route.Settings>() ||
             dest.hasRoute<Route.Profile>() ||
-            dest.hasRoute<Route.Changelog>()
+            dest.hasRoute<Route.Changelog>() ||
+            dest.hasRoute<Route.ComponentsCatalog>()
         if (isPostAuth) {
             navController.navigate(Route.Auth) {
                 popUpTo<Route.Home> { inclusive = true }
@@ -118,7 +120,11 @@ fun KitNavHost() {
         composable<Route.Home> {
             HomeScreen(
                 onOpenSettings = { navController.navigate(Route.Settings) },
+                onBrowseComponents = { navController.navigate(Route.ComponentsCatalog) },
             )
+        }
+        composable<Route.ComponentsCatalog> {
+            ComponentsCatalogScreen(onBack = { navController.popBackStack() })
         }
         composable<Route.Settings> {
             SettingsScreen(
