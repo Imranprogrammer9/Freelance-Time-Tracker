@@ -9,6 +9,20 @@ command handles this).
 
 ## [Unreleased]
 
+### Added (2026-06-01 — Sentry pass)
+- Sentry crash + breadcrumb reporting (`io.sentry:sentry-android:7.20.0`) +
+  new `core/log/SentryTree.kt`. Plants alongside `CrashlyticsTree` in release
+  when `KitConfig.SENTRY_ENABLED` is true AND `BuildConfig.SENTRY_DSN` is
+  non-blank. INFO/WARN logs become Sentry breadcrumbs; ERROR/ASSERT becomes
+  `captureException()` (with throwable) or `captureMessage(SentryLevel.ERROR)`
+  (without).
+- `KitConfig.SENTRY_ENABLED` (default false).
+- `BuildConfig.SENTRY_DSN` from `local.properties` (`sentry.dsn`). Template
+  updated.
+- `/kit-setup-analytics` Step 1 multi-select now includes **Sentry** alongside
+  PostHog / Firebase Analytics / Crashlytics. New Step 4 walks the DSN-paste
+  path; both Crashlytics + Sentry can run in parallel.
+
 ### Added (2026-06-01)
 - Timber logging (`com.jakewharton.timber:timber:5.0.1`) + new
   `core/log/CrashlyticsTree.kt`. `KitApplication.onCreate` plants `DebugTree`

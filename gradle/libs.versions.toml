@@ -36,6 +36,7 @@ revenuecat = "9.23.1"
 posthog = "3.44.2"
 playReview = "2.0.2"
 timber = "5.0.1"
+sentry = "7.20.0"
 # Google Play Services OSS licenses — generates a Settings → About licenses screen
 # from the project's deps at build time. Plugin scans, library renders.
 ossLicensesPlugin = "0.10.6"
@@ -141,6 +142,10 @@ play-review = { group = "com.google.android.play", name = "review", version.ref 
 # KitConfig.ANALYTICS_ENABLED + Firebase actually configured). Replaces raw android.util.Log
 # across the kit; survives R8 obfuscation; lets devs add new Tree impls (Sentry, file, etc).
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+# Sentry — alternative to Firebase Crashlytics. Can run alongside Crashlytics (each gets
+# its own Timber.Tree). KitApplication plants SentryTree only when KitConfig.SENTRY_ENABLED.
+sentry-android = { group = "io.sentry", name = "sentry-android", version.ref = "sentry" }
 
 # OSS licenses screen — pairs with the gms.oss-licenses-plugin below. Plugin reads the
 # project's POMs at build time and bakes the result into raw resources; OssLicensesMenuActivity

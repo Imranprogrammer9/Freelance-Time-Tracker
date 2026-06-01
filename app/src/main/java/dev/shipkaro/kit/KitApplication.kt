@@ -6,6 +6,8 @@ import dev.shipkaro.kit.core.billing.PurchaseManager
 import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.di.appModules
 import dev.shipkaro.kit.core.log.CrashlyticsTree
+import dev.shipkaro.kit.core.log.SentryTree
+import io.sentry.android.core.SentryAndroid
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -22,12 +24,22 @@ class KitApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Timber — debug builds get verbose stdout; release builds mirror WARN+ to Crashlytics
-        // (only when ANALYTICS_ENABLED, matching AnalyticsManager.logError's gating).
+        // Timber — debug builds get verbose stdout; release builds mirror WARN+ to whichever
+        // crash reporter(s) are wired. Crashlytics + Sentry can run in parallel — Timber
+        // supports any number of trees.
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        } else if (KitConfig.ANALYTICS_ENABLED) {
-            Timber.plant(CrashlyticsTree())
+        } else {
+            if (KitConfig.ANALYTICS_ENABLED) {
+                Timber.plant(CrashlyticsTree())
+            }
+            if (KitConfig.SENTRY_ENABLED && BuildConfig.SENTRY_DSN.isNotBlank()) {
+                SentryAndroid.init(this) { options ->
+                    options.dsn = BuildConfig.SENTRY_DSN
+                    options.isDebug = false
+                }
+                Timber.plant(SentryTree())
+            }
         }
 
         startKoin {

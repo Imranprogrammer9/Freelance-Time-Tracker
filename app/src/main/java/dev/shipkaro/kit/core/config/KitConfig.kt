@@ -91,6 +91,20 @@ object KitConfig {
     const val ANALYTICS_ENABLED: Boolean = true
 
     /**
+     * Wire Sentry error + breadcrumb reporting alongside (or instead of) Firebase Crashlytics.
+     *
+     * Both crash reporters can run in parallel — each gets its own `Timber.Tree`. Use Sentry
+     * when:
+     *  - you need richer breadcrumb / release-health features than Crashlytics offers,
+     *  - you want crash reporting without Firebase / `google-services.json`,
+     *  - your team already has a Sentry org and dashboard set up.
+     *
+     * Inert until [SENTRY_ENABLED] is true AND `local.properties` has `sentry.dsn` set
+     * (sentry.io → Project → Settings → Client Keys → DSN).
+     */
+    const val SENTRY_ENABLED: Boolean = false
+
+    /**
      * Backend for [RemoteAppConfig] (runtime feature flags + the update gate).
      *  - [LOCAL]    : no-op, returns defaults. Default — builds & runs offline.
      *  - [FIREBASE] : Firebase Remote Config. Requires `google-services.json` + plugin.

@@ -59,6 +59,12 @@ posthog.host=https://us.i.posthog.com
 openrouter.api.key=sk-or-v1-YOUR_OPENROUTER_KEY
 
 # -----------------------------------------------------------------------
+# Sentry   (needed only if KitConfig.SENTRY_ENABLED = true)
+# sentry.io -> Project -> Settings -> Client Keys -> DSN
+# -----------------------------------------------------------------------
+sentry.dsn=https://YOUR_SENTRY_DSN@oXXXXXX.ingest.sentry.io/YYYYYYY
+
+# -----------------------------------------------------------------------
 # Not set here:
 #  - Google Sign-In Web client ID -> KitConfig.kt (GOOGLE_WEB_CLIENT_ID).
 #  - Firebase -> uses google-services.json placed at app/, not a key here.

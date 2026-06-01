@@ -36,6 +36,8 @@ val postHogHost: String = localProps.getProperty("posthog.host", "https://us.i.p
 // OpenRouter API key — generic AI access (100+ models behind one key).
 // Empty if not set — OpenRouterAiRepository surfaces 401s when called; nothing breaks at build time.
 val openRouterApiKey: String = localProps.getProperty("openrouter.api.key", "")
+// Sentry DSN — error / breadcrumb reporting. Empty if not set; SentryTree is not planted.
+val sentryDsn: String = localProps.getProperty("sentry.dsn", "")
 
 android {
     namespace = "dev.shipkaro.kit"
@@ -57,6 +59,7 @@ android {
         buildConfigField("String", "POSTHOG_API_KEY", "\"$postHogApiKey\"")
         buildConfigField("String", "POSTHOG_HOST", "\"$postHogHost\"")
         buildConfigField("String", "OPENROUTER_API_KEY", "\"$openRouterApiKey\"")
+        buildConfigField("String", "SENTRY_DSN", "\"$sentryDsn\"")
     }
 
     // Locales the app ships with. Add a language => add values-XX/strings.xml
@@ -184,6 +187,10 @@ dependencies {
 
     // Logging — Timber. KitApplication plants DebugTree (debug) + CrashlyticsTree (release).
     implementation(libs.timber)
+
+    // Sentry — optional alternative / addition to Firebase Crashlytics. Inert until
+    // KitConfig.SENTRY_ENABLED is true AND BuildConfig.SENTRY_DSN is non-empty.
+    implementation(libs.sentry.android)
 
     // OSS licenses — pairs with the oss-licenses-plugin above. Settings → About → Open source
     // licenses launches OssLicensesMenuActivity which renders the build-time-generated list.
