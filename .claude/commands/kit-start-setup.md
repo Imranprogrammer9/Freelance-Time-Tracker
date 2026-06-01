@@ -43,12 +43,12 @@ Use these task titles verbatim:
 - Step 0 — Orientation + prereqs
 - Step 1 — Rename kit
 - Step 2 — Onboarding content
-- Step 3 — Brand & theme
+- Step 3 — Brand and theme
 - Step 4 — Authentication
 - Step 5 — Paywall
 - Step 6 — Analytics
 - Step 7 — Ops (remote config, updates, push)
-- Step 8 — Build & run
+- Step 8 — Build and run
 
 ## Step 0 — Orientation
 
