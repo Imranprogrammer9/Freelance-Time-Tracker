@@ -25,7 +25,7 @@ fine — they can resume later by running that single command on its own.
 **Speed — important:** do NOT run `./gradlew` compile or build commands between
 steps. They are slow and the wait adds up across the flow. Each sub-command has a
 "Verify" step that compiles — SKIP that step while running inside `/kit-start-setup`. A
-single build runs once at the very end, in Step 8 (`/kit-run-app`), and it catches
+single build runs once at the very end, in Step 7 (`/kit-run-app`), and it catches
 any compile error introduced by any earlier step.
 
 ## Progress tracking
@@ -47,8 +47,7 @@ Use these task titles verbatim:
 - Step 4 — Authentication
 - Step 5 — Paywall
 - Step 6 — Analytics
-- Step 7 — Ops (remote config, updates, push)
-- Step 8 — Build and run
+- Step 7 — Build and run
 
 ## Step 0 — Orientation
 
@@ -67,7 +66,6 @@ Then show the developer what ShipKit gives them — present this list as-is:
 - 🔑 **Authentication** — email + Google sign-in
 - 💳 **Paywall + subscriptions** — RevenueCat
 - 📊 **Analytics + crash reporting**
-- 🔧 **Ops** — remote config, force/soft updates, push notifications
 - 🌐 **Localization** — English by default; add more languages anytime with `/kit-translate`
 - 🚀 **Release** — Play Store assets + listing + upload via `/kit-upload-on-google-play`
 
@@ -180,11 +178,7 @@ file.
 
 Configure PostHog and/or Firebase Analytics + Crashlytics.
 
-## Step 7 — Ops: remote config, updates, push  →  `.claude/commands/kit-setup-updates.md`
-
-Configure the remote-config provider, the force/soft update gate, and FCM push.
-
-## Step 8 — Build & run  →  `.claude/commands/kit-run-app.md`
+## Step 7 — Build & run  →  `.claude/commands/kit-run-app.md`
 
 Final verification. Run **`/kit-run-app`** — it compiles the app, installs it on
 the connected device, and launches it. This is the single build that runs
@@ -196,5 +190,29 @@ If the developer just wants a compile check without installing, they can use
 ## Wrap up
 
 Summarise what was configured, what was skipped, and the obvious next move (e.g.
-"run `/kit-setup-paywall` later when you add subscriptions", or "start building your
-first screen"). Keep it to a few lines.
+"start building your first screen", or "run `/kit-setup-paywall` later when you
+add subscriptions"). Keep it to a few lines.
+
+Then print this verbatim (so the developer knows what optional commands exist
+without having to discover them):
+
+> **Optional commands you can run later when you need them:**
+>
+> - `/kit-setup-updates` — wire force/soft update gate, maintenance mode, and
+>   remote config provider (Supabase / Firebase / local). The kit ships with
+>   LOCAL so the gate compiles + runs offline; switch when you have a backend.
+> - `/kit-setup-review-dialog` — wire the Google Play in-app review prompt at
+>   a trigger of your choice (Nth launch / after a key action / time delay).
+> - `/kit-setup-ai` — turn on OpenRouter for AI features (one API key unlocks
+>   Claude / GPT / Gemini / Llama via one client).
+> - `/kit-translate` — add more languages on demand. Kit ships English-only;
+>   pick from RTL / Asia / Europe buckets.
+> - `/kit-design-onboarding` — replace the simple 3-page intro with a
+>   personalised Calm / Headspace-style questionnaire flow.
+> - `/kit-design-app` — design + wire your app's own screens (two-phase:
+>   layout with dummy data → connect to data).
+> - `/kit-upload-on-google-play` — when you're ready to ship, walks signing,
+>   listing copy, screenshots, Data Safety, privacy policy generation, and
+>   the manual Play Console upload.
+>
+> Type `/kit-` to see the full list any time.
