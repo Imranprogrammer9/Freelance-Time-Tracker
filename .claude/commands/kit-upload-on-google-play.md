@@ -37,13 +37,14 @@ First-version path tasks (verbatim):
 - A — Pre-flight check
 - B — App icon
 - C — Release keystore
-- D — Screenshots
-- E — Store listing copy
-- F — Data Safety form
-- G — Plan release analytics
-- H — Create Play Console app
-- I — Build signed AAB
-- J — Manual upload
+- D — Register release SHA-1 (Google sign-in)
+- E — Screenshots
+- F — Store listing copy
+- G — Data Safety form
+- H — Plan release analytics
+- I — Create Play Console app
+- J — Build signed AAB
+- K — Manual upload
 
 Update path tasks (verbatim):
 
@@ -77,7 +78,7 @@ Confirm before continuing:
 - The app runs cleanly via `/kit-run-app` on a device.
 - A Google Play Console account exists (https://play.google.com/console — one
   time $25 fee). If not, tell them to create it now and wait.
-- Privacy + Terms URLs are settled. Don't validate them here — Step F runs
+- Privacy + Terms URLs are settled. Don't validate them here — Step G runs
   `/kit-generate-legal` which produces both and walks the developer through
   hosting them.
 
@@ -129,7 +130,111 @@ After they confirm, show this:
 `app/build.gradle.kts` already reads these env vars — when they are present, the
 release buildType is signed automatically.
 
-## D. Screenshots
+## D. Register your release SHA-1 (Google sign-in)
+
+**Detect first — do NOT show this section if Google sign-in is off.**
+
+Read `KitConfig.kt`. If `AUTH_ENABLED = false`, OR `GOOGLE_SIGN_IN_ENABLED = false`,
+OR `AUTH_PROVIDER = STUB`, mark this task `[skipped]` and continue to E.
+
+Otherwise: native Google sign-in needs the **release** SHA-1 registered the same
+way the debug SHA-1 was during `/kit-setup-auth`. Without it, sign-in works on
+your dev machine but fails for users on the Play build.
+
+**Pacing rule** — same as `/kit-setup-auth`: one sub-step at a time, wait for
+the developer to say "done" or "next" between sub-steps, do NOT run shell
+commands without an explicit "yes".
+
+### D.1 — Pick which release SHA-1 to register
+
+Show this verbatim. AskUserQuestion:
+
+> Google Play offers two ways to sign your release:
+>
+> - **Play App Signing (recommended)** — Google manages your release key.
+>   You upload an AAB signed with your upload key; Google re-signs it with
+>   their key for delivery. The SHA-1 on devices is Google's, so that's the
+>   one you register.
+> - **Self-managed keystore** — your `release.keystore` from Step C signs
+>   the artifact that lands on devices. Register that keystore's SHA-1.
+>
+> If you don't know which, pick **Play App Signing** — it's the default
+> Play flow and protects you against keystore loss.
+
+If they pick **Play App Signing** and this is the very first upload of the
+app, the signing key doesn't exist yet (Play creates it on first AAB
+upload). Tell them so + mark this task `[skipped (do after first upload)]`
+and continue. They'll come back to D.2A after K.
+
+### D.2A — Play App Signing path (post-first-upload)
+
+Show this verbatim. **STOP and wait** for the SHA-1 value:
+
+> Get your **release SHA-1** from Play Console:
+> 1. Open Play Console → your app → **Test and release → App integrity**.
+> 2. Under **App signing key certificate**, copy the **SHA-1** value.
+> 3. Paste it back here.
+
+Continue to D.3.
+
+### D.2B — Self-managed keystore path
+
+Tell the developer:
+
+> I'll read the SHA-1 from your `release.keystore` using `keytool`. Say
+> "yes" when you're ready.
+
+**STOP and wait** for "yes" / "ready". When confirmed, run:
+
+    keytool -list -v \
+        -keystore "$RELEASE_STORE_FILE" \
+        -alias "$RELEASE_KEY_ALIAS" \
+        -storepass "$RELEASE_STORE_PASSWORD" 2>&1 | grep "SHA1:"
+
+(If the env vars are not set in this shell, fall back to asking the developer
+for the keystore path / alias / password and substitute literal values.)
+
+Show the SHA-1 line. Confirm the developer has it.
+
+### D.3 — Register the SHA-1
+
+Branch on `KitConfig.AUTH_PROVIDER`:
+
+**If `SUPABASE`** — show this verbatim. **STOP and wait** for "done":
+
+> Add your **release** SHA-1 to Google Cloud Console:
+> 1. Open https://console.cloud.google.com — same project as the Web /
+>    Android OAuth clients you created during `/kit-setup-auth`.
+> 2. **APIs & Services → Credentials → + Create credentials → OAuth client
+>    ID**.
+> 3. Application type: **Android**.
+> 4. Name: `Android (release)`.
+> 5. Package name: your `applicationId`.
+> 6. **SHA-1 certificate fingerprint**: paste the release SHA-1 from D.2.
+> 7. Click **Create**.
+>
+> Don't delete the existing `Android (debug)` client — keep both. Debug
+> sign-in works during development, release sign-in works for Play users.
+>
+> Say "done" once saved.
+
+**If `FIREBASE`** — show this verbatim. **STOP and wait** for the file path:
+
+> Add your **release** SHA-1 to Firebase:
+> 1. Open https://console.firebase.google.com → your project → **Project
+>    settings** (gear) → **General**.
+> 2. Under **Your apps**, select your Android app → **Add fingerprint** →
+>    paste the release SHA-1 from D.2. Save.
+> 3. Click **Download google-services.json** — the new file now lists both
+>    debug + release SHA-1s.
+> 4. Tell me the path where you saved it.
+
+When the developer pastes the path, copy the file to `app/google-services.json`
+(overwrite existing). Then say:
+
+> Done — the next `bundleRelease` build picks up the new file.
+
+## E. Screenshots
 
 Play requires at least 2 phone screenshots. Ask (AskUserQuestion):
 - **Generate them automatically** — uses the `aso-appstore-screenshots` skill
@@ -146,7 +251,7 @@ the screenshot flow. When it finishes, copy the produced images into
 If **provide**: wait for confirmation, then `ls` the directory and report the
 count back to the developer (Play needs ≥ 2).
 
-## E. Store listing copy
+## F. Store listing copy
 
 Ask (AskUserQuestion):
 - **Generate them automatically** — uses the `aso-googleplay-listing` skill
@@ -168,7 +273,7 @@ Either way, the three files end up at:
 - Short description → `playstore/short_description.txt`
 - Long description → `playstore/full_description.txt`
 
-## F. Data Safety form + Privacy policy
+## G. Data Safety form + Privacy policy
 
 Run `/kit-generate-legal` inline. That command scans the active SDKs +
 KitConfig, asks the developer the legal questions (company name, contact email,
@@ -195,17 +300,17 @@ After the generator finishes, show:
 Wait for the developer to confirm the policy is hosted and the Data Safety
 form is submitted before continuing.
 
-## G. Plan release analytics
+## H. Plan release analytics
 
 Run `/kit-plan-release-analytics` inline (don't ask permission — funnels are
 load-bearing for "did this release work?"). That command asks the developer
 the release goal, suggests 3–5 events, and wires them into the codebase. Skip
-its own Verify step here — Step I below builds.
+its own Verify step here — Step J below builds.
 
 If the developer types "skip" when asked the release goal, mark this task
 `[skipped]` and continue.
 
-## H. Create the Play Console app
+## I. Create the Play Console app
 
 Manual web step:
 
@@ -220,7 +325,7 @@ Manual web step:
 
 Wait for the developer to confirm the app exists in Play Console.
 
-## I. Build the signed AAB
+## J. Build the signed AAB
 
 Run from the project root:
 
@@ -233,7 +338,7 @@ The signed Android App Bundle lands at:
 If it fails, the usual cause is the signing env vars not being picked up — open
 a new terminal and re-check `echo $RELEASE_STORE_FILE`.
 
-## J. Upload — manual
+## K. Upload — manual
 
 Show this:
 
