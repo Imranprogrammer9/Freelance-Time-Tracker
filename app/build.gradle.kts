@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.oss.licenses)
     alias(libs.plugins.detekt)
 }
 
@@ -32,6 +33,9 @@ val revenueCatApiKey: String = localProps.getProperty("revenuecat.android.api.ke
 // PostHog project API key + host. Empty key = PostHog disabled (AnalyticsManager no-ops it).
 val postHogApiKey: String = localProps.getProperty("posthog.api.key", "")
 val postHogHost: String = localProps.getProperty("posthog.host", "https://us.i.posthog.com")
+// OpenRouter API key — generic AI access (100+ models behind one key).
+// Empty if not set — OpenRouterAiRepository surfaces 401s when called; nothing breaks at build time.
+val openRouterApiKey: String = localProps.getProperty("openrouter.api.key", "")
 
 android {
     namespace = "dev.shipkaro.kit"
@@ -52,6 +56,7 @@ android {
         buildConfigField("String", "REVENUECAT_API_KEY", "\"$revenueCatApiKey\"")
         buildConfigField("String", "POSTHOG_API_KEY", "\"$postHogApiKey\"")
         buildConfigField("String", "POSTHOG_HOST", "\"$postHogHost\"")
+        buildConfigField("String", "OPENROUTER_API_KEY", "\"$openRouterApiKey\"")
     }
 
     // Locales the app ships with. Add a language => add values-XX/strings.xml
@@ -176,6 +181,13 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.config)
     implementation(libs.play.review)
+
+    // Logging — Timber. KitApplication plants DebugTree (debug) + CrashlyticsTree (release).
+    implementation(libs.timber)
+
+    // OSS licenses — pairs with the oss-licenses-plugin above. Settings → About → Open source
+    // licenses launches OssLicensesMenuActivity which renders the build-time-generated list.
+    implementation(libs.play.services.oss.licenses)
 
     detektPlugins(libs.detekt.formatting)
 

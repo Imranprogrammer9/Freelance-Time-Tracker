@@ -109,6 +109,27 @@ object KitConfig {
     const val API_BASE_URL: String = "https://example.com/"
 
     /**
+     * Wire the OpenRouter AI client + Koin bindings for [OpenRouterAiRepository].
+     *
+     * OpenRouter (https://openrouter.ai) proxies 100+ models from Anthropic, OpenAI,
+     * Google, Meta, Mistral, etc. behind one API. Set the key in `local.properties`
+     * (`openrouter.api.key`) → it lands in BuildConfig.OPENROUTER_API_KEY.
+     *
+     * The OpenRouter client is provider-specific by design: its Retrofit instance,
+     * base URL, and auth header are isolated from the app's own [API_BASE_URL]
+     * Retrofit. Adding your own backend never collides with this client.
+     */
+    const val OPENROUTER_ENABLED: Boolean = false
+
+    /**
+     * Default OpenRouter model used by [OpenRouterAiRepository] when callers don't
+     * pass a specific model. Pick from https://openrouter.ai/models. Cheap fast
+     * default: `meta-llama/llama-3.2-3b-instruct:free`. Heavy reasoning: try
+     * `anthropic/claude-sonnet-4-6` or `google/gemini-2.5-flash`.
+     */
+    const val OPENROUTER_DEFAULT_MODEL: String = "meta-llama/llama-3.2-3b-instruct:free"
+
+    /**
      * Privacy policy URL. Opened from Settings → Privacy via Chrome Custom Tabs.
      * Replace with your real published policy before shipping. Empty = link disabled.
      */

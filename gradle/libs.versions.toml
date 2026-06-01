@@ -35,6 +35,11 @@ googleid = "1.1.1"
 revenuecat = "9.23.1"
 posthog = "3.44.2"
 playReview = "2.0.2"
+timber = "5.0.1"
+# Google Play Services OSS licenses — generates a Settings → About licenses screen
+# from the project's deps at build time. Plugin scans, library renders.
+ossLicensesPlugin = "0.10.6"
+ossLicenses = "17.1.0"
 detekt = "1.23.7"
 junit = "4.13.2"
 androidxTestExt = "1.2.1"
@@ -132,6 +137,16 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 play-review = { group = "com.google.android.play", name = "review", version.ref = "playReview" }
 
+# Logging — Timber. Plant DebugTree in debug, CrashlyticsTree in release (gated on
+# KitConfig.ANALYTICS_ENABLED + Firebase actually configured). Replaces raw android.util.Log
+# across the kit; survives R8 obfuscation; lets devs add new Tree impls (Sentry, file, etc).
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+# OSS licenses screen — pairs with the gms.oss-licenses-plugin below. Plugin reads the
+# project's POMs at build time and bakes the result into raw resources; OssLicensesMenuActivity
+# renders them. Settings → About → Open source licenses launches it.
+play-services-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "ossLicenses" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -139,3 +154,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+oss-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "ossLicensesPlugin" }

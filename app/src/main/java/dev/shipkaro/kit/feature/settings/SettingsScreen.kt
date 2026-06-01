@@ -1,8 +1,5 @@
 package dev.shipkaro.kit.feature.settings
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,11 +21,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dev.shipkaro.kit.R
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.analytics.ScreenNames
@@ -47,9 +44,8 @@ import dev.shipkaro.kit.core.designsystem.settings.ToggleRow
 import dev.shipkaro.kit.core.designsystem.theme.KitTheme
 import dev.shipkaro.kit.core.designsystem.theme.ThemeMode
 import dev.shipkaro.kit.core.locale.LocaleManager
-import dev.shipkaro.kit.core.ops.InAppReviewManager
 import dev.shipkaro.kit.core.util.CustomTabs
-import kotlinx.coroutines.launch
+import dev.shipkaro.kit.core.util.PlayStoreLauncher
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -66,10 +62,8 @@ fun SettingsScreen(
     val analyticsEnabled by vm.analyticsEnabled.collectAsState(initial = true)
     val deleteStatus by vm.deleteStatus.collectAsState()
     val db = koinInject<KitDatabase>()
-    val reviewManager = koinInject<InAppReviewManager>()
     val analytics = koinInject<AnalyticsManager>()
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.SETTINGS) }
     // Intentionally NO LaunchedEffect on DeleteStatus.Done → calling onBack() here
@@ -160,10 +154,19 @@ fun SettingsScreen(
                     title = stringResource(R.string.settings_rate_app),
                     leading = KitTheme.icons.star,
                     chipColor = KitTheme.colors.warning,
+                    onClick = { PlayStoreLauncher.openListing(context) },
+                )
+                SettingsDivider()
+                val ossLicensesTitle = stringResource(R.string.settings_oss_licenses)
+                NavRow(
+                    title = ossLicensesTitle,
+                    leading = KitTheme.icons.info,
+                    chipColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     onClick = {
-                        context.findActivity()?.let { act ->
-                            scope.launch { reviewManager.requestReview(act) }
-                        }
+                        OssLicensesMenuActivity.setActivityTitle(ossLicensesTitle)
+                        context.startActivity(
+                            android.content.Intent(context, OssLicensesMenuActivity::class.java),
+                        )
                     },
                 )
             }
@@ -303,9 +306,3 @@ private fun ThemeMode.labelRes(): Int = when (this) {
     ThemeMode.DARK -> R.string.settings_theme_dark
 }
 
-/** Walk the Context wrapper chain to the hosting Activity (needed by the Play review flow). */
-private tailrec fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
-}

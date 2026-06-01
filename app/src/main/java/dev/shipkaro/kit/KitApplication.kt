@@ -5,11 +5,13 @@ import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.billing.PurchaseManager
 import dev.shipkaro.kit.core.config.KitConfig
 import dev.shipkaro.kit.core.di.appModules
+import dev.shipkaro.kit.core.log.CrashlyticsTree
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import timber.log.Timber
 
 /**
  * Application entry point. Starts Koin DI + initialises RevenueCat.
@@ -19,6 +21,15 @@ import org.koin.core.logger.Level
 class KitApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        // Timber — debug builds get verbose stdout; release builds mirror WARN+ to Crashlytics
+        // (only when ANALYTICS_ENABLED, matching AnalyticsManager.logError's gating).
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        } else if (KitConfig.ANALYTICS_ENABLED) {
+            Timber.plant(CrashlyticsTree())
+        }
+
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@KitApplication)

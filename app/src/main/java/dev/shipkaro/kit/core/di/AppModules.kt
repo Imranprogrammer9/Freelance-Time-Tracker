@@ -1,7 +1,11 @@
 package dev.shipkaro.kit.core.di
 
 import androidx.room.Room
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dev.shipkaro.kit.BuildConfig
+import dev.shipkaro.kit.core.ai.OpenRouterAiClient
+import dev.shipkaro.kit.core.ai.OpenRouterAiRepository
+import dev.shipkaro.kit.core.ai.OpenRouterAuthInterceptor
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.auth.AuthRepository
 import dev.shipkaro.kit.core.auth.FirebaseAuthRepository
@@ -19,16 +23,20 @@ import dev.shipkaro.kit.core.data.settings.SettingsRepository
 import dev.shipkaro.kit.core.ops.ChangelogManager
 import dev.shipkaro.kit.core.ops.InAppReviewManager
 import dev.shipkaro.kit.core.ops.UpdateManager
+import dev.shipkaro.kit.core.security.SecureDataStore
 import dev.shipkaro.kit.feature.auth.AuthViewModel
 import dev.shipkaro.kit.feature.settings.SettingsViewModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
@@ -38,6 +46,7 @@ import retrofit2.Retrofit
  */
 private val coreModule = module {
     single { SettingsRepository(androidContext()) }
+    single { SecureDataStore(androidContext()) }
     single<RemoteAppConfig> {
         when (KitConfig.REMOTE_CONFIG_PROVIDER) {
             KitConfig.RemoteConfigProvider.FIREBASE -> FirebaseRemoteAppConfig()
@@ -139,6 +148,47 @@ private val opsModule = module {
     single { InAppReviewManager() }
 }
 
+/**
+ * AI graph — OpenRouter chat / streaming / structured-JSON. Only added to [appModules]
+ * when [KitConfig.OPENROUTER_ENABLED] is true so the unused Retrofit / OkHttp graph
+ * isn't built for apps without AI features.
+ *
+ * The OpenRouter Retrofit is a **separate** named instance — its base URL, auth
+ * header, and converter never touch the app's own [KitConfig.API_BASE_URL] Retrofit.
+ */
+private val aiModule = module {
+    single(named("ai_json")) {
+        Json {
+            ignoreUnknownKeys = true
+            explicitNulls = false
+        }
+    }
+    single(named("retrofit_openrouter")) {
+        val json = get<Json>(named("ai_json"))
+        Retrofit.Builder()
+            .baseUrl("https://openrouter.ai/api/v1/")
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(
+                        OpenRouterAuthInterceptor(
+                            apiKey = BuildConfig.OPENROUTER_API_KEY,
+                            appName = "ShipKit",
+                        ),
+                    )
+                    .addInterceptor(
+                        HttpLoggingInterceptor().apply {
+                            level = HttpLoggingInterceptor.Level.BASIC
+                        },
+                    )
+                    .build(),
+            )
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build()
+    }
+    single { get<Retrofit>(named("retrofit_openrouter")).create(OpenRouterAiClient::class.java) }
+    single { OpenRouterAiRepository(get(), get(named("ai_json"))) }
+}
+
 private val featureModule = module {
     viewModel { AuthViewModel(get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get()) }
@@ -152,5 +202,6 @@ val appModules = buildList {
     add(billingModule)
     add(analyticsModule)
     add(opsModule)
+    if (KitConfig.OPENROUTER_ENABLED) add(aiModule)
     add(featureModule)
 }

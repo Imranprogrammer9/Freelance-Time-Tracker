@@ -2,8 +2,8 @@ package dev.shipkaro.kit.core.util
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.browser.customtabs.CustomTabsIntent
+import timber.log.Timber
 
 /**
  * Open a URL in Chrome Custom Tabs. If no browser supporting Custom Tabs is installed,
@@ -17,6 +17,6 @@ object CustomTabs {
         if (url.isBlank()) return
         runCatching {
             CustomTabsIntent.Builder().build().launchUrl(context, Uri.parse(url))
-        }.onFailure { Log.w("CustomTabs", "Failed to open $url", it) }
+        }.onFailure { Timber.tag("CustomTabs").w(it, "Failed to open %s", url) }
     }
 }

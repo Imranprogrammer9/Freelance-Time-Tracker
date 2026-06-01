@@ -40,9 +40,10 @@ First-version path tasks (verbatim):
 - D — Screenshots
 - E — Store listing copy
 - F — Data Safety form
-- G — Create Play Console app
-- H — Build signed AAB
-- I — Manual upload
+- G — Plan release analytics
+- H — Create Play Console app
+- I — Build signed AAB
+- J — Manual upload
 
 Update path tasks (verbatim):
 
@@ -51,8 +52,9 @@ Update path tasks (verbatim):
 - C — Update RemoteAppConfig (if wired)
 - D — Release notes
 - E — Screenshots (if UI changed)
-- F — Build signed AAB
-- G — Manual upload
+- F — Plan release analytics
+- G — Build signed AAB
+- H — Manual upload
 
 ## Step 1 — First version or update?
 
@@ -73,12 +75,11 @@ pick.
 
 Confirm before continuing:
 - The app runs cleanly via `/kit-run-app` on a device.
-- `KitConfig.PRIVACY_URL` and `KitConfig.TERMS_URL` are set to real published
-  URLs (Play **requires** a real privacy policy). If they still equal the
-  defaults (`https://example.com/...`), ask the developer for both URLs and
-  edit `KitConfig.kt` before continuing.
 - A Google Play Console account exists (https://play.google.com/console — one
   time $25 fee). If not, tell them to create it now and wait.
+- Privacy + Terms URLs are settled. Don't validate them here — Step F runs
+  `/kit-generate-legal` which produces both and walks the developer through
+  hosting them.
 
 ## B. App icon
 
@@ -167,22 +168,44 @@ Either way, the three files end up at:
 - Short description → `playstore/short_description.txt`
 - Long description → `playstore/full_description.txt`
 
-## F. Data Safety form
+## F. Data Safety form + Privacy policy
 
-Play **requires** a Data Safety declaration in the Console — web-only, cannot be
-automated. The kit ships `legal/play-data-safety.md` as a per-SDK template.
+Run `/kit-generate-legal` inline. That command scans the active SDKs +
+KitConfig, asks the developer the legal questions (company name, contact email,
+jurisdiction, GDPR / CCPA / COPPA scope), and writes:
 
-Show this:
+- `playstore/privacy_policy.md` — source of truth.
+- `playstore/privacy_policy.html` — host this on GitHub Pages / Netlify /
+  Vercel so it has a public URL.
+- `playstore/play_data_safety.md` — filled Play Console form answers.
 
-> **Data Safety in Play Console:**
-> 1. Open `legal/play-data-safety.md` in your editor — it lists every SDK the
->    kit uses and what data each collects.
-> 2. In Play Console go to **App content → Data safety**.
-> 3. Fill the form using the template's values. Per-SDK answers are
->    pre-mapped.
-> 4. Submit it. Without this, your release cannot be published.
+After the generator finishes, show:
 
-## G. Create the Play Console app
+> **Now host the privacy policy:**
+> 1. Open `playstore/privacy_policy.html` — that's the file Play will scrape.
+> 2. Pick a host (free options): GitHub Pages, Cloudflare Pages, Vercel,
+>    Netlify. Drop the `.html` file in a public repo / project.
+> 3. Copy the public URL.
+> 4. In Play Console go to **App content → Privacy policy** → paste that URL.
+> 5. In Play Console go to **App content → Data safety** → open
+>    `playstore/play_data_safety.md` side-by-side and fill the web form.
+> 6. Update `KitConfig.PRIVACY_URL` and `KitConfig.TERMS_URL` to the hosted
+>    URLs so Settings → Privacy / Terms opens them in-app.
+
+Wait for the developer to confirm the policy is hosted and the Data Safety
+form is submitted before continuing.
+
+## G. Plan release analytics
+
+Run `/kit-plan-release-analytics` inline (don't ask permission — funnels are
+load-bearing for "did this release work?"). That command asks the developer
+the release goal, suggests 3–5 events, and wires them into the codebase. Skip
+its own Verify step here — Step I below builds.
+
+If the developer types "skip" when asked the release goal, mark this task
+`[skipped]` and continue.
+
+## H. Create the Play Console app
 
 Manual web step:
 
@@ -197,7 +220,7 @@ Manual web step:
 
 Wait for the developer to confirm the app exists in Play Console.
 
-## H. Build the signed AAB
+## I. Build the signed AAB
 
 Run from the project root:
 
@@ -210,7 +233,7 @@ The signed Android App Bundle lands at:
 If it fails, the usual cause is the signing env vars not being picked up — open
 a new terminal and re-check `echo $RELEASE_STORE_FILE`.
 
-## I. Upload — manual
+## J. Upload — manual
 
 Show this:
 
@@ -242,6 +265,13 @@ Confirm:
 - Signing env vars (`RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`,
   `RELEASE_KEY_ALIAS`, `RELEASE_KEY_PASSWORD`) are still set. Run
   `echo $RELEASE_STORE_FILE` to verify.
+
+Ask the developer (AskUserQuestion): "Did any SDKs change since the last
+release — enabled / disabled auth, paywall, analytics, AI, new Retrofit
+endpoints, new Supabase tables?" If **yes**, run `/kit-generate-legal` inline
+to regenerate the privacy policy + Data Safety mapping; tell them to re-host
+the new `playstore/privacy_policy.html`. If **no**, skip — the existing hosted
+policy is still accurate.
 
 ## B. Bump the version
 
@@ -288,11 +318,20 @@ Ask (AskUserQuestion):
   first-version path (see D in that path above).
 - **UI unchanged — skip** — existing screenshots stay.
 
-## F. Build the signed AAB
+## F. Plan release analytics
+
+Run `/kit-plan-release-analytics` inline. It reads the release notes from
+Step D + the current codebase, asks the developer the release goal, suggests
+3–5 events, and wires them in. Skip its Verify step — Step G below builds.
+
+If the developer types "skip" when asked the release goal, mark this task
+`[skipped]` and continue.
+
+## G. Build the signed AAB
 
     ./gradlew bundleRelease
 
-## G. Upload — manual
+## H. Upload — manual
 
 Show this:
 

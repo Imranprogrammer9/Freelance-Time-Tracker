@@ -53,6 +53,12 @@ posthog.api.key=phc_YOUR_POSTHOG_KEY
 posthog.host=https://us.i.posthog.com
 
 # -----------------------------------------------------------------------
+# OpenRouter   (needed only if KitConfig.OPENROUTER_ENABLED = true)
+# https://openrouter.ai/keys -> Create Key. One key unlocks 100+ models.
+# -----------------------------------------------------------------------
+openrouter.api.key=sk-or-v1-YOUR_OPENROUTER_KEY
+
+# -----------------------------------------------------------------------
 # Not set here:
 #  - Google Sign-In Web client ID -> KitConfig.kt (GOOGLE_WEB_CLIENT_ID).
 #  - Firebase -> uses google-services.json placed at app/, not a key here.

@@ -9,6 +9,71 @@ command handles this).
 
 ## [Unreleased]
 
+### Added (2026-06-01)
+- Timber logging (`com.jakewharton.timber:timber:5.0.1`) + new
+  `core/log/CrashlyticsTree.kt`. `KitApplication.onCreate` plants `DebugTree`
+  in debug builds and `CrashlyticsTree` in release (gated on
+  `KitConfig.ANALYTICS_ENABLED`). `CrashlyticsTree` mirrors INFO+ to
+  `Crashlytics.log()` and routes ERROR/ASSERT to `recordException()`.
+- `core/util/PlayStoreLauncher.kt` — opens the app's Play Store listing
+  (`market://` with `https://play.google.com/store/apps/details?id=…`
+  fallback). Settings → Rate now uses this; `InAppReviewManager` is reserved
+  for `/kit-setup-review-dialog`.
+- `core/security/SecureDataStore.kt` — AES-256/GCM encrypted key-value store
+  for dev-held secrets. Master key in Android Keystore. Ciphertext + IV
+  packed + Base64'd into a dedicated DataStore Preferences file
+  `kit_secure_prefs`. Single Koin singleton.
+- `core/ai/` package — `OpenRouterAiClient`, `OpenRouterAiRepository`,
+  `OpenRouterAuthInterceptor`, `AiModels`. Provider-generic methods
+  (`generateText`, `generateTextWithMessages`, `streamText`, `generateJson`)
+  with model-first signature. Separate named Retrofit `retrofit_openrouter`
+  (base URL `https://openrouter.ai/api/v1/`) — never collides with
+  `KitConfig.API_BASE_URL`.
+- `KitConfig.OPENROUTER_ENABLED` (default false) + `OPENROUTER_DEFAULT_MODEL`
+  (default `meta-llama/llama-3.2-3b-instruct:free`).
+- `BuildConfig.OPENROUTER_API_KEY` from `local.properties`
+  (`openrouter.api.key`). Template updated.
+- `/kit-setup-ai` command — collects OpenRouter key, picks a default model
+  bucket (Fast & free / Cheap workhorse / Premium reasoning / pick own),
+  flips `OPENROUTER_ENABLED`.
+- `/kit-setup-review-dialog` command — wires
+  `InAppReviewManager.requestReview()` at one of four trigger styles (Nth
+  launch / key action / time delay / manual) with a `reviewPrompted`
+  DataStore flag.
+- `/kit-plan-release-analytics` command — pre-release funnel planner. Scans
+  changelog + existing events + screens, derives a release-goal question,
+  suggests 3–5 events, and auto-inserts `analytics.logEvent(...)` at Grep'd
+  call-sites. Wired into `/kit-upload-on-google-play` (first-version Step G,
+  update Step F).
+- `/kit-generate-legal` command — scans `libs.versions.toml` + `KitConfig` +
+  Retrofit annotations + Supabase `.from()` calls, asks 8 legal questions,
+  writes `playstore/privacy_policy.md` + `.html` + filled
+  `playstore/play_data_safety.md`. Wired into `/kit-upload-on-google-play`
+  (first-version Step F, update Step A regenerates on SDK change).
+- OSS licenses screen — Google's `oss-licenses-plugin:0.10.6` +
+  `play-services-oss-licenses:17.1.0`. Settings → About → "Open source
+  licenses" launches `OssLicensesMenuActivity` with a localized title.
+  `settings.gradle.kts` carries a `resolutionStrategy.eachPlugin` mapping
+  because the plugin has no plugin-marker artifact.
+
+### Changed (2026-06-01)
+- Settings → Rate row swapped from `InAppReviewManager.requestReview()` to
+  `PlayStoreLauncher.openListing()`. Play's in-app review API is
+  quota-throttled and silently no-ops most of the time — sending users to
+  the listing always works and lets them see other reviews. The Play in-app
+  review prompt now lives behind `/kit-setup-review-dialog` (wire it at the
+  trigger that fits the app, not the Settings row).
+- `CustomTabs.kt` replaced `android.util.Log.w` with `Timber.tag(...).w(...)`
+  (the only `Log.x` call in the kit).
+- `local.properties.template` — new `openrouter.api.key` entry.
+- `/kit-upload-on-google-play` — first-version Step F now runs
+  `/kit-generate-legal` instead of pointing at `legal/play-data-safety.md`
+  manually. New Step G "Plan release analytics" runs
+  `/kit-plan-release-analytics`. Steps renumbered (H = Create Console app,
+  I = Build AAB, J = Manual upload). Update path Step A now asks whether any
+  SDKs changed and runs `/kit-generate-legal` on a yes. Update path Step F
+  also runs `/kit-plan-release-analytics`.
+
 ### Added (2026-05-31)
 - `aso-googleplay-listing` skill at `.claude/skills/` — Play Store listing-copy
   generator (replaces the placeholder iOS clone with a Play-specific three-field
