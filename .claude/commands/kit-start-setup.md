@@ -83,6 +83,12 @@ exploring** walks through everything.
 Confirm prerequisites. This is where first-time developers — **especially on
 Windows** — get stuck, so do it carefully and verify, never guess.
 
+**If anything below fails (or the dev says `java -version` errors, `adb`
+isn't found, etc.), stop here and tell the developer to run `/kit-env-check`
+first.** That command checks JDK 17 / Android CLI / Android Skills / optional
+terminal tools and prints OS-specific install commands for whatever is
+missing. Come back to `/kit-start-setup` once it reports clean.
+
 **a. Create `local.properties`.** If it does not exist, copy it from the
 template: `cp local.properties.template local.properties` on macOS/Linux, or
 `copy local.properties.template local.properties` on Windows.
@@ -198,6 +204,10 @@ without having to discover them):
 
 > **Optional commands you can run later when you need them:**
 >
+> - `/kit-env-check` — verify your machine has every tool the kit needs
+>   (JDK 17, Android SDK, android CLI, Android Skills, optional scrcpy + Holo).
+>   Cross-platform — macOS, Windows, Linux. Re-run after a new OS install or
+>   when switching machines.
 > - `/kit-setup-updates` — wire force/soft update gate, maintenance mode, and
 >   remote config provider (Supabase / Firebase / local). The kit ships with
 >   LOCAL so the gate compiles + runs offline; switch when you have a backend.
