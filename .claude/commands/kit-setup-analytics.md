@@ -13,6 +13,34 @@ When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim** — do not paraphrase or improvise. Prose outside those
 blocks is instructions for you, not the developer.
 
+## Step 0 — Detect existing state
+
+Before walking the full setup, check what's already configured:
+
+1. Read `KitConfig.kt` — note `ANALYTICS_ENABLED` and `SENTRY_ENABLED`.
+2. Read `local.properties` (if it exists) — check `posthog.api.key` and
+   `sentry.dsn` are set + non-blank.
+3. Check whether `app/google-services.json` exists (Firebase wired) + whether
+   the `google-services` + `firebase-crashlytics` plugins are applied in
+   `app/build.gradle.kts`.
+
+Build a state list ("PostHog: configured", "Firebase Analytics: not configured",
+"Crashlytics: not configured", "Sentry: configured") and show it back to the
+developer.
+
+Branch:
+
+- **All providers the dev cares about are already configured** — AskUserQuestion:
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Add another provider** — skip Step 1, jump straight to whichever
+    provider's sub-steps they pick.
+  - **Reconfigure everything** — walk the full flow (Step 1 onwards).
+  - **Change one provider** — jump to that provider's Step (2 / 3 / 4).
+- **Partially configured** — tell the developer which providers are already
+  wired ("PostHog already configured, skipping Step 2") and ask whether to add
+  the missing ones now. Walk only the missing steps.
+- **Nothing configured** — walk the full flow below.
+
 ## Step 1 — Pick what to enable
 
 Ask (AskUserQuestion, multi-select) which the developer wants:

@@ -35,6 +35,33 @@ Tell the developer up-front:
 > moment where the user just finished something good (saved a note, completed a
 > workout, finished onboarding).
 
+## Step 0 — Detect existing state
+
+Before walking the full setup, check whether the prompt is already wired:
+
+1. Grep `app/src/main/java` for `InAppReviewManager.requestReview(` — that's
+   the call-site that fires the prompt. Exclude matches inside
+   `InAppReviewManager.kt` itself (the implementation file).
+2. Read `SettingsRepository.kt` — note whether `reviewPrompted` (and / or
+   `launchCount`, `firstLaunchAt`) keys exist. Those are written by previous
+   runs of this command.
+
+Branch:
+
+- **Call-site found + DataStore keys exist** — the prompt is already wired.
+  AskUserQuestion:
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Move the trigger to a different call-site** — walk Step 1 again
+    (pick a new trigger style) and remove the old `requestReview(...)`
+    call-site after wiring the new one.
+  - **Reset the `reviewPrompted` flag** (lets the prompt fire again on next
+    launch — useful for testing) — write a one-shot
+    `settings.markReviewPrompted(false)` snippet the dev can paste once,
+    then revert.
+- **Call-site found but DataStore keys missing** — odd state; offer to add
+  the DataStore keys without changing the call-site.
+- **Nothing wired yet** — walk the full flow below.
+
 ## Step 1 — Pick the trigger
 
 Use AskUserQuestion. Offer these options:

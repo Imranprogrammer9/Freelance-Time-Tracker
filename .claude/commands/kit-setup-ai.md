@@ -26,6 +26,27 @@ blocks is instructions for you, not the developer.
 > (`KitConfig.API_BASE_URL`) never collides with it — adding a second AI
 > provider later (Together, Groq, raw OpenAI) gets its own client class too.
 
+## Step 0 — Detect existing state
+
+Before walking the full setup, check what's already configured:
+
+1. Read `KitConfig.kt` — note `OPENROUTER_ENABLED` and `OPENROUTER_DEFAULT_MODEL`.
+2. Read `local.properties` (if it exists) — note whether `openrouter.api.key`
+   is set + non-blank.
+
+Branch on the result:
+
+- **Both already configured** (`OPENROUTER_ENABLED = true` AND key non-blank) —
+  AskUserQuestion:
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Reconfigure** — walk the full flow (existing values get overwritten).
+  - **Change model only** — jump straight to Step 4 (default-model picker).
+  - **Change key only** — jump straight to Step 3 (key paste).
+- **Partially configured** (one set, one missing) — tell the developer which
+  pieces you're skipping (e.g. "key already set — skipping Step 3") and walk
+  only the missing steps.
+- **Nothing configured** — walk the full flow below.
+
 ## Step 1 — Decide whether to wire AI
 
 Use AskUserQuestion: "Will this app call AI models?" If no, set

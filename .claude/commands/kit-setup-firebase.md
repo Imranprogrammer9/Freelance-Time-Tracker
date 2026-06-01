@@ -14,6 +14,32 @@ When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim** — do not paraphrase or improvise. Prose outside those
 blocks is instructions for you, not the developer.
 
+## Step 0 — Detect existing state
+
+Before walking the full setup, check what's already configured:
+
+1. Check whether `app/google-services.json` exists.
+2. Grep `app/build.gradle.kts` for `id("com.google.gms.google-services")`
+   (or the alias form) — note whether the plugin is applied.
+3. Grep for `id("com.google.firebase.crashlytics")` — note whether
+   Crashlytics is applied.
+4. Open `app/google-services.json` (if it exists) and check the
+   `package_name` field matches the current `applicationId` from
+   `app/build.gradle.kts`.
+
+Branch:
+
+- **All three pieces present + package_name matches** — AskUserQuestion:
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Replace google-services.json** — jump to Step 2 only.
+  - **Add Crashlytics plugin** (if it's the only missing piece) — jump to
+    Step 3 only.
+  - **Re-do everything** — walk the full flow.
+- **`google-services.json` exists but package_name mismatch** — flag this
+  loudly (the app will crash at startup), then walk the developer through
+  re-downloading from Firebase Console (Step 2).
+- **Nothing wired** — walk the full flow below.
+
 ## Step 1 — Create the Firebase project + register the Android app
 
 Open `app/build.gradle.kts`, read the `applicationId` value, and tell the

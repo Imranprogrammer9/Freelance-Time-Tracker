@@ -13,6 +13,30 @@ When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim** — do not paraphrase or improvise. Prose outside those
 blocks is instructions for you, not the developer.
 
+## Step 0 — Detect existing state
+
+Before walking the full setup, check what's already configured:
+
+1. Read `KitConfig.kt` — note `PAYWALL_ENABLED`, `ENTITLEMENT_ID`, `PAYWALL_MODE`.
+2. Read `local.properties` (if it exists) — note whether
+   `revenuecat.android.api.key` is set + starts with `goog_`.
+
+Branch on the result:
+
+- **Fully configured** (`PAYWALL_ENABLED = true` AND key set AND entitlement
+  non-default) — AskUserQuestion:
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Reconfigure** — walk the full flow.
+  - **Change paywall mode only** — jump to sub-step 2.5.
+  - **Change API key only** — jump to sub-step 2.4.
+  - **Change entitlement only** — jump to sub-step 2.3 (re-prompt for ID + edit
+    `KitConfig.ENTITLEMENT_ID`).
+- **Partially configured** — tell the developer which sub-steps you're
+  skipping (e.g. "API key already in local.properties — skipping 2.4") and
+  walk only the missing pieces.
+- **Nothing configured** (default state — `PAYWALL_ENABLED = true` but no key)
+  — walk the full flow below.
+
 ## Step 1 — Does the app need a paywall?
 
 Ask (AskUserQuestion). If the app is free, set `PAYWALL_ENABLED = false` in

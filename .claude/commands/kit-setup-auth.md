@@ -14,6 +14,35 @@ When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim** — do not paraphrase, reorder, or improvise the steps. The
 prose outside those blocks is instructions for you, not for the developer.
 
+## Step 0 — Detect existing state
+
+Before walking the full setup, check what's already configured:
+
+1. Read `KitConfig.kt` — note `AUTH_ENABLED`, `AUTH_PROVIDER`,
+   `EMAIL_SIGN_IN_ENABLED`, `GOOGLE_SIGN_IN_ENABLED`, `GOOGLE_WEB_CLIENT_ID`.
+2. Read `local.properties` (if it exists) — check `supabase.url` and
+   `supabase.key` are set + non-blank (only relevant if `AUTH_PROVIDER` is
+   SUPABASE).
+3. Check whether `app/google-services.json` exists (relevant if `AUTH_PROVIDER`
+   is FIREBASE).
+
+Branch:
+
+- **Auth is off** (`AUTH_ENABLED = false`) — the dev probably hasn't run this
+  command yet. Walk the full flow.
+- **Auth is fully configured** for the selected provider — AskUserQuestion:
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Switch provider** — walk the full flow (overwrites `AUTH_PROVIDER` +
+    credentials).
+  - **Toggle sign-in methods** — jump to Step 3 (Email / Google / Both picker).
+  - **Update Google Web Client ID only** — jump to sub-step 4a.4 (Supabase) or
+    4b.5 (Firebase) for re-paste.
+  - **Re-register SHA-1 only** — jump to sub-step 4a.7 (Supabase) or 4b.3
+    (Firebase). Useful after a debug-keystore reset.
+- **Provider chosen but credentials missing** (e.g. `AUTH_PROVIDER = SUPABASE`
+  but `supabase.key` blank) — tell the developer which pieces are missing and
+  walk only those sub-steps.
+
 ## Step 1 — Choose a provider
 
 First ask (AskUserQuestion) whether the app needs auth at all. If they pick "no

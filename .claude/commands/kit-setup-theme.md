@@ -15,6 +15,29 @@ When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim** — do not paraphrase or improvise. Prose outside those
 blocks is instructions for you, not the developer.
 
+## Step 0 — Detect existing state
+
+Before walking the full setup, check what's already configured:
+
+1. Read `Color.kt` — note the current `BrandPrimary` hex value. Default is
+   `#7C3AED` (ShipKit purple).
+2. Inspect `Theme.kt` for the `LocalKitIcons` provider — note which icon-pack
+   impl is wired (Material default / Feather / Tabler / custom).
+3. Check `app/build.gradle.kts` for which `composeicons-*` deps are
+   uncommented (Feather, Tabler, etc.).
+
+Branch:
+
+- **Both already set to non-default values** — AskUserQuestion:
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Reconfigure both** — walk Step 1 + Step 2.
+  - **Change brand color only** — jump to Step 1.
+  - **Change icon pack only** — jump to Step 2.
+- **Only one is non-default** — tell the developer which one is already set
+  and walk only the missing step.
+- **Default values still in place** (brand still purple, Material icons in
+  use) — walk the full flow below.
+
 ## Step 1 — Brand color
 
 The whole app reskins from one color. Find `Color.kt` (search for a file named

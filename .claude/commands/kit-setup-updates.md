@@ -14,6 +14,26 @@ When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim** — do not paraphrase or improvise. Prose outside those
 blocks is instructions for you, not the developer.
 
+## Step 0 — Detect existing state
+
+Before walking the full setup, check what's already configured:
+
+1. Read `KitConfig.kt` — note `REMOTE_CONFIG_PROVIDER`
+   (`LOCAL` / `FIREBASE` / `SUPABASE`).
+2. For `SUPABASE`: check `local.properties` for `supabase.url` + `supabase.key`
+   (re-uses the auth credentials).
+3. For `FIREBASE`: check `app/google-services.json` exists + `firebase-config`
+   plugin is applied.
+
+Branch:
+
+- **`REMOTE_CONFIG_PROVIDER` already non-LOCAL** — AskUserQuestion:
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Switch provider** — walk the full flow.
+  - **Re-print the SQL / Firebase setup block for the existing provider** —
+    show the provider-specific block without changing `KitConfig`.
+- **Set to `LOCAL` (default)** — walk the full flow below.
+
 ## Remote config provider
 
 The update gate, maintenance mode, and the changelog all read their values from
