@@ -62,91 +62,201 @@ instruction in the steps below.**
 
 ## Step 4a — Supabase credentials
 
-Show the developer exactly this:
+**Pacing rule for this step (important — read before you start):** the
+developer is a non-coder switching between this terminal, a browser, and
+sometimes their email inbox. Show **one sub-step at a time**, then **stop and
+wait** for them to say "done" / "next" / "ready" before printing the next
+sub-step. Do not dump the whole Supabase set in one message — they lose place.
+Do not run `./gradlew signingReport` (or any other command) until the prior
+sub-step is explicitly confirmed.
+
+### Sub-step 4a.1 — Create the project
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **Create your Supabase project**
+> 1. Go to https://supabase.com and sign in.
+> 2. Click **New Project**, give it a name, pick a region, set a database
+>    password, click **Create new project**.
+> 3. Wait for the project to finish provisioning (~1 minute) before continuing.
+>
+> Say "done" when the project dashboard is open.
+
+### Sub-step 4a.2 — Grab the Project ID + anon key
+
+Show this verbatim. Then **STOP and wait** for "done":
 
 > **Get your Supabase keys**
-> 1. Go to https://supabase.com and sign in.
-> 2. Click **New Project**, give it a name, pick a region, create it.
-> 3. Open **Project Settings → General** (gear icon, left sidebar). Copy the
->    **Project ID**. There is no "Project URL" field — your URL is
->    `https://<Project-ID>.supabase.co`.
-> 4. Open **Project Settings → API Keys**, then click the **Legacy anon,
+> 1. Open **Project Settings → General** (gear icon, left sidebar). Copy
+>    the **Project ID** (your URL becomes `https://<Project-ID>.supabase.co`).
+> 2. Open **Project Settings → API Keys**, then click the **Legacy anon,
 >    service_role API keys** tab.
-> 5. Copy the **anon public** key — this becomes your `supabase.key`.
+> 3. Copy the **anon public** key.
+>
+> Paste both values back here when ready and say "done".
 
-Write the URL + key into `local.properties` (git-ignored — never committed).
-Build the URL from the Project ID:
+When the developer pastes them, write `local.properties` (git-ignored). Build
+the URL from the Project ID:
 
     supabase.url=https://YOUR-PROJECT-ID.supabase.co
     supabase.key=YOUR-ANON-PUBLIC-KEY
 
-**Only if Google sign-in is enabled**, also show the developer this:
+Confirm what you wrote, then continue.
 
-> **Enable Google sign-in on Supabase**
-> 6. Go to **Authentication → Providers → Google** and toggle it on.
-> 7. Copy the **Authorized Client ID** of type *Web application*.
+**If Google sign-in is NOT enabled, skip the rest of Step 4a and go to Step 5.**
+
+### Sub-step 4a.3 — Enable the Google provider on Supabase
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **Enable Google on Supabase**
+> 1. In your Supabase project, go to **Authentication → Providers → Google**.
+> 2. Toggle it **on**.
+> 3. Copy the **Authorized Client ID** field of type *Web application* (you'll
+>    paste it here in the next sub-step — keep it open).
 >
-> **Add the redirect URL**
-> 8. Go to **Authentication → URL Configuration → Redirect URLs**.
-> 9. Add this exact value: `shipkaro://auth-callback`
+> Say "done" once Google is toggled on.
 
-Then set the client ID in `KitConfig.kt`:
+### Sub-step 4a.4 — Add the redirect URL
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **Add the redirect URL**
+> 1. In Supabase, open **Authentication → URL Configuration → Redirect URLs**.
+> 2. Add this **exact** value (copy-paste, no edits): `shipkaro://auth-callback`
+> 3. Save.
+>
+> Say "done" when the redirect URL is saved.
+
+OAuth callback note (for you, not the developer): the kit uses
+`shipkaro://auth-callback`, defined in `AppModules.kt` (the
+`supabaseClientModule` `install(Auth) { scheme/host }` block) and
+`AndroidManifest.xml`. If the developer asks to use a custom scheme, edit
+BOTH files to match before this sub-step is "done".
+
+### Sub-step 4a.5 — Save the Web client ID
+
+Ask the developer to paste the **Web Client ID** they copied in 4a.3. When
+they paste it, edit `KitConfig.kt`:
 
     const val GOOGLE_WEB_CLIENT_ID: String = "..."
 
-Native Google sign-in also needs the app's **SHA-1 fingerprint** registered.
-Get the debug SHA-1 by running `./gradlew signingReport` and reading the SHA-1
-under the `debug` variant. Then show the developer this:
+Confirm what you wrote. Then continue.
 
-> **Register your app's SHA-1** (Google Cloud Console →
-> **APIs & Services → Credentials**):
-> 10. Create an **OAuth client ID → Android** (or open the existing one).
-> 11. Set the package name to your `applicationId` and paste the **debug
->     SHA-1** from `./gradlew signingReport`.
+### Sub-step 4a.6 — Grab the debug SHA-1
 
-Before a Play release the app also needs the **release** SHA-1 registered the
-same way — from your release keystore, or Play Console → Test and release → App
-integrity → App signing if you use Play App Signing. Tell the developer that is
-a release-time task, not needed now.
+Tell the developer:
 
-OAuth callback note: the kit uses `shipkaro://auth-callback`, defined in
-`AppModules.kt` (the `supabaseClientModule` `install(Auth) { scheme/host }`
-block) and `AndroidManifest.xml`. The redirect URL from step 9 must match it.
-If the developer wants a custom scheme instead of `shipkaro`, edit BOTH files
-to match.
+> Next we need your app's **debug SHA-1 fingerprint** so Google trusts this
+> build. I'll run a Gradle command to read it — say "yes" when you're ready.
+
+**STOP and wait for the developer to say "yes" / "ready" / "go".** Do not run
+the command before then. When confirmed, run:
+
+    ./gradlew signingReport 2>&1 | grep "SHA-1\|SHA1" | head -1
+
+(or the equivalent for their shell). Extract the SHA-1 line printed under the
+`debug` variant and show it to the developer. Confirm they have it copied.
+
+### Sub-step 4a.7 — Register the SHA-1 in Google Cloud Console
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **Register your app's SHA-1**
+> 1. Open https://console.cloud.google.com → **APIs & Services → Credentials**
+>    (pick the same Google Cloud project that owns the Web client ID from 4a.3).
+> 2. Click **Create credentials → OAuth client ID → Android** (or open an
+>    existing Android client).
+> 3. Set the **Package name** to your `applicationId`.
+> 4. Paste the **debug SHA-1** from 4a.6 into the **SHA-1 certificate
+>    fingerprint** field.
+> 5. Save.
+>
+> Say "done" once the Android OAuth client is saved.
+
+Before a Play release the app also needs the **release** SHA-1 added the same
+way — from your release keystore, or Play Console → Test and release → App
+integrity → App signing if you use Play App Signing. Mention this as a
+release-time task only — do NOT walk through it now.
 
 More detail + screenshots: https://kit.shipkaro.dev/docs/auth/supabase
 
 ## Step 4b — Firebase credentials
 
-Firebase auth needs the Google Services plugin. Read
-`.claude/commands/kit-kit-setup-firebase.md` and follow it to add `google-services.json`
-and apply the plugin, then return here.
+**Same pacing rule as 4a:** show one sub-step at a time, wait for "done"
+between each, do not run shell commands before explicit confirmation.
 
-**Only if Google sign-in is enabled**, show the developer this:
+### Sub-step 4b.1 — Wire google-services.json + plugin
 
-Native Google sign-in needs the app's **SHA-1 fingerprint** in Firebase. Get the
-debug SHA-1 by running `./gradlew signingReport` and reading the SHA-1 under the
-`debug` variant. Then show the developer this:
+Firebase auth needs the Google Services plugin + the `google-services.json`
+file at `app/`. Read `.claude/commands/kit-setup-firebase.md` and follow it
+inline. Skip its build/verify tail — this orchestrator builds at the end.
 
-> **Add your SHA-1, then get the Web client ID** (Firebase console):
+When `kit-setup-firebase` reports done, say so + **wait** for the developer
+to say "next" before continuing.
+
+**If Google sign-in is NOT enabled, skip the rest of Step 4b and go to Step 5.**
+
+### Sub-step 4b.2 — Grab the debug SHA-1
+
+Tell the developer:
+
+> Next we need your app's **debug SHA-1 fingerprint** so Firebase trusts this
+> build. I'll run a Gradle command to read it — say "yes" when ready.
+
+**STOP and wait for "yes" / "ready" / "go".** Then run:
+
+    ./gradlew signingReport 2>&1 | grep "SHA-1\|SHA1" | head -1
+
+Show the SHA-1 from the `debug` variant. Confirm they have it copied.
+
+### Sub-step 4b.3 — Register the SHA-1 in Firebase
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **Add your SHA-1 to Firebase**
 > 1. Open https://console.firebase.google.com → your project →
 >    **Project settings** (gear icon) → **General**.
-> 2. Under **Your apps**, select the Android app → **Add fingerprint** →
->    paste the **debug SHA-1** from `./gradlew signingReport`.
-> 3. Click **Download google-services.json** and replace
->    `app/google-services.json` (it now includes the OAuth client).
-> 4. Copy the **Web client ID** shown for the app. (Not shown? Google Cloud
->    Console → Credentials → the OAuth 2.0 Client of type *Web application*.)
+> 2. Under **Your apps**, click your Android app → **Add fingerprint**.
+> 3. Paste the **debug SHA-1** from the previous sub-step. Save.
+>
+> Say "done" once the fingerprint is added.
 
-Then set it in `KitConfig.kt`:
+### Sub-step 4b.4 — Re-download google-services.json
+
+Show this verbatim. Then **STOP and wait** for the file path:
+
+> **Re-download google-services.json**
+> 1. Still on the Firebase **General** page, scroll to your Android app.
+> 2. Click **Download google-services.json** — the new file includes the
+>    OAuth client now.
+> 3. Tell me the path where you saved it (e.g. `~/Downloads/google-services.json`).
+
+When the developer pastes the path, copy the file to `app/google-services.json`
+(overwrite the existing one).
+
+### Sub-step 4b.5 — Save the Web client ID
+
+Show this verbatim. Then **STOP and wait** for the value:
+
+> **Copy your Web client ID**
+> 1. Same Firebase **General** page — look under your Android app for the
+>    **Web client ID** (auto-created with Google sign-in).
+> 2. Don't see it? Open https://console.cloud.google.com → **APIs & Services
+>    → Credentials** in the same project → look for the OAuth 2.0 Client of
+>    type *Web application* → copy its Client ID.
+> 3. Paste it back here.
+
+When the developer pastes it, edit `KitConfig.kt`:
 
     const val GOOGLE_WEB_CLIENT_ID: String = "..."
 
+Confirm what you wrote.
+
 Before a Play release the app also needs the **release** SHA-1 added the same
 way — from your release keystore, or Play Console → Test and release → App
-integrity → App signing if you use Play App Signing. Tell the developer that is
-a release-time task, not needed now.
+integrity → App signing if you use Play App Signing. Mention this as a
+release-time task only — do NOT walk through it now.
 
 More detail + screenshots: https://kit.shipkaro.dev/docs/auth/firebase
 
