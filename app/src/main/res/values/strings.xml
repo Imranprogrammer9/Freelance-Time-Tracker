@@ -88,6 +88,52 @@
     <string name="kit_datepicker_confirm">OK</string>
     <string name="kit_datepicker_dismiss">Cancel</string>
 
+    <!-- Permission flows — shared button labels -->
+    <string name="permission_action_allow">Allow</string>
+    <string name="permission_action_enable">Enable</string>
+    <string name="permission_action_skip">Skip</string>
+    <string name="permission_action_open_settings">Open Settings</string>
+
+    <!-- Permission flows — Notifications -->
+    <string name="permission_notifications_title">Turn on notifications?</string>
+    <string name="permission_notifications_rationale">Get reminders, status updates, and important alerts so you don\'t miss anything.</string>
+    <string name="permission_notifications_denied">Notifications are off. Open Settings to enable them whenever you\'re ready.</string>
+
+    <!-- Permission flows — Camera -->
+    <string name="permission_camera_title">Allow camera access?</string>
+    <string name="permission_camera_rationale">So you can take photos and scan codes right inside the app.</string>
+    <string name="permission_camera_denied">Camera is blocked. Open Settings to allow access.</string>
+
+    <!-- Permission flows — Microphone -->
+    <string name="permission_microphone_title">Allow microphone?</string>
+    <string name="permission_microphone_rationale">Record audio for voice notes and in-app calls.</string>
+    <string name="permission_microphone_denied">Microphone is blocked. Open Settings to allow access.</string>
+
+    <!-- Permission flows — Photo / Gallery -->
+    <string name="permission_photo_title">Allow photo access?</string>
+    <string name="permission_photo_rationale">So you can pick images to upload from your gallery.</string>
+    <string name="permission_photo_denied">Photo access is blocked. Open Settings to allow access.</string>
+
+    <!-- Permission flows — Contacts -->
+    <string name="permission_contacts_title">Allow contacts access?</string>
+    <string name="permission_contacts_rationale">Quickly find friends to share with.</string>
+    <string name="permission_contacts_denied">Contacts access is blocked. Open Settings to allow access.</string>
+
+    <!-- Permission flows — Calendar -->
+    <string name="permission_calendar_title">Allow calendar access?</string>
+    <string name="permission_calendar_rationale">Add events to your calendar in one tap and see what\'s coming up.</string>
+    <string name="permission_calendar_denied">Calendar access is blocked. Open Settings to allow access.</string>
+
+    <!-- Permission flows — Location -->
+    <string name="permission_location_title">Allow location?</string>
+    <string name="permission_location_rationale">Show nearby content and personalise recommendations for where you are.</string>
+    <string name="permission_location_denied">Location is blocked. Open Settings to allow access.</string>
+
+    <!-- Permission flows — Motion / Activity recognition -->
+    <string name="permission_motion_title">Allow activity tracking?</string>
+    <string name="permission_motion_rationale">Count steps and detect workouts automatically — no manual logging needed.</string>
+    <string name="permission_motion_denied">Activity tracking is blocked. Open Settings to allow access.</string>
+
     <!-- Components catalog -->
     <string name="catalog_title">Components</string>
     <string name="catalog_intro_heading">Every component in this kit</string>
@@ -334,16 +380,8 @@
     <string name="changelog_empty_title">No release notes</string>
     <string name="changelog_empty_message">Release notes will show up here.</string>
 
-    <!-- Permission priming -->
-    <string name="permission_allow">Allow</string>
-    <string name="permission_not_now">Not now</string>
-    <string name="permission_open_settings">Open settings</string>
-    <string name="permission_notifications_title">Stay in the loop</string>
-    <string name="permission_notifications_rationale">Turn on notifications to get reminders and important updates.</string>
-    <string name="permission_camera_title">Camera access</string>
-    <string name="permission_camera_rationale">Allow camera access to take photos in the app.</string>
-    <string name="permission_location_title">Location access</string>
-    <string name="permission_location_rationale">Allow location access to show content near you.</string>
+    <!-- Permission priming + per-permission full-screen flows live above (search for
+         permission_action_allow + permission_<name>_title). Older legacy strings removed. -->
 
     <!-- Settings — account actions -->
     <string name="settings_account_default_name">Account</string>

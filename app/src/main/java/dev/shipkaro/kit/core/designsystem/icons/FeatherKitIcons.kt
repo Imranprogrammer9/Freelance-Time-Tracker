@@ -2,12 +2,14 @@ package dev.shipkaro.kit.core.designsystem.icons
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.FeatherIcons
+import compose.icons.feathericons.Activity
 import compose.icons.feathericons.AlertCircle
 import compose.icons.feathericons.AlertTriangle
 import compose.icons.feathericons.Aperture
 import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.ArrowRight
 import compose.icons.feathericons.Bell
+import compose.icons.feathericons.Calendar
 import compose.icons.feathericons.Camera
 import compose.icons.feathericons.Check
 import compose.icons.feathericons.CheckCircle
@@ -17,12 +19,14 @@ import compose.icons.feathericons.Edit2
 import compose.icons.feathericons.Eye
 import compose.icons.feathericons.EyeOff
 import compose.icons.feathericons.Globe
+import compose.icons.feathericons.Image
 import compose.icons.feathericons.Info
 import compose.icons.feathericons.Lock
 import compose.icons.feathericons.LogOut
 import compose.icons.feathericons.Mail
 import compose.icons.feathericons.MapPin
 import compose.icons.feathericons.Menu
+import compose.icons.feathericons.Mic
 import compose.icons.feathericons.MoreVertical
 import compose.icons.feathericons.Plus
 import compose.icons.feathericons.Search
@@ -32,6 +36,7 @@ import compose.icons.feathericons.Shield
 import compose.icons.feathericons.Star
 import compose.icons.feathericons.Tool
 import compose.icons.feathericons.Trash2
+import compose.icons.feathericons.Users
 import compose.icons.feathericons.User
 import compose.icons.feathericons.X
 
@@ -75,6 +80,11 @@ open class FeatherKitIconsImpl : KitIcons {
     override val maintenance: ImageVector = FeatherIcons.Tool
     override val camera: ImageVector = FeatherIcons.Camera
     override val location: ImageVector = FeatherIcons.MapPin
+    override val microphone: ImageVector = FeatherIcons.Mic
+    override val photo: ImageVector = FeatherIcons.Image
+    override val contacts: ImageVector = FeatherIcons.Users
+    override val calendar: ImageVector = FeatherIcons.Calendar
+    override val motion: ImageVector = FeatherIcons.Activity
 
     override val success: ImageVector = FeatherIcons.CheckCircle
     override val info: ImageVector = FeatherIcons.Info

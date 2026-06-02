@@ -6,11 +6,14 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
@@ -20,11 +23,13 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
@@ -82,6 +87,11 @@ open class MaterialKitIconsImpl : KitIcons {
     override val maintenance: ImageVector = Icons.Default.Build
     override val camera: ImageVector = Icons.Default.PhotoCamera
     override val location: ImageVector = Icons.Default.LocationOn
+    override val microphone: ImageVector = Icons.Default.Mic
+    override val photo: ImageVector = Icons.Default.PhotoLibrary
+    override val contacts: ImageVector = Icons.Default.Contacts
+    override val calendar: ImageVector = Icons.Default.CalendarMonth
+    override val motion: ImageVector = Icons.Default.DirectionsRun
 
     override val success: ImageVector = Icons.Default.CheckCircle
     override val info: ImageVector = Icons.Default.Info

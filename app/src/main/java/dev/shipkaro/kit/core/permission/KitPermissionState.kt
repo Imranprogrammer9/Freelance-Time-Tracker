@@ -34,8 +34,8 @@ enum class KitPermissionStatus { GRANTED, DENIED, PERMANENTLY_DENIED }
  *         icon = KitTheme.icons.notification,
  *         title = stringResource(R.string.permission_notifications_title),
  *         rationale = stringResource(R.string.permission_notifications_rationale),
- *         allowLabel = stringResource(R.string.permission_allow),
- *         dismissLabel = stringResource(R.string.permission_not_now),
+ *         allowLabel = stringResource(R.string.permission_action_allow),
+ *         dismissLabel = stringResource(R.string.permission_action_skip),
  *         onAllow = {
  *             if (notifications.status == KitPermissionStatus.PERMANENTLY_DENIED) {
  *                 notifications.openAppSettings()
@@ -76,13 +76,22 @@ fun rememberKitPermissionState(permission: KitPermission): KitPermissionState {
     val activity = remember(context) { context.findActivity() }
     val state = remember(permission) { KitPermissionState(permission) }
 
+    // Resolve per-SDK manifest string (PHOTO swaps to legacy READ_EXTERNAL_STORAGE on API < 33).
+    val resolvedPermission = remember(permission) { resolveManifestPermission(permission) }
+
     // POST_NOTIFICATIONS only exists on API 33+; below that, notifications are granted by default.
-    val notificationsImplicitlyGranted = permission == KitPermission.NOTIFICATIONS &&
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+    // ACTIVITY_RECOGNITION only exists on API 29+; below that, motion is granted by default.
+    val implicitlyGranted = (
+        permission == KitPermission.NOTIFICATIONS &&
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+        ) || (
+        permission == KitPermission.MOTION &&
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+        )
 
     LaunchedEffect(permission) {
-        val granted = notificationsImplicitlyGranted ||
-            ContextCompat.checkSelfPermission(context, permission.manifestPermission) ==
+        val granted = implicitlyGranted ||
+            ContextCompat.checkSelfPermission(context, resolvedPermission) ==
             PackageManager.PERMISSION_GRANTED
         if (granted) {
             state.status = KitPermissionStatus.GRANTED
@@ -98,17 +107,17 @@ fun rememberKitPermissionState(permission: KitPermission): KitPermissionState {
             granted -> KitPermissionStatus.GRANTED
             activity != null && ActivityCompat.shouldShowRequestPermissionRationale(
                 activity,
-                permission.manifestPermission,
+                resolvedPermission,
             ) -> KitPermissionStatus.DENIED
             else -> KitPermissionStatus.PERMANENTLY_DENIED
         }
     }
 
     state.onRequest = {
-        if (notificationsImplicitlyGranted) {
+        if (implicitlyGranted) {
             state.status = KitPermissionStatus.GRANTED
         } else {
-            launcher.launch(permission.manifestPermission)
+            launcher.launch(resolvedPermission)
         }
     }
     state.onOpenSettings = {
@@ -126,4 +135,15 @@ private tailrec fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
     is ContextWrapper -> baseContext.findActivity()
     else -> null
+}
+
+/**
+ * Resolves the manifest permission string per Android version. Most permissions are stable;
+ * PHOTO swaps to the legacy storage permission on API < 33.
+ */
+private fun resolveManifestPermission(permission: KitPermission): String = when {
+    permission == KitPermission.PHOTO &&
+        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ->
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
+    else -> permission.manifestPermission
 }

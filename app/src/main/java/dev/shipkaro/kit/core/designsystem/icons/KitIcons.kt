@@ -70,6 +70,11 @@ interface KitIcons {
     val maintenance: ImageVector
     val camera: ImageVector
     val location: ImageVector
+    val microphone: ImageVector
+    val photo: ImageVector
+    val contacts: ImageVector
+    val calendar: ImageVector
+    val motion: ImageVector
 
     // State
     val success: ImageVector

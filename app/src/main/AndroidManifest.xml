@@ -6,6 +6,29 @@
     <!-- FCM notifications. Runtime-requested on Android 13+. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!--
+      Opt-in permissions for the pre-built KitPermissionScreen flows (feature/permissions).
+      Uncomment the lines for permissions your app actually uses. Each is a "dangerous"
+      permission requiring a runtime prompt — declaring without prompting at runtime does
+      NOT grant access. The corresponding kit screen is at:
+        feature/permissions/PermissionScreens.kt :: <Permission>PermissionScreen
+
+      Uncommenting an unused permission is harmless (no behaviour change) but bloats your
+      Play Store privacy/data-safety form, so cull aggressively before shipping.
+    -->
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+    <!-- <uses-permission android:name="android.permission.RECORD_AUDIO" /> -->
+    <!-- Photo gallery — modern (API 33+) -->
+    <!-- <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> -->
+    <!-- Photo gallery — legacy (API ≤ 32). Pair with maxSdkVersion to drop on newer devices. -->
+    <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_CONTACTS" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_CALENDAR" /> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
+    <!-- Step counter / workout detection (API 29+). -->
+    <!-- <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" /> -->
+
     <application
         android:name=".KitApplication"
         android:allowBackup="true"

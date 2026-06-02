@@ -2,12 +2,14 @@ package dev.shipkaro.kit.core.designsystem.icons
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.TablerIcons
+import compose.icons.tablericons.Activity
 import compose.icons.tablericons.AlertCircle
 import compose.icons.tablericons.AlertTriangle
 import compose.icons.tablericons.ArrowLeft
 import compose.icons.tablericons.ArrowRight
 import compose.icons.tablericons.Bell
 import compose.icons.tablericons.BrandGoogle
+import compose.icons.tablericons.Calendar
 import compose.icons.tablericons.Camera
 import compose.icons.tablericons.Check
 import compose.icons.tablericons.ChevronRight
@@ -24,7 +26,9 @@ import compose.icons.tablericons.Logout
 import compose.icons.tablericons.Mail
 import compose.icons.tablericons.MapPin
 import compose.icons.tablericons.Menu2
+import compose.icons.tablericons.Microphone
 import compose.icons.tablericons.Palette
+import compose.icons.tablericons.Photo
 import compose.icons.tablericons.Plus
 import compose.icons.tablericons.Search
 import compose.icons.tablericons.Settings
@@ -33,6 +37,7 @@ import compose.icons.tablericons.Shield
 import compose.icons.tablericons.Star
 import compose.icons.tablericons.Tool
 import compose.icons.tablericons.Trash
+import compose.icons.tablericons.Users
 import compose.icons.tablericons.User
 import compose.icons.tablericons.X
 
@@ -77,6 +82,11 @@ open class TablerKitIconsImpl : KitIcons {
     override val maintenance: ImageVector = TablerIcons.Tool
     override val camera: ImageVector = TablerIcons.Camera
     override val location: ImageVector = TablerIcons.MapPin
+    override val microphone: ImageVector = TablerIcons.Microphone
+    override val photo: ImageVector = TablerIcons.Photo
+    override val contacts: ImageVector = TablerIcons.Users
+    override val calendar: ImageVector = TablerIcons.Calendar
+    override val motion: ImageVector = TablerIcons.Activity
 
     override val success: ImageVector = TablerIcons.CircleCheck
     override val info: ImageVector = TablerIcons.InfoCircle
