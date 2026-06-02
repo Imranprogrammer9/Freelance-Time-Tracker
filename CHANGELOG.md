@@ -9,6 +9,31 @@ command handles this).
 
 ## [Unreleased]
 
+### Added (2026-06-02 — 8 full-screen permission flows)
+- `core/designsystem/permission/KitPermissionScreen.kt` — parameterised
+  full-screen permission flow (icon chip + title + rationale + Allow + Skip).
+  Auto-swaps to "Open Settings" + denied-state rationale on permanent
+  denial.
+- `feature/permissions/PermissionScreens.kt` — 8 pre-instantiated screens:
+  `NotificationsPermissionScreen`, `CameraPermissionScreen`,
+  `MicrophonePermissionScreen`, `PhotoPermissionScreen`,
+  `ContactsPermissionScreen`, `CalendarPermissionScreen`,
+  `LocationPermissionScreen`, `MotionPermissionScreen`.
+- `KitPermission` enum gains MICROPHONE, PHOTO, CONTACTS, CALENDAR, MOTION.
+- `KitPermissionState` handles SDK gates: PHOTO falls back to
+  `READ_EXTERNAL_STORAGE` on API < 33; MOTION auto-grants on API < 29.
+- 5 new `KitIcons` slots (`microphone`, `photo`, `contacts`, `calendar`,
+  `motion`) wired across Material / Feather / Tabler packs.
+- 32 permission strings (`permission_<name>_{title,rationale,denied}`) + 4
+  shared button labels (`permission_action_{allow,enable,skip,open_settings}`).
+- 8 commented-out `<uses-permission>` opt-in lines in AndroidManifest.
+
+### Changed (2026-06-02 — 8 full-screen permission flows)
+- Removed legacy `permission_allow` / `permission_not_now` /
+  `permission_open_settings` + duplicate `permission_*_title` / `_rationale`
+  strings from the old primer section. `KitPermissionState` KDoc updated
+  to reference the new `permission_action_*` keys.
+
 ### Added (2026-06-02 — runtime feedback pass)
 - `/kit-env-check` command — cross-platform per-machine env probe (JDK 17,
   `ANDROID_HOME`, adb, android CLI, Android Skills, optional scrcpy + Holo).
