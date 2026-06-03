@@ -221,6 +221,9 @@ without having to discover them):
 >   personalised Calm / Headspace-style questionnaire flow.
 > - `/kit-design-app` — design + wire your app's own screens (two-phase:
 >   layout with dummy data → connect to data).
+> - `/kit-generate-screenshots` — generate Play Store phone screenshots
+>   (1080×1920) from your codebase via the `aso-appstore-screenshots` skill,
+>   or drop your own PNGs into `playstore/screenshots/`.
 > - `/kit-upload-on-google-play` — when you're ready to ship, walks signing,
 >   listing copy, screenshots, Data Safety, privacy policy generation, and
 >   the manual Play Console upload.

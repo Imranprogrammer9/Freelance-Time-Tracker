@@ -236,20 +236,14 @@ When the developer pastes the path, copy the file to `app/google-services.json`
 
 ## E. Screenshots
 
-Play requires at least 2 phone screenshots. Ask (AskUserQuestion):
-- **Generate them automatically** — uses the `aso-appstore-screenshots` skill
-  available in this Claude Code install. The skill reads the app's code,
-  derives the core benefits, and produces ASO-optimised screenshot images.
-- **I'll provide my own** — they drop PNGs into
-  `playstore/screenshots/` named
-  `1.png`, `2.png`, … (1080×1920 portrait, up to 8 images).
+Run `/kit-generate-screenshots` inline. That command handles the
+generate-via-skill OR drop-your-own branch, the Play-Store-correct
+dimensions (1080×1920 phone), and the output folder
+(`playstore/screenshots/`). Skip its Verify step here — Step J below builds.
 
-If **generate**: invoke the `aso-appstore-screenshots` skill and let it drive
-the screenshot flow. When it finishes, copy the produced images into
-`playstore/screenshots/`.
-
-If **provide**: wait for confirmation, then `ls` the directory and report the
-count back to the developer (Play needs ≥ 2).
+Mark this task `[skipped]` if the developer already has screenshots in
+`playstore/screenshots/` from a previous release that they don't want to
+redo.
 
 ## F. Store listing copy
 
@@ -419,9 +413,9 @@ line (no Markdown), max 500 chars total (Play's limit).
 ## E. Screenshots (if UI changed)
 
 Ask (AskUserQuestion):
-- **UI changed — redo screenshots** — same Generate / Provide branch as the
-  first-version path (see D in that path above).
-- **UI unchanged — skip** — existing screenshots stay.
+- **UI changed — redo screenshots** — run `/kit-generate-screenshots` inline.
+- **UI unchanged — skip** — existing screenshots in `playstore/screenshots/`
+  stay.
 
 ## F. Plan release analytics
 
