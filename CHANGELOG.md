@@ -9,6 +9,29 @@ command handles this).
 
 ## [Unreleased]
 
+### Added (2026-06-04 — Phase 7 site bootstrap + screenshots command)
+- New `/kit-generate-screenshots` standalone command. Promoted from
+  inline-in-/kit-upload-on-google-play to first-class so devs can refresh
+  shots without re-walking the release flow. Step 0 detects existing PNGs
+  (keep/regenerate/add-more); Step 1 generate-via-skill (uses
+  `aso-appstore-screenshots`, Play Store dimensions 1080×1920) OR
+  provide-own PNGs.
+- `/kit-upload-on-google-play` Step E (first-version + update) now invokes
+  `/kit-generate-screenshots` inline.
+- `/kit-start-setup` outro optional-commands list gains
+  `/kit-generate-screenshots`.
+- **Phase 7 sales+docs site bootstrap** in separate repo
+  https://github.com/wajahatkarim3/shipkit-site (private):
+  - Next.js 14 + Tailwind 3 + TypeScript landing page scaffold
+  - 12 hand-rolled components covering Header / Hero / PlatformStrip /
+    TrustStrip / FeatureCards / ShowDontTell / TechStack / Comparison /
+    Pricing / FAQ / FinalCta / Footer
+  - Brand decisions locked: ShipKit name, kit.shipkaro.dev subdomain,
+    LemonSqueezy MoR, $29 early-bird (first 30) → $49 regular, cohort
+    100%-off coupon, 14-day refund, WhatsApp community, autoplay video
+    hero, generic "other kits" comparison, multi-platform Coming Soon
+    teaser for iOS/Flutter/React Native/Web
+
 ### Added (2026-06-02 — 8 full-screen permission flows)
 - `core/designsystem/permission/KitPermissionScreen.kt` — parameterised
   full-screen permission flow (icon chip + title + rationale + Allow + Skip).
