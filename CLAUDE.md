@@ -123,6 +123,7 @@ Split into 6a (design pass) + 6b (demo). Model CHANGED mid-phase — see Decisio
 - [ ] Architecture overview
 - [ ] Component catalog docs (Swift-catalog parity: name + screenshot + usage; user provides screenshots)
 - [ ] Guides (adding a screen, toggling modules, rename package)
+- [x] **Example app recipes (added 2026-06-07)** — `docs/example-app-recipes.md`. 5 buyer-facing end-to-end walkthroughs (`/kit-start-setup` → Play), each a different path: **A** Water Tracker (free/no-auth/offline/Room), **B** Habit Tracker (free + Supabase Google-only + questionnaire onboarding + OpenRouter AI + review dialog), **C** Calm Meditate (subscription + HARD paywall + Firebase Email+Google + Firebase analytics/remote-config), **D** QuickNotes (subscription + SOFT paywall + all-Supabase + Sentry + maintenance/update gate), **E** Everything-on tour (exploring + all 4 analytics + custom icon pack + RTL translate + catalog). Per-recipe choice tables + "what you'll see on device" + a sanity checklist. Doubles as the maintainer's manual device-test matrix (orthogonal — every branch covered once).
 - [x] Permissions priming components (built 2026-05-22) — `KitPermission` enum + `rememberKitPermissionState` helper + `KitPermissionPrimer`/`KitPermissionPrimerSheet` components (components+helper only, not force-wired)
 - [ ] Deployment + Troubleshooting
 
