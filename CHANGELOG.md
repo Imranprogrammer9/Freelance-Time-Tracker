@@ -9,6 +9,22 @@ command handles this).
 
 ## [Unreleased]
 
+### Changed (2026-06-05 — brand rename ShipKit → NowKit)
+- Product renamed **ShipKit → NowKit** ("ShipKit" too crowded on Google/Play/npm).
+  Brand display name only — the GitHub repo, Vercel URL, and `/kit-*` commands
+  keep their names. Renamed across the `shipkit-site` repo (metadata, wordmark,
+  CTAs, footer, FAQ, comparison). "by ShipKaro" attribution unchanged.
+
+### Added (2026-06-07 — example recipes + sales site legal/store)
+- `docs/example-app-recipes.md` — 5 buyer-facing end-to-end walkthroughs
+  (`/kit-start-setup` → Play), each a different kit path (free/no-auth,
+  free+Google+AI, subscription+HARD-paywall+Firebase, subscription+SOFT+
+  all-Supabase, everything-on tour). Doubles as the device-test matrix.
+- (sales site) Legal pages `/privacy` `/terms` `/refund` `/contact` `/license`
+  (RemoteKaro LLC, Wyoming, LemonSqueezy MoR) + brand assets (square logo,
+  product cover, Getting-Started delivery PDF) — for LemonSqueezy store
+  activation. Store created + product published; identity verification in review.
+
 ### Added (2026-06-04 — Phase 7 site bootstrap + screenshots command)
 - New `/kit-generate-screenshots` standalone command. Promoted from
   inline-in-/kit-upload-on-google-play to first-class so devs can refresh
