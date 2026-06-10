@@ -43,7 +43,7 @@ commands are independent.
 | android CLI | `android --version 2>&1 \| head -1` | exits 0 with a version line |
 | Android Skills | `android skills list 2>&1 \| wc -l` | result > 1 |
 | scrcpy (optional) | `scrcpy --version 2>&1 \| head -1` | exits 0 with a version line |
-| Holo (optional) | `holo --version 2>&1 \| head -1` | exits 0 with a version line |
+| Holo (optional) | `command -v holo` | prints a path (Holo is on PATH) — Holo has no `--version` flag, so only check that it is installed, never run `holo --version` |
 
 For `ANDROID_HOME` on Windows under Git Bash, also accept `%LOCALAPPDATA%\Android\Sdk`
 expansion — if the env var is empty, check whether the default path exists:
@@ -181,7 +181,7 @@ Replaces clicking around Android Studio for most debug work.
 
 (Rust install: https://rustup.rs)
 
-Verify with `holo --version`. Plug a device in and run `holo` for the TUI.
+Verify it installed with `command -v holo` (Holo has no `--version` flag). Plug a device in and run `holo` for the TUI.
 
 ## Step 5 — Wrap up
 
