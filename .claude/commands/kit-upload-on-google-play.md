@@ -39,8 +39,8 @@ First-version path tasks (verbatim):
 - C — Release keystore
 - D — Register release SHA-1 (Google sign-in)
 - E — Screenshots
-- F — Store listing copy
-- G — Data Safety form
+- F — Store listing copy (ASO)
+- G — Data Safety, Privacy policy + Landing page
 - H — Plan release analytics
 - I — Create Play Console app
 - J — Build signed AAB
@@ -278,51 +278,51 @@ Mark this task `[skipped]` if the developer already has screenshots in
 `playstore/screenshots/` from a previous release that they don't want to
 redo.
 
-## F. Store listing copy
+## F. Store listing copy (ASO)
 
-Ask (AskUserQuestion):
-- **Generate them automatically** — uses the `aso-googleplay-listing` skill
-  shipped with this kit. The skill builds a keyword strategy and writes app
-  name, short description, and long description tuned for Play SEO.
-- **I'll write my own** — they hand you the three fields conversationally.
+Run `/kit-generate-aso` inline. That command drives the `aso-googleplay-listing`
+skill — it derives a keyword strategy, confirms which keyword groups to target,
+and writes app name, short + long description tuned for Play SEO. The three
+files end up at:
 
-If **generate**: invoke the `aso-googleplay-listing` skill and let it drive the
-flow. It writes the three files at the paths below when done.
-
-If **write own**: ask for each in plain conversational text (free-form, no
-multi-choice):
-- **App name** (max 30 chars). Usually your app's display name.
-- **Short description** (max 80 chars) — one-line elevator pitch.
-- **Long description** (max 4000 chars) — features, benefits, why install.
-
-Either way, the three files end up at:
 - App name → `playstore/title.txt`
 - Short description → `playstore/short_description.txt`
 - Long description → `playstore/full_description.txt`
 
-## G. Data Safety form + Privacy policy
+Mark this task `[skipped]` if the developer already has listing copy they're
+happy with from a previous run.
 
-Run `/kit-generate-legal` inline. That command scans the active SDKs +
-KitConfig, asks the developer the legal questions (company name, contact email,
-jurisdiction, GDPR / CCPA / COPPA scope), and writes:
+## G. Data Safety, Privacy policy + Landing page
+
+**G.1 — Legal.** Run `/kit-generate-legal` inline. That command scans the active
+SDKs + KitConfig, asks the developer the legal questions (company name, contact
+email, jurisdiction, GDPR / CCPA / COPPA scope), and writes:
 
 - `playstore/privacy_policy.md` — source of truth.
-- `playstore/privacy_policy.html` — host this on GitHub Pages / Netlify /
-  Vercel so it has a public URL.
+- `playstore/privacy_policy.html` — the page Play scrapes (needs a public URL).
 - `playstore/play_data_safety.md` — filled Play Console form answers.
 
-After the generator finishes, show:
+**G.2 — Landing page (gives you the public privacy URL).** Play requires a
+**public** privacy-policy URL — the `.html` has to be hosted somewhere. Offer to
+generate a simple landing page that hosts it (AskUserQuestion):
 
-> **Now host the privacy policy:**
-> 1. Open `playstore/privacy_policy.html` — that's the file Play will scrape.
-> 2. Pick a host (free options): GitHub Pages, Cloudflare Pages, Vercel,
->    Netlify. Drop the `.html` file in a public repo / project.
-> 3. Copy the public URL.
-> 4. In Play Console go to **App content → Privacy policy** → paste that URL.
-> 5. In Play Console go to **App content → Data safety** → open
->    `playstore/play_data_safety.md` side-by-side and fill the web form.
-> 6. Update `KitConfig.PRIVACY_URL` and `KitConfig.TERMS_URL` to the hosted
->    URLs so Settings → Privacy / Terms opens them in-app.
+- **Generate a landing page** (recommended) — run `/kit-generate-landing`
+  inline. It builds a static `landing/` site (hero + features + screenshots +
+  Play badge + **privacy** + **terms** + contact) reusing the privacy policy
+  from G.1. The hosted `…/privacy.html` becomes the URL you paste into Play.
+- **I'll just host the privacy file myself** — skip the landing page; host
+  `playstore/privacy_policy.html` directly.
+
+After the privacy page is hosted (via the landing page or directly), show:
+
+> **Finish the legal setup in Play Console:**
+> 1. Copy your public privacy URL (`…/privacy.html` if you made a landing page,
+>    else wherever you hosted `privacy_policy.html`).
+> 2. **App content → Privacy policy** → paste that URL.
+> 3. **App content → Data safety** → open `playstore/play_data_safety.md`
+>    side-by-side and fill the web form.
+> 4. Update `KitConfig.PRIVACY_URL` and `KitConfig.TERMS_URL` to the hosted
+>    URLs so Settings → Privacy / Terms open them in-app.
 
 Wait for the developer to confirm the policy is hosted and the Data Safety
 form is submitted before continuing.

@@ -44,15 +44,31 @@ Before writing copy, build a small keyword set:
 - 1 **primary keyword** — the single most important search term for this app.
 - 3–5 **supporting keywords** — related terms users would search for.
 
-Pull from the seeds (if any), the audience description, and common
-Play search behaviour. Prefer specific over generic ("offline habit tracker"
-beats "tracker"). Show the keyword set to the developer briefly:
+Pull from the seeds (if any), the audience description, the core features, and
+common Play search behaviour. Prefer specific over generic ("offline habit
+tracker" beats "tracker").
 
-> **Keyword plan:**
-> Primary: `<primary>`
-> Supporting: `<k1>`, `<k2>`, `<k3>`, ...
+**Cluster the keywords into 2–4 named groups** by search intent — e.g. for a
+habit app: *Habit & streaks* (`habit tracker`, `daily streaks`, `routine
+builder`), *Productivity* (`goal tracker`, `self improvement`), *Offline /
+privacy* (`offline habit tracker`, `no account needed`). Each group is one way
+users would search for this app.
 
-If they want different keywords, regenerate. Otherwise continue.
+**Confirm which groups to target** with **AskUserQuestion** (`multiSelect: true`):
+one option per group — label = group name, description = the keywords inside it.
+The developer ticks the groups that match how they want to be found. Phrase the
+question so the strongest group reads as the recommended default.
+
+From the **selected** groups, lock:
+- 1 **primary keyword** — the single strongest term across the picked groups.
+- 3–5 **supporting keywords** — the rest, drawn only from picked groups.
+
+Echo the final plan in one line, then continue to Step 3:
+
+> **Targeting:** primary `<primary>` · supporting `<k1>`, `<k2>`, `<k3>`, …
+
+If the developer ticks no group (or "Other"), fall back to deriving 1 primary +
+3 supporting keywords yourself and show them for a quick yes/no.
 
 ## Step 3 — Generate the three fields
 

@@ -270,5 +270,7 @@ Keep the wrap-up **short** — a vibe coder shouldn't have to scroll. Three part
 > - `/kit-setup-review-dialog` — in-app review prompt
 > - `/kit-save-to-github` — back up to GitHub
 > - `/kit-generate-screenshots` — Play Store screenshots
+> - `/kit-generate-aso` — Play listing copy (title + descriptions)
+> - `/kit-generate-landing` — static landing + privacy + terms page
 > - `/kit-upload-on-google-play` — ship to Google Play
 > - `/kit-env-check` — check your machine's tools

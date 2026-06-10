@@ -59,13 +59,28 @@ Initial task titles (verbatim):
 Ask (AskUserQuestion):
 - **Stitch project** — paste your Stitch project URL or ID. Uses the Stitch MCP
   tools (`mcp__stitch__*`) to import the screen list and generate Compose.
+- **Figma URL** — paste a Figma file or Figma Community URL. If a Figma MCP /
+  Dev Mode connection is available, read the frames directly. Otherwise, tell
+  the developer to open the file → select each frame → **Export as PNG** (1×–2×)
+  → drop the PNGs in the chat, and design from those. A Community file is a
+  great starting point — they can duplicate it to their own Figma first if they
+  want to tweak it.
 - **Screenshots / mockups** — paste images of each screen (Figma exports,
-  sketches, photos of paper, whatever). You read the images and design from
-  them.
+  Dribbble shots, sketches, photos of paper, whatever). You read the images and
+  design from them.
+- **Reference URL** — paste a link to a design you like (a Dribbble shot, a real
+  app's store page, any inspiration). Treat it as a style + layout reference,
+  not a pixel-perfect spec — adapt it to NowKit's components and the developer's
+  brand color.
 - **Text descriptions** — the developer describes each screen in plain English,
   no visuals.
 - **From scratch** — the developer describes the app in one sentence; you
   propose the screen list yourself based on the app concept.
+
+When the source is an image or a reference URL, **call out the key UI patterns
+you see** (e.g. "a big circular progress ring", "color-coded cards", "a bottom
+sheet for adding") and confirm with the developer before you build — so the
+generated screens match the vibe they picked.
 
 If the developer already ran `/kit-start-setup` and answered the "what is your
 app about" question, reuse that for context when you're proposing screens.
