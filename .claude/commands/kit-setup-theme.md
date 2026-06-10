@@ -95,24 +95,39 @@ the developer can browse the style before picking:
   bundled (commented) in the catalog. After picking, Claude wires the pack
   and generates the matching `KitIcons` implementation.
 
+**Default state:** the kit ships **Material icons only**. Feather + Tabler are
+present in the repo but **disabled** (their `libs.versions.toml` + `build.gradle.kts`
+lines are commented, and their impl files are wrapped in `/* ... */`). So picking
+Material is a no-op; picking Feather/Tabler means *enabling* a disabled pack.
+
 ### If they pick Material
 
-Material is already the default. Nothing to wire — go straight to **Apply**
-to disable Feather + Tabler so the build slims down.
+Material is the default and the only pack enabled out of the box. Nothing to
+wire — confirm and finish. (If an earlier run had enabled Feather/Tabler, run
+**Disable a pack** on them so the build stays slim.)
 
 ### If they pick Feather
 
-Update the active default:
-- In `core/designsystem/icons/KitIcons.kt`, change
-  `val LocalKitIcons = staticCompositionLocalOf<KitIcons> { MaterialKitIcons }`
-  to `... { FeatherKitIcons }`.
+**Enable** the bundled Feather pack (it ships disabled):
 
-Then go to **Apply** to disable Material + Tabler.
+1. **Catalog** — in `gradle/libs.versions.toml`, remove the leading `# ` from
+   `# composeicons-feather = { ... }`.
+2. **Build file** — in `app/build.gradle.kts`, remove the leading `// ` from
+   `// implementation(libs.composeicons.feather)`.
+3. **Impl file** — in `core/designsystem/icons/FeatherKitIcons.kt`, remove the
+   `/* Disabled … */` wrapper: delete the `/* …` comment block that sits right
+   after the `package` line, and delete the closing `*/` on the last line. The
+   `object FeatherKitIcons` must compile again.
+4. **Binding** — in `core/designsystem/icons/KitIcons.kt`, change
+   `val LocalKitIcons = staticCompositionLocalOf<KitIcons> { MaterialKitIcons }`
+   to `... { FeatherKitIcons }`.
+
+If any other pack was enabled before, run **Disable a pack** on it.
 
 ### If they pick Tabler
 
-Same as Feather — change `LocalKitIcons`'s default to `TablerKitIcons`,
-then **Apply** to disable Material + Feather.
+Same four steps as Feather, with `tabler` / `TablerKitIcons` / `TablerKitIcons.kt`
+in place of the Feather names.
 
 ### If they pick "another pack"
 
@@ -160,39 +175,27 @@ For their pick:
    `/kit-change-app-id`).
 
 4. Change `LocalKitIcons`'s default in `KitIcons.kt` to the new impl.
-5. Go to **Apply** to disable the original three packs.
+5. If another pack was enabled before, run **Disable a pack** on it.
 
-### Apply — comment out unused packs (reversible)
+### Disable a pack (reverse of enabling)
 
-To slim the build without losing the option to switch later, for each pack
-the developer is **NOT** using:
+When switching away from a pack (so the build doesn't carry an unused icon
+dependency), disable the old one. For the pack being turned off:
 
-1. **Catalog** — in `gradle/libs.versions.toml` under `[libraries]`,
-   prepend `# ` to the matching line. (Material is
-   `androidx-compose-material-icons`; the others are
-   `composeicons-feather`, `composeicons-tabler`, etc.)
-2. **Build file** — in `app/build.gradle.kts`, prepend `// ` to the
-   matching `implementation(libs.<...>)` line.
+1. **Catalog** — in `gradle/libs.versions.toml`, prepend `# ` to its
+   `composeicons-<pack>` line.
+2. **Build file** — in `app/build.gradle.kts`, prepend `// ` to its
+   `implementation(libs.composeicons.<pack>)` line.
 3. **Implementation file** — in
-   `core/designsystem/icons/<Pack>KitIcons.kt`, wrap the entire file
-   content after the `package` declaration in a `/* ... */` block comment.
-   Example:
+   `core/designsystem/icons/<Pack>KitIcons.kt`, wrap everything after the
+   `package` declaration in a `/* ... */` block comment (same shape the kit
+   ships Feather/Tabler in). The file stays in the repo, just doesn't compile.
 
-       package <basePackage>.core.designsystem.icons
+Material is the kit's baseline — leave it enabled unless you've enabled a
+replacement pack and are sure no code uses Material icons directly.
 
-       /* Disabled — uncomment to re-enable this icon pack.
-          Also uncomment the matching libs.versions.toml +
-          app/build.gradle.kts lines.
-
-       import ...
-       object FeatherKitIcons : KitIcons { ... }
-       */
-
-   The file stays in the repo, just does not compile.
-
-To switch packs later, the developer (or Claude on a re-run of
-`/kit-setup-theme`) reverses the three steps above for the desired pack and
-applies them to the now-current pack.
+The whole thing is reversible: enabling re-does these three edits, disabling
+undoes them.
 
 ## Step 3 — Verify
 

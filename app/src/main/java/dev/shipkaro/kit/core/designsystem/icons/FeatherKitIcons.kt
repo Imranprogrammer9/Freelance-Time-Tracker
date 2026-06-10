@@ -1,5 +1,11 @@
 package dev.shipkaro.kit.core.designsystem.icons
 
+/* Disabled by default — the kit ships Material icons only. To enable the Feather
+   pack: uncomment composeicons-feather in gradle/libs.versions.toml AND
+   implementation(libs.composeicons.feather) in app/build.gradle.kts, remove this
+   /* ... */ wrapper, and set LocalKitIcons in KitIcons.kt to FeatherKitIcons.
+   `/kit-setup-theme` does all of this for you when you pick Feather.
+
 import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Activity
@@ -93,3 +99,4 @@ open class FeatherKitIconsImpl : KitIcons {
 }
 
 object FeatherKitIcons : FeatherKitIconsImpl()
+*/

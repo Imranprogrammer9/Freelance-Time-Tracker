@@ -1,5 +1,11 @@
 package dev.shipkaro.kit.core.designsystem.icons
 
+/* Disabled by default — the kit ships Material icons only. To enable the Tabler
+   pack: uncomment composeicons-tabler in gradle/libs.versions.toml AND
+   implementation(libs.composeicons.tabler) in app/build.gradle.kts, remove this
+   /* ... */ wrapper, and set LocalKitIcons in KitIcons.kt to TablerKitIcons.
+   `/kit-setup-theme` does all of this for you when you pick Tabler.
+
 import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Activity
@@ -95,3 +101,4 @@ open class TablerKitIconsImpl : KitIcons {
 }
 
 object TablerKitIcons : TablerKitIconsImpl()
+*/

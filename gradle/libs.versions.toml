@@ -62,11 +62,12 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 
-# Optional icon packs (compose-icons by devsrsouza). Default: feather + tabler.
-# Add others by uncommenting and adding to app/build.gradle.kts dependencies.
-# R8 strips unused packs in release builds.
-composeicons-feather = { group = "br.com.devsrsouza.compose.icons", name = "feather", version.ref = "composeIcons" }
-composeicons-tabler = { group = "br.com.devsrsouza.compose.icons", name = "tabler-icons", version.ref = "composeIcons" }
+# Optional icon packs (compose-icons by devsrsouza). The kit ships with Material
+# icons only — every pack below is commented out by default. Enable one by
+# uncommenting its line here + the matching app/build.gradle.kts dependency
+# (`/kit-setup-theme` does this for you). R8 strips unused packs in release builds.
+# composeicons-feather = { group = "br.com.devsrsouza.compose.icons", name = "feather", version.ref = "composeIcons" }
+# composeicons-tabler = { group = "br.com.devsrsouza.compose.icons", name = "tabler-icons", version.ref = "composeIcons" }
 # composeicons-simple = { group = "br.com.devsrsouza.compose.icons", name = "simple-icons", version.ref = "composeIcons" }
 # composeicons-fontawesome = { group = "br.com.devsrsouza.compose.icons", name = "font-awesome", version.ref = "composeIcons" }
 # composeicons-eva = { group = "br.com.devsrsouza.compose.icons", name = "eva-icons", version.ref = "composeIcons" }

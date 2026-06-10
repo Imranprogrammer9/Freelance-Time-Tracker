@@ -130,9 +130,11 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
-    // Optional icon packs (see libs.versions.toml for full list). R8 strips unused.
-    implementation(libs.composeicons.feather)
-    implementation(libs.composeicons.tabler)
+    // Optional icon packs (see libs.versions.toml for full list). Commented out by
+    // default — the kit ships Material icons only. `/kit-setup-theme` uncomments the
+    // pack you pick. R8 strips unused packs in release builds anyway.
+    // implementation(libs.composeicons.feather)
+    // implementation(libs.composeicons.tabler)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     implementation(libs.androidx.navigation.compose)
