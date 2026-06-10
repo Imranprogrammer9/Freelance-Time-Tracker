@@ -158,19 +158,20 @@ Ask (AskUserQuestion):
 
 **If "Later"** — show this verbatim, then continue (don't wait long):
 
-> **Save for before your first release.** To charge real users:
+> **IMPORTANT before your first release.** 
 >
-> 1. **Create your in-app products** in Play Console (Subscriptions or In-app
->    products) — each gets a Product ID.
-> 2. **Connect Play to RevenueCat** — upload a Google service-account JSON so
->    RevenueCat can verify purchases on your behalf (~36 h to propagate).
-> 3. **Create an offering + design your paywall** in RevenueCat (visual editor).
-> 4. **Upload a signed AAB to an internal testing track** and open the **tester
->    opt-in URL** on your test device — Google Play only serves products to a build
->    that's live on a track, to opted-in testers. Without this, the paywall shows
->    "offerings empty". `/kit-upload-on-google-play` does this upload for you.
+> To charge real users in production, you have to connect the Google Play Console
+> with the RevenueCat. That needs to be done in both websites and can't be done
+> here by the AI agent.
 >
-> 📖 Full step-by-step, written for the kit: **https://kit.shipkaro.dev/docs/paywall**
+> It's not urgent right now and can be skipped. It needs to be done before the 
+> app's first public release on Google Play.
+>
+> Follow this full step-by-step to connect Google Play with RevenueCat
+> **https://kit.shipkaro.dev/docs/paywall**
+>
+> Note that the integration between Google Play and RevenueCat takes around
+> **36 hours** to propagte.
 >
 > The kit reminds you again in `/kit-upload-on-google-play` before you ship. Say
 > "got it" to continue.

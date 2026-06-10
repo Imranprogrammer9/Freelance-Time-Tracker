@@ -109,9 +109,11 @@ The rest is dashboard-side, so confirm it with the developer. Show verbatim:
 > **https://kit.shipkaro.dev/docs/paywall** (or `/kit-setup-paywall` → "Set up
 > products + Play billing").
 
-If they haven't done it, recommend they finish billing on the internal test track
-before promoting to production. Don't block them — just make sure the choice is
-informed.
+If they started this early (during `/kit-start-setup` Step 8), most of it should be
+done — have them confirm the RevenueCat → Play connection shows **Verified** (the
+~36 h propagation is complete) and an offering is published. If they haven't done it,
+recommend they finish billing on the internal test track before promoting to
+production. Don't block them — just make sure the choice is informed.
 
 ## B. App icon
 

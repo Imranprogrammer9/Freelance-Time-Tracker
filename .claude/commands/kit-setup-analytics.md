@@ -141,8 +141,10 @@ Show this verbatim. Then **STOP and wait** for "done":
 
 > **Create your Sentry project**
 > 1. Sign up at https://sentry.io.
-> 2. Pick **Android** as the platform when prompted.
-> 3. Name the project after your app → **Create project**.
+> 2. Create a new project.
+> 3. Pick **Android** as the platform when prompted.
+> 4. Set any Alerts frequency you prefer.
+> 5. Name the project after your app → **Create project**.
 >
 > Say "done" when the project dashboard is open.
 
@@ -151,8 +153,9 @@ Show this verbatim. Then **STOP and wait** for "done":
 Show this verbatim. Then **STOP and wait** for the value:
 
 > **Get your Sentry DSN**
-> 1. **Settings → Projects → <your project> → Client Keys (DSN)**.
-> 2. Copy the **DSN** value (looks like
+> 1. Click on Settings Gear icon on Top-Right to see Project Settings.
+> 2. Scroll in the left sidebar to **SDK Setup → Client Keys (DSN)**.
+> 3. Copy the **DSN** value (looks like
 >    `https://abc123@o456.ingest.sentry.io/7890`).
 > 3. Paste it back here.
 
