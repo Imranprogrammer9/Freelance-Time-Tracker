@@ -2,7 +2,7 @@
 description: Configure remote config, the update gate, and push notifications
 ---
 
-You are running **`/kit-setup-updates`** for ShipKit. Goal: wire the "operations"
+You are running **`/kit-setup-updates`** for NowKit. Goal: wire the "operations"
 features — remote config / feature flags, the force/soft update gate, maintenance
 mode, and FCM push notifications.
 
@@ -80,7 +80,7 @@ here. If it already exists, do not repeat that — just continue.
 
 Then show the developer exactly this:
 
-> **Remote Config keys ShipKit reads** — create these in the Firebase console
+> **Remote Config keys NowKit reads** — create these in the Firebase console
 > under Remote Config, or leave any unset and the kit's defaults apply:
 > - `min_supported_version` — below this version code, force an update.
 > - `latest_version` — newest version code available.

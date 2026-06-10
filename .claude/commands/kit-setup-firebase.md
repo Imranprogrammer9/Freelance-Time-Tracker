@@ -2,7 +2,7 @@
 description: Add google-services.json and apply the Firebase Gradle plugins (shared helper)
 ---
 
-You are running **`/kit-setup-firebase`** for ShipKit. This is a shared helper used
+You are running **`/kit-setup-firebase`** for NowKit. This is a shared helper used
 by `/kit-setup-auth`, `/kit-setup-analytics`, and `/kit-setup-updates`. It makes the Firebase
 SDKs (already on the classpath) connect to a Firebase project.
 

@@ -2,7 +2,7 @@
 description: Generate Play Store screenshots for your app — codebase-driven, ASO-optimised, or drop your own PNGs
 ---
 
-You are running **`/kit-generate-screenshots`** for ShipKit. Goal: produce
+You are running **`/kit-generate-screenshots`** for NowKit. Goal: produce
 phone screenshots for the Google Play Store, either by invoking the codebase-
 driven `aso-appstore-screenshots` skill or by letting the developer drop their
 own PNGs into the right folder.

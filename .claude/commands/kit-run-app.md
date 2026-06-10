@@ -2,7 +2,7 @@
 description: Compile, install, and launch the app on a connected device
 ---
 
-You are running **`/kit-run-app`** for ShipKit.
+You are running **`/kit-run-app`** for NowKit.
 
 Audience: first-time mobile developers / vibe coders. They want one command that
 gets the app running on their device — be brief and concrete.

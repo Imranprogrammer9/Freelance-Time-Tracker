@@ -2,7 +2,7 @@
 description: Back up your app to your own private GitHub repo (creates it the first time, saves changes after)
 ---
 
-You are running the ShipKit **`/kit-save-to-github`** command.
+You are running the NowKit **`/kit-save-to-github`** command.
 
 Goal: get the developer's app onto **their own** private GitHub repo — created,
 wired, and pushed — without them needing to know git or GitHub. First run creates

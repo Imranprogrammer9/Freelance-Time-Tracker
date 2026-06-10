@@ -172,7 +172,7 @@ private val aiModule = module {
                     .addInterceptor(
                         OpenRouterAuthInterceptor(
                             apiKey = BuildConfig.OPENROUTER_API_KEY,
-                            appName = "ShipKit",
+                            appName = "NowKit",
                         ),
                     )
                     .addInterceptor(

@@ -59,7 +59,7 @@ private val DarkColors = darkColorScheme(
 
 /**
  * App theme. Supports light, dark, and follow-system modes; the color scheme is
- * always derived from the ShipKit brand palette. [themeMode] null = not loaded
+ * always derived from the NowKit brand palette. [themeMode] null = not loaded
  * yet, fall back to system.
  *
  * @param icons Icon pack used kit-wide. Default = [MaterialKitIcons]. Switch to

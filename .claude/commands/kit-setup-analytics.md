@@ -2,7 +2,7 @@
 description: Configure PostHog, Firebase Analytics, Crashlytics and Sentry
 ---
 
-You are running **`/kit-setup-analytics`** for ShipKit. Goal: wire product analytics
+You are running **`/kit-setup-analytics`** for NowKit. Goal: wire product analytics
 and crash reporting.
 
 Audience: first-time mobile developers. Be brief; you make the edits.

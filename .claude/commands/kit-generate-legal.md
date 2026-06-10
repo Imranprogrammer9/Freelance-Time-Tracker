@@ -2,7 +2,7 @@
 description: Generate privacy policy + Play Data Safety from the actual codebase
 ---
 
-You are running **`/kit-generate-legal`** for ShipKit. Goal: scan what this app
+You are running **`/kit-generate-legal`** for NowKit. Goal: scan what this app
 *actually* does — which SDKs are wired, which `KitConfig` flags are on, which
 custom endpoints send user data — and produce a draft privacy policy plus a
 filled Play Data Safety form mapping.

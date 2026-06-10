@@ -2,7 +2,7 @@
 description: Verify your machine has every tool the kit needs (JDK, Android SDK, android CLI, skills, optional tools)
 ---
 
-You are running **`/kit-env-check`** for ShipKit. Goal: detect which tools the
+You are running **`/kit-env-check`** for NowKit. Goal: detect which tools the
 ShipKaro mobile dev environment expects, report what's installed vs missing,
 and print **OS-specific install commands** for anything missing.
 

@@ -3,7 +3,7 @@ description: Rename the kit — package, applicationId, and app display name —
 argument-hint: [newAppId] [newAppName]
 ---
 
-You are running the ShipKit **`/kit-change-app-id`** setup command.
+You are running the NowKit **`/kit-change-app-id`** setup command.
 
 Goal: turn this starter kit into the developer's own app by renaming the package
 name, `applicationId`, and display name. This is usually the very first thing a

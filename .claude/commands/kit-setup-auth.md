@@ -2,7 +2,7 @@
 description: Choose and configure the kit's authentication provider
 ---
 
-You are running **`/kit-setup-auth`** for ShipKit. Goal: pick and wire the
+You are running **`/kit-setup-auth`** for NowKit. Goal: pick and wire the
 authentication provider.
 
 Audience: first-time mobile developers. Be brief; you make the edits, they answer
@@ -155,7 +155,7 @@ Show this verbatim. Then **STOP and wait** for "done":
 > 1. Open https://console.cloud.google.com — sign in with the same Google
 >    account that owns the Supabase project (easier later) or a separate
 >    Google Cloud account, either works.
-> 2. Top bar → project picker → **New Project** → name it (e.g. "shipkit
+> 2. Top bar → project picker → **New Project** → name it (e.g. "NowKit
 >    auth") → **Create**.
 > 3. Left sidebar → **APIs & Services → OAuth consent screen**.
 > 4. Pick **External** → **Create**.

@@ -2,7 +2,7 @@
 description: Design and build your app's screens — two phases, first the UI with dummy data, then the functionality screen-by-screen
 ---
 
-You are running **`/kit-design-app`** for ShipKit.
+You are running **`/kit-design-app`** for NowKit.
 
 Goal: turn the developer's design ideas (Stitch, Figma, screenshots, or plain
 text) into a working set of Compose screens, then wire data + actions into each
@@ -120,7 +120,7 @@ For each approved screen, do all of this:
    package — do NOT hardcode `dev.shipkaro.kit` (the dev may have run
    `/kit-change-app-id`).
 
-2. **Style** — use the ShipKit design system: `KitTheme.spacing.*`,
+2. **Style** — use the NowKit design system: `KitTheme.spacing.*`,
    `KitTheme.icons.*`, `KitButton`, `KitCard`, `KitListItem`, `KitTextField`,
    `KitBanner`, `KitDialog`, `KitBottomSheet`, `KitChip`, `Scaffold` +
    `TopAppBar` for top-level chrome. Brand color flows from `Color.kt`.

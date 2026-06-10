@@ -1,8 +1,8 @@
 ---
-description: Guided end-to-end setup of ShipKit — run this first
+description: Guided end-to-end setup of NowKit — run this first
 ---
 
-You are running **`/kit-start-setup`**, the master setup command for ShipKit.
+You are running **`/kit-start-setup`**, the master setup command for NowKit.
 
 This is the FIRST command a developer runs after cloning the kit. Your job: walk
 them through turning the starter kit into their own app — renaming, branding, and
@@ -51,17 +51,17 @@ Use these task titles verbatim:
 
 ## Step 0 — Orientation
 
-Open with one line: **ShipKit** is a starter kit from **ShipKaro**, a community
+Open with one line: **NowKit** is a starter kit from **ShipKaro**, a community
 for indie mobile developers who ship fast — ShipKaro's motto is "Stop
 perfecting. Start shipping."
 
 Then point the developer at the two places they will need:
 - **Docs:** https://kit.shipkaro.dev/docs — setup guides, feature reference,
   troubleshooting.
-- **Kit home & updates:** https://kit.shipkaro.dev — ShipKit's page, changelog,
+- **Kit home & updates:** https://kit.shipkaro.dev — NowKit's page, changelog,
   and new releases.
 
-Then show the developer what ShipKit gives them — present this list as-is:
+Then show the developer what NowKit gives them — present this list as-is:
 
 - 🔑 **Authentication** — email + Google sign-in
 - 💳 **Paywall + subscriptions** — RevenueCat

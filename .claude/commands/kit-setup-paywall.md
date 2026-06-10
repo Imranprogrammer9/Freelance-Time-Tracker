@@ -2,7 +2,7 @@
 description: Configure the RevenueCat paywall and subscriptions
 ---
 
-You are running **`/kit-setup-paywall`** for ShipKit. Goal: wire RevenueCat so the
+You are running **`/kit-setup-paywall`** for NowKit. Goal: wire RevenueCat so the
 app can sell subscriptions.
 
 Audience: first-time mobile developers. Be brief; you make the edits.

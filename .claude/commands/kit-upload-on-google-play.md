@@ -2,7 +2,7 @@
 description: Prepare release assets and upload your app to the Google Play Store
 ---
 
-You are running **`/kit-upload-on-google-play`** for ShipKit.
+You are running **`/kit-upload-on-google-play`** for NowKit.
 
 Goal: take a built app to a Google Play release — assets, signing, listing copy,
 data-safety, AAB build, and upload. Two paths: **first version** (more setup) vs

@@ -2,7 +2,7 @@
 description: Wire Play in-app review prompt at a chosen trigger
 ---
 
-You are running **`/kit-setup-review-dialog`** for ShipKit. Goal: pick a trigger and
+You are running **`/kit-setup-review-dialog`** for NowKit. Goal: pick a trigger and
 call `InAppReviewManager.requestReview(activity)` at that point so the user sees
 Google Play's in-app rating sheet without leaving the app.
 

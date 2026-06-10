@@ -2,7 +2,7 @@
 description: Translate every app string into one or more languages and wire the locales in
 ---
 
-You are running **`/kit-translate`** for ShipKit.
+You are running **`/kit-translate`** for NowKit.
 
 Goal: translate every user-facing string in the app from English into one or
 more developer-picked languages, and wire the new locales into the kit so the

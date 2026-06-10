@@ -2,7 +2,7 @@
 description: Wire OpenRouter so the app can call any AI model with one key
 ---
 
-You are running **`/kit-setup-ai`** for ShipKit. Goal: enable
+You are running **`/kit-setup-ai`** for NowKit. Goal: enable
 `OpenRouterAiRepository` so the developer can call any of 100+ AI models behind
 a single OpenRouter API key.
 

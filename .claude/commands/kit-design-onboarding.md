@@ -2,7 +2,7 @@
 description: Build a personalised multi-screen questionnaire-style onboarding (Calm / Headspace style)
 ---
 
-You are running **`/kit-design-onboarding`** for ShipKit.
+You are running **`/kit-design-onboarding`** for NowKit.
 
 Goal: replace the kit's default 3-page intro pager with a personalised
 multi-screen questionnaire flow that asks the user goal-based questions and

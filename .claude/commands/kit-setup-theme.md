@@ -3,7 +3,7 @@ description: Set the kit's brand color and pick the app's icon pack
 argument-hint: [#hexcolor]
 ---
 
-You are running **`/kit-setup-theme`** for ShipKit. Goal: make the app look like the
+You are running **`/kit-setup-theme`** for NowKit. Goal: make the app look like the
 developer's brand.
 
 Audience: first-time mobile developers. Be brief and concrete; you make the
@@ -20,7 +20,7 @@ blocks is instructions for you, not the developer.
 Before walking the full setup, check what's already configured:
 
 1. Read `Color.kt` — note the current `BrandPrimary` hex value. Default is
-   `#7C3AED` (ShipKit purple).
+   `#7C3AED` (NowKit purple).
 2. Inspect `Theme.kt` for the `LocalKitIcons` provider — note which icon-pack
    impl is wired (Material default / Feather / Tabler / custom).
 3. Check `app/build.gradle.kts` for which `composeicons-*` deps are

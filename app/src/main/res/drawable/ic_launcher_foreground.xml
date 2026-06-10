@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Adaptive-icon foreground. Wraps the ShipKit brand mark in a 19% inset so the
+  Adaptive-icon foreground. Wraps the NowKit brand mark in a 19% inset so the
   logo sits inside Android's safe zone (66 of 108 dp). Replace with your own
   logo via `/kit-upload-on-google-play` (icon.kitchen flow) before release.
 -->

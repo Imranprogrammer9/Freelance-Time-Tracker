@@ -2,7 +2,7 @@
 description: Plan and wire release-specific analytics events + funnels before a Play upload
 ---
 
-You are running **`/kit-plan-release-analytics`** for ShipKit. Goal: before the
+You are running **`/kit-plan-release-analytics`** for NowKit. Goal: before the
 developer ships this release to Google Play, capture the funnel events they need
 to learn what's working. Read the unreleased changelog, ask a few targeted
 questions about app + release goals, then add `AnalyticsEvents` constants + wire

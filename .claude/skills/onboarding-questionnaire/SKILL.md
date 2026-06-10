@@ -4,7 +4,7 @@ description: Build a personalised multi-screen Calm / Headspace-style onboarding
 ---
 
 You are running the **onboarding-questionnaire** skill — build a personalised
-multi-screen onboarding flow for a ShipKit app.
+multi-screen onboarding flow for a NowKit app.
 
 ## What this builds vs the kit default
 

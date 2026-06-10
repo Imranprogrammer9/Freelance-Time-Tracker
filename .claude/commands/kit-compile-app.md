@@ -2,7 +2,7 @@
 description: Compile-check the kit (Kotlin compile only, no install or launch)
 ---
 
-You are running **`/kit-compile-app`** for ShipKit.
+You are running **`/kit-compile-app`** for NowKit.
 
 Audience: first-time mobile developers / vibe coders. Be brief — they want a
 yes / no answer.

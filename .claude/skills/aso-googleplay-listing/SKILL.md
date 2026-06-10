@@ -4,7 +4,7 @@ description: Generate a conversion-optimised Google Play Store listing (app name
 ---
 
 You are running the **aso-googleplay-listing** skill — generate
-conversion-optimised Google Play Store listing copy for a ShipKit app.
+conversion-optimised Google Play Store listing copy for a NowKit app.
 
 ## Play vs App Store — important
 
