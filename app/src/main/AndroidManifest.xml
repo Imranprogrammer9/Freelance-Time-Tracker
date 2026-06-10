@@ -7,6 +7,14 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!--
+      In-app billing. Required by RevenueCat / Google Play Billing for purchases,
+      and needed for Google Play Console to unlock in-app product creation on your
+      uploaded build. `/kit-setup-paywall` uncomments this automatically when you
+      turn the paywall on; leave it commented for a free (no-paywall) app.
+    -->
+    <!-- <uses-permission android:name="com.android.vending.BILLING" /> -->
+
+    <!--
       Opt-in permissions for the pre-built KitPermissionScreen flows (feature/permissions).
       Uncomment the lines for permissions your app actually uses. Each is a "dangerous"
       permission requiring a runtime prompt — declaring without prompting at runtime does

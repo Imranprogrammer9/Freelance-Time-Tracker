@@ -82,6 +82,37 @@ Confirm before continuing:
   `/kit-generate-legal` which produces both and walks the developer through
   hosting them.
 
+### A.1 — Paywall billing readiness (only if the app sells)
+
+Read `KitConfig.kt`. **If `PAYWALL_ENABLED = false`, skip this entirely** — the
+app is free, no billing to wire.
+
+If `PAYWALL_ENABLED = true`, the release-time RevenueCat + Play billing setup must
+be done or real purchases won't credit users. First, **verify the billing
+permission is declared** — check `app/src/main/AndroidManifest.xml` contains an
+uncommented `<uses-permission android:name="com.android.vending.BILLING" />`. If
+it's still commented (e.g. paywall enabled by hand), uncomment it now — Play
+Console won't unlock product creation without it in the uploaded build.
+
+The rest is dashboard-side, so confirm it with the developer. Show verbatim:
+
+> **You have a paywall — is billing wired up?** Before real users can pay, you need:
+> 1. **In-app products** created + activated in Play Console.
+> 2. **A service-account JSON** uploaded to RevenueCat (~36 h to propagate).
+> 3. **An offering + published paywall** in RevenueCat.
+> 4. **This build live on a testing track + the tester opt-in URL opened** on your
+>    device — Google Play only serves products to a build that's on a track, to
+>    opted-in testers. (The internal-testing upload in the steps below covers this;
+>    just remember to open the opt-in URL afterwards, or products stay empty.)
+>
+> Done already? Great — continue. Not yet? Full guide:
+> **https://kit.shipkaro.dev/docs/paywall** (or `/kit-setup-paywall` → "Set up
+> products + Play billing").
+
+If they haven't done it, recommend they finish billing on the internal test track
+before promoting to production. Don't block them — just make sure the choice is
+informed.
+
 ## B. App icon
 
 A real launcher icon is required for a Play release. Show this:
