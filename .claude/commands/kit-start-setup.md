@@ -193,6 +193,19 @@ during `/kit-start-setup` (every earlier step skipped its own verify).
 If the developer just wants a compile check without installing, they can use
 `/kit-compile-app` instead.
 
+## Step 8 — Offer to back up to GitHub
+
+Once the app runs, offer to save it to the developer's own GitHub (optional — not
+required to ship). Print verbatim:
+
+> **Want to back up your app to GitHub?** Right now it only lives on this laptop.
+> I can save it to your own **private** GitHub repo — free, only you can see it,
+> and it gives you a backup + history. Run **`/kit-save-to-github`** and I'll
+> create the repo and push everything for you. You can also do this later anytime.
+
+If they say yes now, run `/kit-save-to-github` inline. If they decline, move on —
+don't push.
+
 ## Wrap up
 
 Summarise what was configured, what was skipped, and the obvious next move (e.g.
@@ -221,6 +234,8 @@ without having to discover them):
 >   personalised Calm / Headspace-style questionnaire flow.
 > - `/kit-design-app` — design + wire your app's own screens (two-phase:
 >   layout with dummy data → connect to data).
+> - `/kit-save-to-github` — back up your app to your own private GitHub repo
+>   (creates it the first time, saves your changes after). Free + private.
 > - `/kit-generate-screenshots` — generate Play Store phone screenshots
 >   (1080×1920) from your codebase via the `aso-appstore-screenshots` skill,
 >   or drop your own PNGs into `playstore/screenshots/`.

@@ -44,6 +44,7 @@ commands are independent.
 | Android Skills | `android skills list 2>&1 \| wc -l` | result > 1 |
 | scrcpy (optional) | `scrcpy --version 2>&1 \| head -1` | exits 0 with a version line |
 | Holo (optional) | `command -v holo` | prints a path (Holo is on PATH) — Holo has no `--version` flag, so only check that it is installed, never run `holo --version` |
+| gh / GitHub CLI (optional) | `gh --version 2>&1 \| head -1` | output starts with `"gh version"` — needed only for `/kit-save-to-github` (backing your app up to GitHub) |
 
 For `ANDROID_HOME` on Windows under Git Bash, also accept `%LOCALAPPDATA%\Android\Sdk`
 expansion — if the env var is empty, check whether the default path exists:
@@ -63,6 +64,7 @@ Print this verbatim (with the actual pass/fail per row):
 > ✓ / ✗  Android Skills
 > ○      scrcpy (optional)
 > ○      Holo (optional)
+> ○      gh / GitHub CLI (optional)
 > ```
 >
 > Legend: ✓ = installed · ✗ = missing · ○ = optional, not installed.
@@ -182,6 +184,26 @@ Replaces clicking around Android Studio for most debug work.
 (Rust install: https://rustup.rs)
 
 Verify it installed with `command -v holo` (Holo has no `--version` flag). Plug a device in and run `holo` for the TUI.
+
+### gh / GitHub CLI (optional)
+
+Only needed if you want to back your app up to GitHub via `/kit-save-to-github`.
+It creates your private repo and pushes for you.
+
+**macOS:**
+
+    brew install gh
+
+**Windows (Scoop):**
+
+    scoop install gh
+
+**Linux:**
+
+    sudo apt install gh   # or see https://github.com/cli/cli#installation
+
+After installing, run `gh auth login` once (browser sign-in). Verify with
+`gh --version`.
 
 ## Step 5 — Wrap up
 
