@@ -82,8 +82,13 @@ app/src/main/java/<base>/
 
 ## The `/kit-*` commands
 
-Slash commands live in `.claude/commands/` (and mirror to `.cursor/` / Antigravity workflows where
-ported). Tell the developer to type `/kit-` to discover them. Key ones:
+The same `/kit-*` commands ship for every supported agent — type `/kit-` to discover them:
+- **Claude Code** → `.claude/commands/`
+- **Antigravity** → `.agent/workflows/`
+- **Cursor** → `.cursor/commands/`
+- **OpenCode** → `.opencode/commands/`
+
+Key ones:
 
 - **`/kit-start-setup`** — the first command. Rename → onboarding → brand/theme → auth → paywall →
   analytics → build. Runs the setup commands inline.
