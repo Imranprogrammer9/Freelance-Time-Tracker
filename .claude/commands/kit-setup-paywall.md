@@ -143,11 +143,16 @@ Confirm what you wrote (config + the permission).
 
 ### Sub-step 2.6 — Products + billing: now or later?
 
-Three more pieces are needed before you can charge **real** users: (1) in-app
-products in Play Console, (2) connecting Play to RevenueCat via a service-account
-JSON, (3) offerings + paywall design in RevenueCat. None of this is needed to keep
-building — the paywall screen renders today (it just shows an "offerings empty"
-state on device, which is fine in development).
+A few pieces are needed before you can charge **real** users: a Play app + a
+billing-enabled build on a testing track, then in-app products, then the
+RevenueCat ↔ Play connection (service-account JSON), then offerings + paywall
+design. None of this is needed to keep building — the paywall screen renders
+today (it just shows an "offerings empty" state on device, which is fine in
+development).
+
+**Order matters:** Google Play **blocks product creation until a build that
+declares the BILLING permission is live on a track**. So the build comes
+*before* products — not after. (This is the #1 thing developers trip on.)
 
 Ask (AskUserQuestion):
 
@@ -176,27 +181,33 @@ Ask (AskUserQuestion):
 > The kit reminds you again in `/kit-upload-on-google-play` before you ship. Say
 > "got it" to continue.
 
-**If "Now"** — walk the three pieces one at a time, **STOP and wait** after each
-(same pacing rule as above). The full content for each is on the docs page
-(https://kit.shipkaro.dev/docs/paywall, sections "Before you charge real users"
-1–3); present it paced, not all at once:
+**If "Now"** — walk these pieces **in this exact order** (each unblocks the next),
+one at a time, **STOP and wait** after each (same pacing rule as above). Full
+content on the docs page (https://kit.shipkaro.dev/docs/paywall, "Before you
+charge real users"); present it paced, not all at once:
 
-1. **Products** — Play Console → Monetize → Products → Subscriptions / In-app
-   products → create + **activate** each tier → note each Product ID.
-2. **Service-account JSON** — Google Cloud Console → IAM & Admin → Service Accounts
-   → create → Keys → JSON; Play Console → Users and permissions → invite that
-   service-account email with *View financial data* + *Manage orders and
-   subscriptions*; RevenueCat → Apps → your Play Store app → upload the JSON.
-   **~36 h** to propagate. (Official guide:
+1. **Play Console account + app entry** — you need a Google Play developer account
+   (one-time $25) **and an app created** in Play Console. If you don't have both
+   yet, this is the blocker: create them first (https://play.google.com/console →
+   **Create app**). No account at all? Stop here — say so and we'll skip the rest
+   until you have one; the paywall still renders in dev meanwhile.
+2. **Signed build on a testing track** — run **`/kit-sign-release`**: it builds a
+   signed AAB (the BILLING permission is already in the manifest) and walks the
+   **internal testing** upload. *This is what unblocks product creation* and starts
+   the first-review clock. Open the **tester opt-in URL** on your test device after.
+3. **In-app products** *(now unblocked by step 2)* — Play Console → Monetize →
+   Products → Subscriptions / In-app products → create + **activate** each tier →
+   note each Product ID.
+4. **Service-account JSON → RevenueCat** (the actual Play ↔ RevenueCat connection)
+   — Google Cloud Console → IAM & Admin → Service Accounts → create → Keys → JSON;
+   Play Console → Users and permissions → invite that service-account email with
+   *View financial data* + *Manage orders and subscriptions*; RevenueCat → Apps →
+   your Play Store app → upload the JSON. **~36 h** to propagate. (Official guide:
    https://www.revenuecat.com/docs/platform-resources/google-platform-resources)
-3. **Offerings + paywall** — RevenueCat → Product catalog → Products (import each
+5. **Offerings + paywall** — RevenueCat → Product catalog → Products (import each
    Product ID, pick *Google Play*) → Offerings (`default`, attach products) →
-   Paywalls (+ New → pick offering → design → **Save + Publish**).
-4. **Get a build onto Play** — Google Play only serves products to a build that's
-   live on a testing track. Upload a signed AAB to an **internal testing track**
-   (run `/kit-upload-on-google-play`) and open the **tester opt-in URL** on your
-   test device. Until then the paywall shows "offerings empty" even with everything
-   above done.
+   Paywalls (+ New → pick offering → design → **Save + Publish**). Until a build is
+   on a track *and* this is done, the device paywall shows "offerings empty".
 
 The kit's `PaywallScreen` loads the published paywall automatically — no code
 changes when you tweak the design.

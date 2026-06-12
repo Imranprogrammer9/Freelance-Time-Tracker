@@ -283,6 +283,28 @@ tasks.register("refactorPackage") {
             if (updated != original) { f.writeText(updated); changed += f.relativeTo(rootDir).path }
         }
 
+        // 2.5 OAuth deep-link scheme — rename the Supabase auth-callback scheme to
+        // the app's slug (last segment of the applicationId) so it's unique per app
+        // and the dev never hand-edits AndroidManifest.xml + AppModules.kt. The scheme
+        // must be a valid URI scheme (ALPHA first, no underscores), so we strip those.
+        val newScheme = newAppId.substringAfterLast('.').replace("_", "")
+        val appModules = fileTree("src").matching { include("**/AppModules.kt") }.files.firstOrNull()
+        val oldScheme = appModules?.readText()
+            ?.let { Regex("scheme\\s*=\\s*\"([^\"]+)\"").find(it)?.groupValues?.get(1) }
+            ?: "shipkaro"
+        if (oldScheme != newScheme && newScheme.isNotBlank()) {
+            appModules?.let { f ->
+                if (f.replaceText("scheme = \"$oldScheme\"", "scheme = \"$newScheme\"")) {
+                    changed += f.relativeTo(rootDir).path
+                }
+            }
+            if (file("src/main/AndroidManifest.xml")
+                    .replaceText("android:scheme=\"$oldScheme\"", "android:scheme=\"$newScheme\"")
+            ) {
+                changed += "app/src/main/AndroidManifest.xml (OAuth scheme → $newScheme)"
+            }
+        }
+
         // 3. Kotlin sources — package + import declarations, plus any other
         // fully-qualified references (KDoc [links], qualified type names).
         if (updatePackage) {
@@ -326,7 +348,9 @@ tasks.register("refactorPackage") {
         println("  1. Sync Gradle (File → Sync Project with Gradle Files)")
         if (updatePackage) println("  2. Invalidate Caches / Restart in Android Studio")
         println("  3. Update google-services.json if Firebase is configured")
-        println("  4. Update the OAuth deeplink scheme/host in AndroidManifest.xml + KitConfig")
+        println("  4. OAuth deep-link scheme auto-renamed to '$newScheme://auth-callback'.")
+        println("     If you use Supabase Google sign-in, set this exact value as the")
+        println("     redirect URL in Supabase → Authentication → URL Configuration.")
         println("$line\n")
     }
 }

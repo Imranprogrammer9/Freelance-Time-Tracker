@@ -45,15 +45,12 @@ BOTH files to match before this sub-step is "done".
 
 ### Sub-step 4a.7 — Grab the debug SHA-1
 
-Tell the developer:
-
-> Next we need your app's **debug SHA-1 fingerprint**. It's a unique string
-> that identifies *this build of your app on this machine* — Google uses it
-> to confirm sign-in requests are really coming from your app and not a
-> copycat. I'll run a Gradle command to read it. Say "yes" when ready.
-
-**STOP and wait for the developer to say "yes" / "ready" / "go".** Do not run
-the command before then. When confirmed, run:
+The **debug SHA-1 fingerprint** uniquely identifies this build on this machine;
+Google uses it to confirm sign-in requests really come from your app. This is a
+**read-only** command and it's required to continue — **run it directly, don't
+ask permission first** (the "wait for yes" pacing rule is for decisions and
+provider walkthroughs, not a harmless fingerprint read). Tell the developer
+one line ("Reading your debug SHA-1…"), then run:
 
     ./gradlew signingReport 2>&1 | grep "SHA-1\|SHA1" | head -1
 
@@ -66,7 +63,7 @@ Show this verbatim. Then **STOP and wait** for "done":
 
 > **Android OAuth client** — what your phone/emulator uses for native sign-in
 > 1. Back in https://console.cloud.google.com (the same project as 4a.4).
-> 2. **APIs & Services → Credentials → + Create credentials → OAuth client ID**.
+> 2. Left sidebar → **Clients → + Create client** (under **Google Auth Platform**; the old **APIs & Services → Credentials → + Create credentials → OAuth client ID** path still works too).
 > 3. Application type: **Android**.
 > 4. Name: `Android (debug)`.
 > 5. Package name: paste your `applicationId` (e.g. `dev.shipkaro.kit` if you

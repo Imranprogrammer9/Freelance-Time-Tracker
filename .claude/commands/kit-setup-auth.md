@@ -151,22 +151,25 @@ coming:
 
 Show this verbatim. Then **STOP and wait** for "done":
 
-> **OAuth consent screen** (one-time per Google Cloud project)
+> **Set up the OAuth consent screen** (one-time per Google Cloud project).
+> Google recently renamed this to **Google Auth Platform** — same thing, new wizard.
 > 1. Open https://console.cloud.google.com — sign in with the same Google
 >    account that owns the Supabase project (easier later) or a separate
 >    Google Cloud account, either works.
 > 2. Top bar → project picker → **New Project** → name it (e.g. "NowKit
->    auth") → **Create**.
-> 3. Left sidebar → **APIs & Services → OAuth consent screen**.
-> 4. Pick **External** → **Create**.
-> 5. Fill the required fields:
->    - App name: your app's display name.
->    - User support email: your email.
->    - Developer contact email: your email.
-> 6. Click **Save and continue** through the next pages (no scopes / test
->    users needed for now). Submit back to dashboard.
+>    auth") → **Create**. Wait for it to finish, then make sure the new
+>    project is selected in the top bar.
+> 3. Left sidebar → **APIs & Services → OAuth consent screen** (it opens the
+>    **Google Auth Platform** page). If it says "Google Auth Platform not
+>    configured yet", click **Get started**.
+> 4. **App Information** → App name (your app's display name) + User support
+>    email → **Next**.
+> 5. **Audience** → pick **External** → **Next**. (This is the old "External"
+>    choice — it just lives inside the wizard now.)
+> 6. **Contact Information** → your email → **Next**.
+> 7. Agree to the policy → **Create**.
 >
-> Say "done" when the consent screen page reads **Testing** status.
+> Say "done" when the **Audience** page shows **Publishing status: Testing**.
 
 ### Sub-step 4a.4 — Create the Web OAuth client
 
@@ -174,7 +177,7 @@ Show this verbatim. Then **STOP and wait** for the Client ID + Secret:
 
 > **Web OAuth client** — what Supabase will use to talk to Google
 > 1. Still in https://console.cloud.google.com (your new project).
-> 2. **APIs & Services → Credentials → + Create credentials → OAuth client ID**.
+> 2. Left sidebar → **Clients → + Create client** (under **Google Auth Platform**; the old **APIs & Services → Credentials → + Create credentials → OAuth client ID** path still works too).
 > 3. Application type: **Web application**.
 > 4. Name: `Supabase Web` (anything — for your reference).
 > 5. **Authorized redirect URIs → + Add URI** → paste this exactly:
@@ -235,15 +238,12 @@ BOTH files to match before this sub-step is "done".
 
 ### Sub-step 4a.7 — Grab the debug SHA-1
 
-Tell the developer:
-
-> Next we need your app's **debug SHA-1 fingerprint**. It's a unique string
-> that identifies *this build of your app on this machine* — Google uses it
-> to confirm sign-in requests are really coming from your app and not a
-> copycat. I'll run a Gradle command to read it. Say "yes" when ready.
-
-**STOP and wait for the developer to say "yes" / "ready" / "go".** Do not run
-the command before then. When confirmed, run:
+The **debug SHA-1 fingerprint** uniquely identifies this build on this machine;
+Google uses it to confirm sign-in requests really come from your app. This is a
+**read-only** command and it's required to continue — **run it directly, don't
+ask permission first** (the "wait for yes" pacing rule is for decisions and
+provider walkthroughs, not a harmless fingerprint read). Tell the developer
+one line ("Reading your debug SHA-1…"), then run:
 
     ./gradlew signingReport 2>&1 | grep "SHA-1\|SHA1" | head -1
 
@@ -256,7 +256,7 @@ Show this verbatim. Then **STOP and wait** for "done":
 
 > **Android OAuth client** — what your phone/emulator uses for native sign-in
 > 1. Back in https://console.cloud.google.com (the same project as 4a.4).
-> 2. **APIs & Services → Credentials → + Create credentials → OAuth client ID**.
+> 2. Left sidebar → **Clients → + Create client** (under **Google Auth Platform**; the old **APIs & Services → Credentials → + Create credentials → OAuth client ID** path still works too).
 > 3. Application type: **Android**.
 > 4. Name: `Android (debug)`.
 > 5. Package name: paste your `applicationId` (e.g. `dev.shipkaro.kit` if you

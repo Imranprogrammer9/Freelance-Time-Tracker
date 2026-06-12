@@ -220,17 +220,19 @@ Show this verbatim, then AskUserQuestion ("Start these now" / "Later"):
 >
 > **Start them now, or later?**
 
-- **Start now** — walk the developer through it, in order:
-  1. **Products + service-account JSON** — run **`/kit-setup-paywall`** and take its
-     sub-step 2.6 **"Now"** path (create in-app products in Play Console + upload the
-     Google service-account JSON to RevenueCat). This starts the ~36 h clock.
-  2. **First build on internal testing** — run **`/kit-upload-on-google-play`** and
-     upload a build to the **internal testing** track. A rough, in-progress build is
-     fine here — internal testing is private; the point is to get the package live so
-     products load and the first review starts. Open the **tester opt-in URL** on the
-     test device afterwards.
-  3. Tell them to **keep building** their app's features; check back in ~36 h, then
-     test a real purchase. Full reference: https://kit.shipkaro.dev/docs/paywall
+- **Start now** — run **`/kit-setup-paywall`** and take its sub-step 2.6 **"Now"**
+  path. That walks the whole chain **in dependency order** (it's the one place that
+  gets the ordering right, so don't reorder it here):
+  1. Play Console account + **app entry** (the first blocker — needs the $25 account).
+  2. **Signed build on a testing track** via **`/kit-sign-release`** — this is what
+     *unblocks product creation* and starts the first-review clock.
+  3. **In-app products** (now unblocked) + activate.
+  4. **Service-account JSON → RevenueCat** — starts the ~36 h propagation clock.
+  5. **Offerings + paywall** in RevenueCat.
+
+  Then tell them to **keep building** their app's features while the clocks tick;
+  check back in ~36 h and test a real purchase. Full reference:
+  https://kit.shipkaro.dev/docs/paywall
 - **Later** — fine. Note the kit will walk all of this in
   `/kit-upload-on-google-play` before they ship, and they can start it anytime with
   `/kit-setup-paywall` → "Set up products + Play billing". Move on.
