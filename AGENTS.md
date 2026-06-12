@@ -12,6 +12,13 @@ Material 3). It's not a framework you import — it's a **real app the developer
 it, rename it, turn on the features they need with `/kit-*` commands, build their screens, and
 ship to Google Play.
 
+> **This is Android-only — NOT Kotlin Multiplatform / Compose Multiplatform.** It's a single
+> Android (`app`) module wired to Android-only SDKs (RevenueCat, Credential Manager, non-KMP
+> Room). It is **not** a drop-in base for a KMP project. If the developer's existing project is
+> KMP (or they assume it is), say so up front: the kit is Android-native; iOS/other targets would
+> be a separate future effort, not something this kit composes into. Don't try to make it
+> multiplatform.
+
 The developer is often a **non-coder / vibe-coder**: they describe what they want and approve;
 **you** write the code. Be concrete, edit files for them, and prefer the kit's commands over
 hand-wiring.
