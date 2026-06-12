@@ -89,11 +89,13 @@ app/src/main/java/<base>/
 
 ## The `/kit-*` commands
 
-The same `/kit-*` commands ship for every supported agent — type `/kit-` to discover them:
-- **Claude Code** → `.claude/commands/`
+The same `/kit-*` commands (and the kit's two skills, `aso-googleplay-listing` +
+`onboarding-questionnaire`) ship for every supported agent — type `/kit-` to discover them:
+- **Claude Code** → `.claude/commands/` + `.claude/skills/`
 - **Antigravity** → `.agent/workflows/`
 - **Cursor** → `.cursor/commands/`
 - **OpenCode** → `.opencode/commands/`
+- **Codex** → `.codex/skills/` (each command/skill is a `SKILL.md`)
 
 Key ones:
 
