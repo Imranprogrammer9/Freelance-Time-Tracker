@@ -1,0 +1,214 @@
+---
+description: Configure the RevenueCat paywall and subscriptions
+---
+
+You are running **`/kit-setup-paywall`** for NowKit. Goal: wire RevenueCat so the
+app can sell subscriptions.
+
+Audience: first-time mobile developers. Be brief; you make the edits.
+
+**Docs:** https://kit.shipkaro.dev/docs/paywall
+
+When a section below shows a block quoted with `>`, present that block to the
+developer **verbatim** — do not paraphrase or improvise. Prose outside those
+blocks is instructions for you, not the developer.
+
+## Step 0 — Detect existing state
+
+Before walking the full setup, check what's already configured:
+
+1. Read `KitConfig.kt` — note `PAYWALL_ENABLED`, `ENTITLEMENT_ID`, `PAYWALL_MODE`.
+2. Read `local.properties` (if it exists) — note whether
+   `revenuecat.android.api.key` is set + starts with `goog_`.
+
+Branch on the result:
+
+- **Fully configured** (`PAYWALL_ENABLED = true` AND key set AND entitlement
+  non-default) — Ask the user (wait for their answer):
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Reconfigure** — walk the full flow.
+  - **Change paywall mode only** — jump to sub-step 2.5.
+  - **Change API key only** — jump to sub-step 2.4.
+  - **Change entitlement only** — jump to sub-step 2.3 (re-prompt for ID + edit
+    `KitConfig.ENTITLEMENT_ID`).
+  - **Set up products + Play billing** — jump to sub-step 2.6 (the release-time
+    products / service-account JSON / offerings + paywall work). This is the
+    dashboard-only part that the kit can't detect from your code, so offer it
+    here for anyone coming back to finish it before release.
+- **Partially configured** — tell the developer which sub-steps you're
+  skipping (e.g. "API key already in local.properties — skipping 2.4") and
+  walk only the missing pieces.
+- **Nothing configured** (default state — `PAYWALL_ENABLED = true` but no key)
+  — walk the full flow below.
+
+## Step 1 — Does the app need a paywall?
+
+Ask the user (wait for their answer): does the app need a paywall, or is it
+free? If the app is free, set `PAYWALL_ENABLED = false` in
+`KitConfig.kt`, make sure the `com.android.vending.BILLING` permission in
+`app/src/main/AndroidManifest.xml` stays **commented out** (a free app shouldn't
+declare billing), and stop. The kit still builds; the paywall screen just is not
+wired into navigation.
+
+## Step 2 — Set up RevenueCat
+
+**Pacing rule for this step:** the developer is a non-coder switching between
+this terminal and the RevenueCat dashboard. Show **one sub-step at a time**,
+then **STOP and wait** for "done" / "next" before printing the next sub-step.
+Do NOT dump the full RevenueCat set-up in one message.
+
+### Sub-step 2.1 — Create the RevenueCat project
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **Create your RevenueCat project**
+> 1. Sign up at https://app.revenuecat.com.
+> 2. **Create a New project** (top-left project picker) → name it after your app.
+> 3. Choose **Native Android** in the the **Platform(s)** dropdown.
+> 4. Click **Create project** button.
+> 5. Click the **Go to dashboard** and DO NOT click the **Continue** button.
+> 3. Wait for the project dashboard to open.
+>
+> Say "done" when the dashboard is open.
+
+### Sub-step 2.2 — Add a Play Store app
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **Connect your Google Play app**
+> 1. In the left sidebar, click **Apps** (near the bottom, between *Lifecycle*
+>    and *Web*).
+> 2. Click the **New app configuration** card → pick **Google Play Store**.
+> 3. Fill the form:
+>    - **App name** — anything, e.g. `<your app name> (Play Store)`.
+>    - **Google Play package name** — your `applicationId` from
+>      `app/build.gradle.kts` (e.g. `dev.shipkaro.kit` if not renamed).
+> 4. **Leave the *Service Account Credentials JSON* upload empty for now** —
+>    we'll handle that in sub-step 2.6 (release-time only; not needed to ship
+>    the paywall UI).
+> 5. Click **Save changes**.
+>
+> Say "done" when the Play Store app appears under **Apps**.
+
+### Sub-step 2.3 — Create the entitlement
+
+Show this verbatim. Then **STOP and wait** for "done":
+
+> **Create the `premium` entitlement**
+> 1. Left sidebar → **Product catalog → Entitlements**.
+> 2. **+ New entitlement**.
+> 3. Identifier: `premium` (lowercase). Display name: anything.
+> 4. Save.
+>
+> Say "done" when the entitlement is saved.
+
+You'll write this identifier into `KitConfig.ENTITLEMENT_ID` in Step 3.
+Remember the exact value the developer typed (use `premium` unless they
+deliberately picked something else).
+
+### Sub-step 2.4 — Copy your Android API key
+
+Show this verbatim. Then **STOP and wait** for the value:
+
+> **Copy your Android API key**
+> 1. Left sidebar → **API keys**.
+> 2. Find the **Google / Android** key (starts with `goog_`).
+> 3. Click the copy icon → paste the value back here.
+
+When the developer pastes the key, write it into `local.properties`
+(git-ignored — never committed):
+
+    revenuecat.android.api.key=goog_YOUR_ANDROID_KEY
+
+Confirm what you wrote.
+
+### Sub-step 2.5 — Pick paywall enforcement
+
+Ask the user (wait for their answer):
+- **Soft (recommended)** — paywall is dismissible; the user can skip it and
+  use the free version of the app.
+- **Hard** — paywall blocks the app until the user purchases or restores.
+
+Set `KitConfig.PAYWALL_MODE` + `KitConfig.ENTITLEMENT_ID` (from 2.3) +
+`KitConfig.PAYWALL_ENABLED = true`.
+
+Also **uncomment the billing permission** in `app/src/main/AndroidManifest.xml`:
+
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+RevenueCat / Google Play Billing needs it for purchases, and Google Play Console
+won't let you create in-app products until an uploaded build declares it. (It's a
+normal permission — no runtime prompt.)
+
+Confirm what you wrote (config + the permission).
+
+### Sub-step 2.6 — Products + billing: now or later?
+
+Three more pieces are needed before you can charge **real** users: (1) in-app
+products in Play Console, (2) connecting Play to RevenueCat via a service-account
+JSON, (3) offerings + paywall design in RevenueCat. None of this is needed to keep
+building — the paywall screen renders today (it just shows an "offerings empty"
+state on device, which is fine in development).
+
+Ask the user (wait for their answer):
+
+- **Later (recommended)** — you only need this right before your first Play
+  release. Show the short summary block below, then continue.
+- **Now** — walk through all three pieces (only pick this if you already have a
+  Play Console developer account and want to set up billing today).
+
+**If "Later"** — show this verbatim, then continue (don't wait long):
+
+> **IMPORTANT before your first release.** 
+>
+> To charge real users in production, you have to connect the Google Play Console
+> with the RevenueCat. That needs to be done in both websites and can't be done
+> here by the AI agent.
+>
+> It's not urgent right now and can be skipped. It needs to be done before the 
+> app's first public release on Google Play.
+>
+> Follow this full step-by-step to connect Google Play with RevenueCat
+> **https://kit.shipkaro.dev/docs/paywall**
+>
+> Note that the integration between Google Play and RevenueCat takes around
+> **36 hours** to propagte.
+>
+> The kit reminds you again in `/kit-upload-on-google-play` before you ship. Say
+> "got it" to continue.
+
+**If "Now"** — walk the three pieces one at a time, **STOP and wait** after each
+(same pacing rule as above). The full content for each is on the docs page
+(https://kit.shipkaro.dev/docs/paywall, sections "Before you charge real users"
+1–3); present it paced, not all at once:
+
+1. **Products** — Play Console → Monetize → Products → Subscriptions / In-app
+   products → create + **activate** each tier → note each Product ID.
+2. **Service-account JSON** — Google Cloud Console → IAM & Admin → Service Accounts
+   → create → Keys → JSON; Play Console → Users and permissions → invite that
+   service-account email with *View financial data* + *Manage orders and
+   subscriptions*; RevenueCat → Apps → your Play Store app → upload the JSON.
+   **~36 h** to propagate. (Official guide:
+   https://www.revenuecat.com/docs/platform-resources/google-platform-resources)
+3. **Offerings + paywall** — RevenueCat → Product catalog → Products (import each
+   Product ID, pick *Google Play*) → Offerings (`default`, attach products) →
+   Paywalls (+ New → pick offering → design → **Save + Publish**).
+4. **Get a build onto Play** — Google Play only serves products to a build that's
+   live on a testing track. Upload a signed AAB to an **internal testing track**
+   (run `/kit-upload-on-google-play`) and open the **tester opt-in URL** on your
+   test device. Until then the paywall shows "offerings empty" even with everything
+   above done.
+
+The kit's `PaywallScreen` loads the published paywall automatically — no code
+changes when you tweak the design.
+
+## Step 3 — Verify
+
+**Skip this step if you are running as part of `/kit-start-setup`** — it
+builds once at the end. If this command was run on its own, run
+`./gradlew :app:compileDebugKotlin`.
+
+Tell the developer real purchases can only be tested with a signed build on a
+Play Console test track (and after sub-step 2.6 is complete) — the paywall
+screen renders now, but real billing won't credit entitlements until the
+Service Account JSON is uploaded. Report what was set.
