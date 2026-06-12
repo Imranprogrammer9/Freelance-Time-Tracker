@@ -106,8 +106,8 @@ Key ones:
   `/kit-setup-analytics`, `/kit-setup-ai`, `/kit-setup-updates`, `/kit-setup-review-dialog`
 - **Run:** `/kit-compile-app`, `/kit-run-app`, `/kit-env-check`
 - **Release:** `/kit-generate-legal`, `/kit-generate-aso`, `/kit-generate-screenshots`,
-  `/kit-generate-landing`, `/kit-plan-release-analytics`, `/kit-upload-on-google-play`,
-  `/kit-save-to-github`, `/kit-translate`
+  `/kit-generate-landing`, `/kit-plan-release-analytics`, `/kit-sign-release`,
+  `/kit-upload-on-google-play`, `/kit-save-to-github`, `/kit-translate`
 
 Full reference: https://kit.shipkaro.dev/docs/commands
 
