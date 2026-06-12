@@ -154,6 +154,14 @@ development).
 declares the BILLING permission is live on a track**. So the build comes
 *before* products — not after. (This is the #1 thing developers trip on.)
 
+**If running as part of `/kit-start-setup`: do NOT ask "now or later" here.** Just
+confirm the config is set, show the short "before your first release" note below
+(the **"Later"** block), and continue. The now/later decision belongs to
+`/kit-start-setup` **Step 8**, which runs *after the first build is on the
+device* — that's the natural point to start the slow billing clocks, not here
+before the app has ever run. Only run the question below when `/kit-setup-paywall`
+is invoked **standalone**.
+
 Ask (AskUserQuestion):
 
 - **Later (recommended)** — you only need this right before your first Play
