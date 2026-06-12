@@ -69,17 +69,25 @@ android {
         localeFilters += setOf("en")
     }
 
-    // Release signing — reads from RELEASE_* env vars (set in CI). When they're absent
-    // (local dev, the kit out of the box) no release signingConfig is created, so
-    // `bundleRelease` produces an unsigned artifact instead of failing the build.
-    val releaseStoreFile: String? = System.getenv("RELEASE_STORE_FILE")
+    // Release signing — reads RELEASE_* env vars (CI) first, then falls back to
+    // release.* keys in local.properties (git-ignored; written by /kit-sign-release).
+    // When neither is present (the kit out of the box) no release signingConfig is
+    // created, so `bundleRelease` produces an unsigned artifact instead of failing.
+    val releaseStoreFile: String? =
+        System.getenv("RELEASE_STORE_FILE") ?: localProps.getProperty("release.store.file")
+    val releaseStorePassword: String? =
+        System.getenv("RELEASE_STORE_PASSWORD") ?: localProps.getProperty("release.store.password")
+    val releaseKeyAlias: String? =
+        System.getenv("RELEASE_KEY_ALIAS") ?: localProps.getProperty("release.key.alias")
+    val releaseKeyPassword: String? =
+        System.getenv("RELEASE_KEY_PASSWORD") ?: localProps.getProperty("release.key.password")
     signingConfigs {
         if (releaseStoreFile != null) {
             create("release") {
                 storeFile = rootProject.file(releaseStoreFile)
-                storePassword = System.getenv("RELEASE_STORE_PASSWORD")
-                keyAlias = System.getenv("RELEASE_KEY_ALIAS")
-                keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
             }
         }
     }
