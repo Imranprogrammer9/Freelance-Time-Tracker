@@ -259,7 +259,9 @@ Keep the wrap-up **short** — a vibe coder shouldn't have to scroll. Three part
    Brand & theme / Auth / Paywall / Analytics / Build), Result column with the
    concrete value. End with a one-line **Skipped:** note.
 2. **Next moves** — at most 3 short lines (e.g. build your first screen with
-   `/kit-design-app`; before release run `/kit-upload-on-google-play`).
+   `/kit-design-app`; before release run `/kit-upload-on-google-play`). Include
+   one line: "Run the app yourself anytime — no AI agent needed — with the
+   commands saved in **`RUN.md`**" (Step 7's run wrote it).
 3. The compact optional-commands list below, verbatim.
 
 > **Run these later when you need them** (type `/kit-` to see all):

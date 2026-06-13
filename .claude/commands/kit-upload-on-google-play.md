@@ -43,7 +43,7 @@ First-version path tasks (verbatim):
 - G — Data Safety, Privacy policy + Landing page
 - H — Plan release analytics
 - I — Create Play Console app
-- J — Build signed AAB
+- J — Set version, changelog, build signed AAB
 - K — Manual upload
 
 Update path tasks (verbatim):
@@ -369,9 +369,29 @@ present verbatim:
 
 Wait for the developer to confirm the app exists in Play Console.
 
-## J. Build the signed AAB
+## J. Set version, write changelog, build the signed AAB
 
-Run from the project root:
+**J.1 — Bump the version (do this BEFORE building).** Every build you upload to
+Play needs a **unique, higher `versionCode`** — Play rejects a duplicate, which is
+the #1 reason "my upload won't go through". In `app/build.gradle.kts`
+`defaultConfig`:
+
+    versionCode = N
+    versionName = "X.Y.Z"
+
+- **Very first upload ever:** `versionCode = 1` is fine, leave it.
+- **Any re-upload** (you already pushed a build to *any* track, including internal
+  testing): **increment `versionCode` by 1** and ask the developer for the next
+  `versionName` (semver — `0.1.1` patch, `0.2.0` minor).
+- When unsure, bump — a higher versionCode is always safe; a duplicate is always
+  rejected. Edit both lines and confirm what you wrote.
+
+**J.2 — Generate the "What's new" changelog.** Run **`/kit-generate-changelog`**
+inline — it writes `playstore/changelogs/<versionCode>.txt` from git history since
+the last release. If the developer says skip, write a one-line file yourself
+(`Initial release.` or `Bug fixes and improvements.`).
+
+**J.3 — Build.** From the project root:
 
     ./gradlew bundleRelease
 
@@ -397,7 +417,8 @@ Show this:
 > 4. Upload the PNGs from
 >    `playstore/screenshots/` to the
 >    **Phone screenshots** section.
-> 5. Add release notes (a few short bullets of what's in this version).
+> 5. Paste the release notes from `playstore/changelogs/<versionCode>.txt`
+>    (from J.2) into the **Release notes** field.
 > 6. **Save → Review release → Start rollout to Internal testing**.
 >
 > Once you've smoke-tested it, promote to Production from the same screen.
@@ -431,7 +452,8 @@ Open `app/build.gradle.kts`. In `defaultConfig` find:
 
 Ask the developer for the next `versionName` (semver — e.g. `0.2.0` for a minor
 feature release, `0.1.1` for a patch). Increment `versionCode` by **1** from
-its current value. Update both lines.
+its current value. Update both lines — this is **mandatory**: Play rejects any
+upload whose `versionCode` matches one already uploaded to any track.
 
 ## C. Update RemoteAppConfig (if wired)
 
@@ -453,12 +475,12 @@ Show this:
 
 ## D. Release notes
 
-Ask the developer for 3–5 short bullet points of what changed. Write them to:
-
-    playstore/changelogs/<versionCode>.txt
-
-where `<versionCode>` is the new value from step B. Plain text, one bullet per
-line (no Markdown), max 500 chars total (Play's limit).
+Run **`/kit-generate-changelog`** inline — it writes
+`playstore/changelogs/<versionCode>.txt` (`<versionCode>` = the new value from
+step B) from git history since the last release, translated into user-facing
+bullets (plain text, ≤ 500 chars — Play's limit). Review with the developer and
+let them edit. If they'd rather write it by hand, take 3–5 short plain-text
+bullets and write the same file yourself.
 
 ## E. Screenshots (if UI changed)
 

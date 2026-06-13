@@ -45,3 +45,46 @@ Run:
 
 Or tell the developer to tap the app icon on the device. Report success or
 failure in one line.
+
+## Step 4 — Save the run commands (so they work without an AI agent)
+
+Vibe coders sometimes hit their AI quota and then can't run the app at all. After
+a **successful** launch, make sure a **`RUN.md`** exists at the project root with
+the plain commands they can paste into any terminal themselves.
+
+If `RUN.md` already exists, skip silently. If it doesn't, read the live
+`applicationId` from `app/build.gradle.kts` (don't hardcode `dev.shipkaro.kit` —
+the dev may have renamed), then write `RUN.md` with that value substituted for
+`<APPLICATION_ID>`:
+
+```markdown
+# Run this app from your terminal
+
+Build, install, and launch the app on a connected device — **no AI agent needed**.
+Run everything from the project root.
+
+## 1. Connect a device
+    adb devices
+- Need at least one device/emulator listed.
+- Real phone: enable **Developer options → USB debugging**, plug in via USB, accept the prompt.
+- Emulator: start one from Android Studio → Device Manager.
+
+## 2. Build + install (debug)
+    ./gradlew :app:installDebug
+
+## 3. Launch
+    adb shell monkey -p <APPLICATION_ID> -c android.intent.category.LAUNCHER 1
+(or just tap the app icon on the device)
+
+## Other handy commands
+    ./gradlew :app:assembleDebug       # build the debug APK without installing
+    ./gradlew :app:compileDebugKotlin  # fast compile-check only
+    ./gradlew bundleRelease            # signed release AAB (needs your keystore set up)
+    adb uninstall <APPLICATION_ID>     # remove the app from the device
+```
+
+Then tell the developer, briefly:
+
+> **Saved your run commands to `RUN.md`.** If your AI agent ever runs out, open
+> `RUN.md` and paste those into your terminal from the project root — that's all
+> you need to build, install, and launch the app yourself. Bookmark it.

@@ -39,7 +39,8 @@ Open `app/build.gradle.kts`. In `defaultConfig` find:
 
 Ask the developer for the next `versionName` (semver — e.g. `0.2.0` for a minor
 feature release, `0.1.1` for a patch). Increment `versionCode` by **1** from
-its current value. Update both lines.
+its current value. Update both lines — this is **mandatory**: Play rejects any
+upload whose `versionCode` matches one already uploaded to any track.
 
 ## C. Update RemoteAppConfig (if wired)
 
@@ -61,12 +62,12 @@ Show this:
 
 ## D. Release notes
 
-Ask the developer for 3–5 short bullet points of what changed. Write them to:
-
-    playstore/changelogs/<versionCode>.txt
-
-where `<versionCode>` is the new value from step B. Plain text, one bullet per
-line (no Markdown), max 500 chars total (Play's limit).
+Run **`/kit-generate-changelog`** inline — it writes
+`playstore/changelogs/<versionCode>.txt` (`<versionCode>` = the new value from
+step B) from git history since the last release, translated into user-facing
+bullets (plain text, ≤ 500 chars — Play's limit). Review with the developer and
+let them edit. If they'd rather write it by hand, take 3–5 short plain-text
+bullets and write the same file yourself.
 
 ## E. Screenshots (if UI changed)
 
