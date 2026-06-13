@@ -154,13 +154,16 @@ development).
 declares the BILLING permission is live on a track**. So the build comes
 *before* products — not after. (This is the #1 thing developers trip on.)
 
-**If running as part of `/kit-start-setup`: do NOT ask "now or later" here.** Just
-confirm the config is set, show the short "before your first release" note below
-(the **"Later"** block), and continue. The now/later decision belongs to
-`/kit-start-setup` **Step 8**, which runs *after the first build is on the
-device* — that's the natural point to start the slow billing clocks, not here
-before the app has ever run. Only run the question below when `/kit-setup-paywall`
-is invoked **standalone**.
+**If running as part of `/kit-start-setup`: skip ALL of the now/later content
+below** — don't ask the question, and don't show the "before your first release"
+block. It only confuses a vibe coder this early and tempts them to run
+`/kit-upload-on-google-play` prematurely. Instead, just confirm the paywall config
+is set and add **one neutral line** — e.g. "Real Play billing gets set up later;
+the kit asks you about it after your first build runs." — then continue to the
+next sub-step. Don't name release/upload commands here. The full now/later decision
++ instructions live in `/kit-start-setup` **Step 8**, after the first build is on
+the device. Only run the question + blocks below when `/kit-setup-paywall` is
+invoked **standalone**.
 
 Ask (AskUserQuestion):
 
