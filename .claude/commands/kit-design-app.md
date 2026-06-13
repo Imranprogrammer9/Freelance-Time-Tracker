@@ -101,28 +101,13 @@ anything. Loop until they approve.
 Also ask: **which of these is the start screen** (the post-Paywall entry,
 replacing the current `HomeScreen` placeholder)?
 
-## 1B.5 — Onboarding style
-
-After the screen list is locked, ask (AskUserQuestion) what onboarding the app
-should ship with:
-
-- **Simple 3-page intro** — keep the kit's default `OnboardingScreen` pager
-  with the 3 page titles + descriptions the developer set in
-  `/kit-start-setup` Step 2. Best for utility apps where users want to jump
-  straight into the feature.
-- **Personalised questionnaire (Calm / Headspace style)** — invoke the
-  `onboarding-questionnaire` skill shipped with the kit to build a
-  multi-screen flow that asks the user goal-based questions and personalises
-  the app from their answers. Best for habit / health / journaling /
-  coaching apps where personalisation drives retention.
-
-If they pick **simple**, do nothing — the default `OnboardingScreen` stays.
-
-If they pick **questionnaire**, invoke the `onboarding-questionnaire` skill
-**before** generating the other screens in 1C (the skill writes its own
-onboarding screens + Route entries + DataStore additions; later screens may
-want to read those preferences). Let the skill drive its own approval loop;
-when it returns, continue with 1C for the rest of the app.
+**Onboarding is NOT part of this command — do not ask about it here.**
+`/kit-design-app` is about the app's *own* screens; stay focused on those and go
+straight to generating them. The kit already ships a default 3-page
+`OnboardingScreen`, and a personalised Calm/Headspace-style questionnaire is a
+**separate** step the developer runs when they want it, via
+**`/kit-design-onboarding`**. Don't branch the screen-design flow into onboarding;
+at most mention `/kit-design-onboarding` once in the final wrap-up.
 
 ## 1C — Generate the screens
 
