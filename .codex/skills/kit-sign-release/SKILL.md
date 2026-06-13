@@ -154,17 +154,29 @@ won't unlock product creation later.
 
 ## Step 4 — Create the Play Console app (if not done)
 
-Manual web step — present verbatim and wait:
+Manual web step. **First read the `applicationId`** from `app/build.gradle.kts`
+(the `applicationId = "…"` line in `defaultConfig`) and substitute its real value
+into the **Package name** line below — the developer won't remember it. Then
+present the block verbatim and wait:
 
 > **Create your app in Play Console** (skip if it already exists):
-> 1. Open https://play.google.com/console (one-time $25 developer account if you
->    haven't paid it).
-> 2. Click **Create app**.
-> 3. Enter app name, default language, **Free / Paid**, accept the declarations,
->    **Create app**.
+> 1. Open https://play.google.com/console → **Create app** (pay the one-time $25
+>    developer fee first if you haven't).
+> 2. **App name** — your app's public name (max 30 chars; you can change it later).
+> 3. **Package name** — paste exactly: `<APPLICATION_ID>`
+>    This is your app's package from `app/build.gradle.kts`. It must match your
+>    build exactly or Play rejects the upload, and it's **permanent** once the app
+>    is created — don't typo it. Click **Check availability**.
+> 4. **Default language** — your main locale (e.g. English (US)).
+> 5. **App or game** — **App**.
+> 6. **Free or paid** — pick **Free** if you sell subscriptions / in-app purchases
+>    (the download is free; you charge through in-app billing). Pick **Paid** only
+>    if users pay an upfront price to install. You **can't switch Free → Paid after
+>    publishing**, so choose deliberately.
+> 7. Tick the declarations → **Create app**.
 >
-> You don't need to finish the whole "Set up your app" checklist yet — just
-> getting the app shell created is enough to upload a testing build.
+> You don't need the whole "Set up your app" checklist yet — the app shell is
+> enough to upload a testing build.
 
 Wait for "done".
 

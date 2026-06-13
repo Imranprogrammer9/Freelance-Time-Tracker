@@ -80,14 +80,25 @@ and continue.
 
 ## I. Create the Play Console app
 
-Manual web step:
+Manual web step. **First read the `applicationId`** from `app/build.gradle.kts`
+(the `applicationId = "…"` line in `defaultConfig`) and substitute its real value
+into the **Package name** line below — the developer won't remember it. Then
+present verbatim:
 
 > **Create your app in Play Console:**
-> 1. Open https://play.google.com/console.
-> 2. Click **Create app**.
-> 3. Enter app name, default language, **Free / Paid**, accept the
->    declarations.
-> 4. Complete the **Set up your app** checklist (target audience, ads, content
+> 1. Open https://play.google.com/console → **Create app**.
+> 2. **App name** — your app's public name (max 30 chars; changeable later).
+> 3. **Package name** — paste exactly: `<APPLICATION_ID>`
+>    This is your app's package from `app/build.gradle.kts`. It must match your
+>    build or Play rejects the upload, and it's **permanent** once the app is
+>    created. Click **Check availability**.
+> 4. **Default language** — your main locale (e.g. English (US)).
+> 5. **App or game** — **App**.
+> 6. **Free or paid** — **Free** if you sell subscriptions / in-app purchases (the
+>    download is free; you charge via billing); **Paid** only if users pay upfront
+>    to install. You can't switch **Free → Paid** after publishing.
+> 7. Tick the declarations → **Create app**.
+> 8. Complete the **Set up your app** checklist (target audience, ads, content
 >    rating, government apps if relevant, news app if relevant, COVID-19
 >    contact-tracing if relevant).
 

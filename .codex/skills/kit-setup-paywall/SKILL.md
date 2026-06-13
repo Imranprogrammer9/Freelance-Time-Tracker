@@ -199,10 +199,24 @@ content on the docs page (https://kit.shipkaro.dev/docs/paywall, "Before you
 charge real users"); present it paced, not all at once:
 
 1. **Play Console account + app entry** — you need a Google Play developer account
-   (one-time $25) **and an app created** in Play Console. If you don't have both
-   yet, this is the blocker: create them first (https://play.google.com/console →
-   **Create app**). No account at all? Stop here — say so and we'll skip the rest
-   until you have one; the paywall still renders in dev meanwhile.
+   (one-time $25). No account at all? Stop here — say so and we'll skip the rest
+   until you have one; the paywall still renders in dev meanwhile. If you have an
+   account but no app yet, create the app entry now. **First read the
+   `applicationId`** from `app/build.gradle.kts` and substitute it into the
+   **Package name** line, then show this verbatim:
+
+   > **Create your app in Play Console:**
+   > 1. Open https://play.google.com/console → **Create app**.
+   > 2. **App name** — your app's public name (max 30 chars; changeable later).
+   > 3. **Package name** — paste exactly: `<APPLICATION_ID>` (your package from
+   >    `app/build.gradle.kts`; it must match your build, and it's **permanent**
+   >    once created — don't typo it). Click **Check availability**.
+   > 4. **Default language** — your main locale (e.g. English (US)).
+   > 5. **App or game** — **App**.
+   > 6. **Free or paid** — pick **Free** (you sell subscriptions / in-app purchases,
+   >    so the app download is free and you charge via billing; you **can't switch
+   >    Free → Paid after publishing**).
+   > 7. Tick the declarations → **Create app**.
 2. **Signed build on a testing track** — run **`/kit-sign-release`**: it builds a
    signed AAB (the BILLING permission is already in the manifest) and walks the
    **internal testing** upload. *This is what unblocks product creation* and starts
