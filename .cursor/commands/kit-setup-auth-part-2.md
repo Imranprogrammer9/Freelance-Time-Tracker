@@ -76,9 +76,9 @@ Show this verbatim. Then **STOP and wait** for "done":
 
 Before a Play release the app also needs a **second** Android OAuth client
 with the **release** SHA-1 added the same way — from your release keystore,
-or (if you use Play App Signing) from Play Console: search `app signing` in the
-top search bar, or Test and release → App integrity → App signing. Mention this
-as a release-time task only — do NOT walk through it now.
+or (if you use Play App Signing) from Play Console: **Protected with Play → Play
+Store protection → Manage Play app signing** (or search `app signing` in the top
+search bar). Mention this as a release-time task only — do NOT walk through it now.
 
 More detail + screenshots: https://kit.shipkaro.dev/docs/auth/supabase
 

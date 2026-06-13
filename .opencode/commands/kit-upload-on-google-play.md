@@ -172,16 +172,15 @@ and continue. They'll come back to D.2A after K.
 Show this verbatim. **STOP and wait** for the SHA-1 value:
 
 > Get your **release SHA-1** from Play Console:
-> 1. **Fastest:** use the Play Console **search bar** (top of the page) → type
->    `app signing` → open the result. (Google moves this page around; search is
->    nav-proof.) Otherwise navigate: left sidebar → expand **Test and release** →
->    **App integrity** → **App signing** tab.
-> 2. Under **App signing key certificate**, copy the **SHA-1** value.
+> 1. Left sidebar → **Protected with Play** → scroll to **Play Store protection**
+>    → **Protect app signing key** row → click **Manage Play app signing**. (If
+>    Google has moved it, the top **search bar** → `app signing` is nav-proof.)
+> 2. On that page, under **App signing key certificate**, copy the **SHA-1** value.
 > 3. Paste it back here.
 >
 > Don't see it? The page only appears once a build with **Play App Signing** is on
 > a track — your internal-testing upload covers that, so give it a minute after
-> the upload finishes, then search again.
+> the upload finishes, then try again.
 
 Continue to D.3.
 
