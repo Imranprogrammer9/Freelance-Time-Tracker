@@ -224,19 +224,35 @@ Step 1's active-SDK list (don't blow away the template at `legal/play-data-safet
 
 ## Data types collected
 
-<Render each Play category, with which SDK collects it and whether it's
-required vs optional. E.g.:>
+For **each** active Play category, the form asks two per-type questions that
+commonly confuse people. Here's how to answer them for this kit:
+
+- **Is this data processed ephemerally?** → **No** for essentially everything
+  this kit collects. "Ephemeral" means used only in memory for a single live
+  request and never stored. This kit *stores* its data — auth in Supabase /
+  Firebase, events in PostHog / Firebase Analytics, local data in Room /
+  DataStore — so it is **not** ephemeral. Only answer **Yes** for a data type you
+  read, use once in-flight, and never persist (rare here).
+- **Is this data required, or can users choose?** → pick **"Data collection is
+  required"** when the user can't turn it off (e.g. account email while auth is
+  on — they must sign in to use the app). Pick **"Users can choose whether this
+  data is collected"** only if your app exposes a real in-app opt-out for it.
+
+<Render each Play category below — only ones with an active source. Fill the
+two lines above per type.>
 
 ### Personal info → Email address
 - Collected: Yes
-- Required: <Yes if AUTH_ENABLED, else No>
+- Processed ephemerally: No (stored by your auth backend)
+- Required: Data collection is required  <include this type only if AUTH_ENABLED; the user must sign in>
 - Shared: No
 - Purpose: Account management, Authentication
 - Source: Supabase Auth / Firebase Auth / Google Sign-In
 
 ### App activity → App interactions
 - Collected: <Yes/No based on ANALYTICS_ENABLED>
-- Required: No (user can opt out via Settings → Privacy)
+- Processed ephemerally: No (events sent to + stored by your analytics provider)
+- Required: <"Users can choose whether this data is collected" if the app has an analytics opt-out toggle, else "Data collection is required">
 - Shared: No
 - Purpose: Analytics
 - Source: PostHog, Firebase Analytics
