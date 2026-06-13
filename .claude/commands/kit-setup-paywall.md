@@ -220,19 +220,58 @@ charge real users"); present it paced, not all at once:
    signed AAB (the BILLING permission is already in the manifest) and walks the
    **internal testing** upload. *This is what unblocks product creation* and starts
    the first-review clock. Open the **tester opt-in URL** on your test device after.
-3. **In-app products** *(now unblocked by step 2)* — Play Console → Monetize →
-   Products → Subscriptions / In-app products → create + **activate** each tier →
-   note each Product ID.
+3. **In-app products** *(now unblocked by step 2)* — the fiddly part: Google Play
+   nests subscriptions as **Subscription → Base plan**, and you must activate
+   *both*. **STOP and wait** while the developer creates + activates each one.
+
+   **For subscriptions** (recurring — most apps), show this verbatim:
+   > **Create a subscription in Play Console:**
+   > 1. Play Console → your app → **Monetize → Products → Subscriptions → Create
+   >    subscription**.
+   > 2. **Product ID** — the permanent identifier you'll paste into RevenueCat,
+   >    e.g. `premium_monthly` or `pro_yearly` (lowercase, digits, underscores).
+   >    **Can't be changed or reused once created** — pick carefully.
+   > 3. **Name** — internal only; users never see it (your paywall text comes from
+   >    RevenueCat, not from here).
+   > 4. Create it, then **add a base plan** (a subscription needs at least one):
+   >    - **Base plan ID** — e.g. `monthly` / `yearly` (permanent; lowercase +
+   >      hyphens).
+   >    - **Type** — pick **Auto-renewing** (the normal subscription; *Prepaid* and
+   >      *Installments* are special cases — skip them).
+   >    - **Billing period** — e.g. Monthly or Yearly.
+   >    - **Price** — set it for your markets.
+   > 5. **Activate BOTH the base plan AND the subscription.** An inactive
+   >    subscription, or one with no active base plan, silently won't load — a very
+   >    common "offerings empty" cause.
+   > 6. Repeat for each tier. **Note every Product ID** — you'll import them into
+   >    RevenueCat in piece 5.
+
+   **For one-time unlocks** (non-recurring) use **In-app products** instead —
+   simpler: an ID + price, then **Activate**. Note each Product ID.
 4. **Service-account JSON → RevenueCat** (the actual Play ↔ RevenueCat connection)
    — Google Cloud Console → IAM & Admin → Service Accounts → create → Keys → JSON;
    Play Console → Users and permissions → invite that service-account email with
    *View financial data* + *Manage orders and subscriptions*; RevenueCat → Apps →
    your Play Store app → upload the JSON. **~36 h** to propagate. (Official guide:
    https://www.revenuecat.com/docs/platform-resources/google-platform-resources)
-5. **Offerings + paywall** — RevenueCat → Product catalog → Products (import each
-   Product ID, pick *Google Play*) → Offerings (`default`, attach products) →
-   Paywalls (+ New → pick offering → design → **Save + Publish**). Until a build is
-   on a track *and* this is done, the device paywall shows "offerings empty".
+5. **RevenueCat: products → entitlement → offering → paywall** — the mapping that
+   actually makes a purchase unlock the app. The **entitlement attach** (step 2) is
+   the most-missed step. Show this verbatim:
+   > 1. **Import products** — RevenueCat → **Product catalog → Products → + New** →
+   >    pick your **Google Play** app → paste each **Product ID** from Play. For a
+   >    subscription, RevenueCat pulls its base plans in automatically.
+   > 2. **Attach to the `premium` entitlement** — Product catalog → **Entitlements →
+   >    premium → Attach products** → add each product. *This is what flips the user
+   >    to premium* — the kit unlocks on the `premium` entitlement
+   >    (`KitConfig.ENTITLEMENT_ID`). Skip this and purchases succeed but **nothing
+   >    unlocks**.
+   > 3. **Offering** — Product catalog → **Offerings** → use `default` (or create
+   >    one) → add your products as packages.
+   > 4. **Paywall** — **Paywalls → + New** → pick the offering → design → **Save +
+   >    Publish**. The kit's `PaywallScreen` renders this automatically.
+
+   Until a build is on a track *and* all of the above is done, the device paywall
+   shows "offerings empty".
 
 The kit's `PaywallScreen` loads the published paywall automatically — no code
 changes when you tweak the design.
