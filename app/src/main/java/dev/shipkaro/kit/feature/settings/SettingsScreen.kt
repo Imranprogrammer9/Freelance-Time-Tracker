@@ -156,13 +156,20 @@ fun SettingsScreen(
                     chipColor = KitTheme.colors.warning,
                     onClick = { PlayStoreLauncher.openListing(context) },
                 )
-                SettingsDivider()
-                NavRow(
-                    title = stringResource(R.string.settings_oss_licenses),
-                    leading = KitTheme.icons.info,
-                    chipColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = onOssLicenses,
-                )
+                // TEMPORARILY HIDDEN — the OSS licenses screen (AboutLibraries
+                // `LibrariesContainer`) crashes with NoSuchMethodError on FlowRow:
+                // aboutlibraries-compose-m3 11.6.2 is built against Compose foundation
+                // 1.7, but the kit runs foundation 1.8.2 (Compose BOM 2025.06.00) and the
+                // FlowRow(...FlowRowOverflow...) overload changed signature. Re-enable this
+                // row once AboutLibraries is bumped to a Compose-1.8-compatible version.
+                // The screen, Route.OssLicenses, and onOssLicenses wiring are all kept.
+                // SettingsDivider()
+                // NavRow(
+                //     title = stringResource(R.string.settings_oss_licenses),
+                //     leading = KitTheme.icons.info,
+                //     chipColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                //     onClick = onOssLicenses,
+                // )
             }
 
             if (KitConfig.AUTH_ENABLED) {
