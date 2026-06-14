@@ -79,11 +79,34 @@ Ask (AskUserQuestion):
 
 When the source is an image or a reference URL, **call out the key UI patterns
 you see** (e.g. "a big circular progress ring", "color-coded cards", "a bottom
-sheet for adding") and confirm with the developer before you build — so the
-generated screens match the vibe they picked.
+sheet for adding") and confirm with the developer before you build. In
+**Reproduce** mode (1A.5) treat what you see as the **spec to match**, not just a
+vibe.
 
 If the developer already ran `/kit-start-setup` and answered the "what is your
 app about" question, reuse that for context when you're proposing screens.
+
+## 1A.5 — Reproduce or adapt?
+
+This sets how faithful the build is to the source — and it changes how **every**
+screen is generated in 1C, so decide it now.
+
+Ask (AskUserQuestion) **only when the source is a concrete design** (Stitch,
+Figma, or screenshots/mockups). For **Text descriptions** or **From scratch**
+there is nothing to reproduce — skip the question and use **Adapt**.
+
+- **Reproduce my design exactly** — match the source's layout, component anatomy,
+  spacing, colors, and copy as closely as Compose allows. The kit's design system
+  becomes the **token source** (colors / spacing / type / icons), *not* a
+  component mandate: a `Kit*` component is used only where it already matches the
+  design; anything else is built from Compose primitives styled with `KitTheme`.
+  Pick this when the developer brought a real mockup they care about.
+- **Adapt to the kit's look** — rebuild with the kit's design system (Kit*
+  components, brand color flowing through) for a consistent, kit-native feel;
+  treat the source as layout + vibe reference. Faster, less faithful.
+
+Remember the choice. If the developer brought a detailed mockup and is unsure,
+default to **Reproduce**.
 
 ## 1B — Build the screen list
 
@@ -100,6 +123,14 @@ anything. Loop until they approve.
 
 Also ask: **which of these is the start screen** (the post-Paywall entry,
 replacing the current `HomeScreen` placeholder)?
+
+**Protect the signature screen.** Identify the app's single *defining* experience —
+the thing the app is fundamentally *for* (e.g. a full-screen capture overlay, the
+main canvas, the core interaction). It is **not** just another row in the list:
+never defer it to "later", simplify it away, or drop it from Phase 1. If the
+source implies a non-standard entry (an overlay, an immediate full-screen action),
+call that out and preserve that behavior. Confirm with the developer which screen
+this is.
 
 **Onboarding is NOT part of this command — do not ask about it here.**
 `/kit-design-app` is about the app's *own* screens; stay focused on those and go
@@ -120,10 +151,29 @@ For each approved screen, do all of this:
    package — do NOT hardcode `dev.shipkaro.kit` (the dev may have run
    `/kit-change-app-id`).
 
-2. **Style** — use the NowKit design system: `KitTheme.spacing.*`,
+2. **Style — branch on the 1A.5 mode:**
+
+   **Reproduce mode (faithful):** reproduce the *source's* design, not a kit
+   interpretation. Match its layout, **every element** (kickers, category dots,
+   tags, badges, counts, empty states), section order, spacing, type, colors, and
+   copy.
+   - The kit's design system is your **token source**: colors from `Color.kt` /
+     `KitTheme.colors`, spacing from `KitTheme.spacing`, icons from
+     `KitTheme.icons`. If the source needs a color the theme lacks (a specific
+     neutral, a category/semantic color), **add it** to `Color.kt` (or a
+     `KitColors` extension) — do not substitute the nearest kit default.
+   - Use a `Kit*` component **only when it already matches** the source element. If
+     the design's card / row / chip / field differs, build it from Compose
+     primitives (`Row`/`Column`/`Box`/`Surface`/`Text`) styled with theme tokens —
+     do NOT force `KitCard`/`KitListItem` and call it close enough.
+   - If the source is **HTML/CSS** (e.g. a Stitch export), read it for the exact
+     hex colors, spacing, font sizes, and DOM structure — that is the spec.
+
+   **Adapt mode:** use the kit design system directly — `KitTheme.spacing.*`,
    `KitTheme.icons.*`, `KitButton`, `KitCard`, `KitListItem`, `KitTextField`,
-   `KitBanner`, `KitDialog`, `KitBottomSheet`, `KitChip`, `Scaffold` +
-   `TopAppBar` for top-level chrome. Brand color flows from `Color.kt`.
+   `KitBanner`, `KitDialog`, `KitBottomSheet`, `KitChip`, `Scaffold` + `TopAppBar`
+   for top-level chrome. Brand color flows from `Color.kt`. Treat the source as
+   layout + vibe reference.
 
 3. **Dummy data** — hardcode a small in-file `private val sample…` of realistic
    placeholder data so the screen renders something useful when previewed.
@@ -155,6 +205,28 @@ For each approved screen, do all of this:
 
 Do every screen in one pass — do not stop between screens unless you hit a
 build error.
+
+## 1C.5 — Faithfulness pass (Reproduce mode only)
+
+Skip in Adapt mode. In Reproduce mode, before compiling, **diff each generated
+screen against its source and fix the gaps** — drift is invisible until it's on a
+device, and that costs a full Phase 1 redo.
+
+1. Put the source (the image, or the HTML/CSS) next to your generated screen.
+2. Check element by element:
+   - Is **every** element present? (kickers, category dots, due/overdue tags,
+     badges, counts, section headers, empty states.)
+   - Layout + section **order** match the source?
+   - Copy matches (not paraphrased)?
+   - Colors + spacing pulled from the right tokens (and any source-specific colors
+     added to the theme)?
+   - Nothing **invented** that isn't in the source (e.g. a "recently captured"
+     list), nothing **swapped** (e.g. a progress bar where the source had an
+     "N today" pill)?
+   - The **signature screen** (1B) reproduced in full, including any overlay /
+     full-screen entry behavior?
+3. List every deviation, then fix it. Only move on when the screen is a faithful
+   match — not a kit-flavored interpretation.
 
 ## 1D — Compile + show
 
