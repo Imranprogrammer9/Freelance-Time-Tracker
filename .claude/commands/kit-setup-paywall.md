@@ -284,45 +284,43 @@ charge real users"); present it paced, not all at once:
    concepts; get the chain right or the paywall stays empty / purchases don't
    unlock. Mental model: a **Product** is the SKU from Play; the **Entitlement**
    (`premium`) is the access flag your app checks; an **Offering** is the set of
-   **Packages** the paywall shows; a **Paywall** is the design. Walk each, **STOP
-   and wait** between. Show verbatim:
+   **Packages** the paywall shows; a **Paywall** is the design. **Walk 5A → 5D one
+   at a time, STOP and wait for "done"** after each — don't dump all four at once.
 
-   > **1. Import your Play products into RevenueCat**
-   > - **Product catalog → Products → + New**.
+   **5A — Import your Play products.** Show verbatim, then wait for "done":
+   > **RevenueCat → Product catalog → Products → + New:**
    > - Pick your **Google Play** app as the store.
    > - Paste a **Product ID** exactly as in Play Console (e.g. `premium_monthly`).
    >   For a subscription, RevenueCat reads its base plans in automatically — you
    >   may also pick the base plan (e.g. `monthly`) here.
    > - Repeat for every Product ID you created in piece 3.
-   >
-   > **2. Attach products to the `premium` entitlement** *(the most-missed step)*
-   > - **Product catalog → Entitlements → premium → Attach products**.
+
+   **5B — Attach products to the `premium` entitlement** *(the most-missed step)*.
+   Show verbatim, then wait for "done":
+   > **RevenueCat → Product catalog → Entitlements → premium → Attach products:**
    > - Add each product you just imported.
    > - This is the switch that flips a buyer to premium — the kit unlocks features
    >   on the `premium` entitlement (`KitConfig.ENTITLEMENT_ID`). Skip it and
    >   purchases go through but **nothing unlocks** in the app.
-   >
-   > **3. Build the `default` offering**
-   > - **Product catalog → Offerings** → use the existing `default` offering (or
-   >   **+ New offering**, identifier `default`) and make it **current**.
+
+   **5C — Build the `default` offering.** Show verbatim, then wait for "done":
+   > **RevenueCat → Product catalog → Offerings:**
+   > - Use the existing `default` offering (or **+ New offering**, identifier
+   >   `default`) and make it **current**.
    > - **+ Add package** for each tier → choose a package type (e.g. **Monthly**,
    >   **Annual**) → attach the matching product. The kit shows the **current**
    >   offering, so the one your app displays must be marked current/default.
-   >
-   > **4. Design + publish the paywall**
-   > - **Paywalls → + New** → select the `default` offering.
+
+   **5D — Design + publish the paywall.** Show verbatim, then wait for "done":
+   > **RevenueCat → Paywalls → + New:**
+   > - Select the `default` offering.
    > - Pick a **template**, set headline / features / button text (prices come from
    >   Play automatically). RevenueCat renders it natively in the app.
    > - **Save**, then **Publish** — a saved-but-unpublished paywall won't appear.
    >
-   > The kit's `PaywallScreen` loads the published paywall automatically — no code
-   > changes when you tweak the design later.
-
-   Until a build is on a track *and* the paywall is **published**, the device shows
-   "offerings empty".
-
-The kit's `PaywallScreen` loads the published paywall automatically — no code
-changes when you tweak the design.
+   > Until a build is on a track *and* this paywall is **published**, the device
+   > shows "offerings empty" — normal in dev. The kit's `PaywallScreen` loads the
+   > published paywall automatically; no code changes when you tweak the design.
 
 ## Step 3 — Verify
 
