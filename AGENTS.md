@@ -105,6 +105,7 @@ Key ones:
 - **Setup:** `/kit-change-app-id`, `/kit-setup-theme`, `/kit-setup-auth`, `/kit-setup-paywall`,
   `/kit-setup-analytics`, `/kit-setup-ai`, `/kit-setup-updates`, `/kit-setup-review-dialog`
 - **Run:** `/kit-compile-app`, `/kit-run-app`, `/kit-env-check`
+- **Maintain:** `/kit-update` — pull the latest kit commands + skills (your code is untouched)
 - **Release:** `/kit-generate-legal`, `/kit-generate-aso`, `/kit-generate-screenshots`,
   `/kit-generate-changelog`, `/kit-generate-landing`, `/kit-plan-release-analytics`,
   `/kit-sign-release`, `/kit-upload-on-google-play`, `/kit-save-to-github`,
