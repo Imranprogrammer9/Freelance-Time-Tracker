@@ -248,12 +248,38 @@ charge real users"); present it paced, not all at once:
 
    **For one-time unlocks** (non-recurring) use **In-app products** instead —
    simpler: an ID + price, then **Activate**. Note each Product ID.
-4. **Service-account JSON → RevenueCat** (the actual Play ↔ RevenueCat connection)
-   — Google Cloud Console → IAM & Admin → Service Accounts → create → Keys → JSON;
-   Play Console → Users and permissions → invite that service-account email with
-   *View financial data* + *Manage orders and subscriptions*; RevenueCat → Apps →
-   your Play Store app → upload the JSON. **~36 h** to propagate. (Official guide:
+4. **Service-account JSON → RevenueCat** (the actual Play ↔ RevenueCat connection;
+   starts the ~36 h clock) — the fiddliest piece, spread across **three**
+   dashboards. **Do NOT dump it all at once** — walk 4A → 4B → 4C and **STOP and
+   wait for "done"** after each one. (Official guide:
    https://www.revenuecat.com/docs/platform-resources/google-platform-resources)
+
+   **4A — Create the service account.** Show verbatim, then wait for "done":
+   > **Google Cloud Console:**
+   > 1. Open https://console.cloud.google.com → pick the project linked to your
+   >    Play account.
+   > 2. **IAM & Admin → Service Accounts → + Create service account**.
+   > 3. Name it (e.g. `revenuecat`) → **Create and continue** → skip the optional
+   >    roles → **Done**.
+   > 4. Click the new service account → **Keys → Add key → Create new key →
+   >    JSON** → download it. **Keep this file safe — it's a credential.**
+   > 5. Copy the service account's **email** (`…@<project>.iam.gserviceaccount.com`).
+
+   **4B — Grant it access in Play Console.** Show verbatim, then wait for "done":
+   > **Play Console:**
+   > 1. https://play.google.com/console → **Users and permissions → Invite new user**.
+   > 2. Paste the service-account email from 4A.
+   > 3. Grant **View financial data, orders, and cancellation survey responses**
+   >    + **Manage orders and subscriptions**.
+   > 4. **Invite user / Send invitation**.
+
+   **4C — Upload to RevenueCat.** Show verbatim, then wait for "done":
+   > **RevenueCat:**
+   > 1. **Apps → your Google Play app**.
+   > 2. Upload the JSON from 4A into **Service Account Credentials JSON** → **Save**.
+   >
+   > The connection takes **~36 hours** to propagate before purchases validate —
+   > that's normal. Keep building meanwhile.
 5. **RevenueCat: products → entitlement → offering → paywall** — four linked
    concepts; get the chain right or the paywall stays empty / purchases don't
    unlock. Mental model: a **Product** is the SKU from Play; the **Entitlement**
