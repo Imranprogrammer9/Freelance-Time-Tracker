@@ -63,6 +63,13 @@ the dev may have renamed), then write `RUN.md` with that value substituted for
 Build, install, and launch the app on a connected device — **no AI agent needed**.
 Run everything from the project root.
 
+## ⚡ Build + run in one command
+With a device connected (step 1), this builds, installs, and launches in one go:
+
+    ./gradlew :app:installDebug && adb shell monkey -p <APPLICATION_ID> -c android.intent.category.LAUNCHER 1
+
+(The numbered steps below are the same thing, broken down.)
+
 ## 1. Connect a device
     adb devices
 - Need at least one device/emulator listed.
@@ -83,8 +90,14 @@ Run everything from the project root.
     adb uninstall <APPLICATION_ID>     # remove the app from the device
 ```
 
-Then tell the developer, briefly:
+Then tell the developer this — with `<APPLICATION_ID>` substituted for the real
+value so the command is copy-paste ready:
 
-> **Saved your run commands to `RUN.md`.** If your AI agent ever runs out, open
-> `RUN.md` and paste those into your terminal from the project root — that's all
-> you need to build, install, and launch the app yourself. Bookmark it.
+> **Saved your run commands to `RUN.md`** — no AI agent needed to run your app.
+>
+> Want to launch it yourself right now? Open **another terminal** in the project
+> root and paste this — it builds, installs, and launches in one go:
+>
+>     ./gradlew :app:installDebug && adb shell monkey -p <APPLICATION_ID> -c android.intent.category.LAUNCHER 1
+>
+> Everything else (with a step-by-step breakdown) is in `RUN.md` — bookmark it.
