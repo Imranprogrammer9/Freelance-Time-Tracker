@@ -9,6 +9,9 @@ import io.github.jan.supabase.auth.status.SessionStatus
 import io.github.jan.supabase.auth.user.UserInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
 
 /**
  * Supabase-backed [AuthRepository]. Wraps the supabase-kt Auth plugin and adapts its
@@ -107,6 +110,12 @@ class SupabaseAuthRepository(
 private fun UserInfo.toAuthUser(): AuthUser = AuthUser(
     id = id,
     email = email,
-    displayName = (userMetadata?.get("full_name") ?: userMetadata?.get("name"))?.toString(),
-    avatarUrl = userMetadata?.get("avatar_url")?.toString(),
+    // userMetadata values are JsonElements — `.toString()` keeps the JSON quotes
+    // (name shows as "name", avatar URL won't load). Read the primitive's content,
+    // which is the raw unquoted string (and null for a JSON null).
+    displayName = (userMetadata?.get("full_name") ?: userMetadata?.get("name")).asContent(),
+    avatarUrl = userMetadata?.get("avatar_url").asContent(),
 )
+
+private fun JsonElement?.asContent(): String? =
+    (this as? JsonPrimitive)?.contentOrNull
