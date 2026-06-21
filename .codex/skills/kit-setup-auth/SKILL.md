@@ -134,18 +134,11 @@ Confirm what you wrote, then continue.
 
 **If Google sign-in is NOT enabled, skip the rest of Step 4a and go to Step 5.**
 
-**Before you continue, tell the developer this verbatim** so they know what's
-coming:
-
-> Heads up — Google sign-in needs two things wired together:
->
-> 1. A **Web OAuth client** in Google Cloud Console → which you paste into
->    Supabase's Google provider so Supabase trusts Google.
-> 2. An **Android OAuth client** in Google Cloud Console (with your debug
->    SHA-1) → so the native sign-in sheet works on your device.
->
-> We'll do them in that order, one at a time. Don't worry about memorising
-> any of it — I'll walk each sub-step.
+Otherwise walk the Google sub-steps below **one at a time** — don't dump the
+whole flow on the developer up front (it's overwhelming and they don't need the
+map, just the next step). For your own context: Google sign-in needs a **Web
+OAuth client** (pasted into Supabase) and an **Android OAuth client** (with the
+debug SHA-1); the sub-steps cover both in order. Just start with 4a.3.
 
 ### Sub-step 4a.3 — Create the OAuth consent screen
 
