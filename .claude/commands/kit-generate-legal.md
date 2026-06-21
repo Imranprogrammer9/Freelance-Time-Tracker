@@ -238,31 +238,27 @@ commonly confuse people. Here's how to answer them for this kit:
   on — they must sign in to use the app). Pick **"Users can choose whether this
   data is collected"** only if your app exposes a real in-app opt-out for it.
 
-<Render each Play category below — only ones with an active source. Fill the
-two lines above per type.>
+<Render one row per active Play category below — only ones with an active
+source. Use the two-question guidance above to fill the **Ephemeral** and
+**Required** columns. Drop the email row if `AUTH_ENABLED = false`, the analytics
+row if `ANALYTICS_ENABLED = false`, etc.>
 
-### Personal info → Email address
-- Collected: Yes
-- Processed ephemerally: No (stored by your auth backend)
-- Required: Data collection is required  <include this type only if AUTH_ENABLED; the user must sign in>
-- Shared: No
-- Purpose: Account management, Authentication
-- Source: Supabase Auth / Firebase Auth / Google Sign-In
-
-### App activity → App interactions
-- Collected: <Yes/No based on ANALYTICS_ENABLED>
-- Processed ephemerally: No (events sent to + stored by your analytics provider)
-- Required: <"Users can choose whether this data is collected" if the app has an analytics opt-out toggle, else "Data collection is required">
-- Shared: No
-- Purpose: Analytics
-- Source: PostHog, Firebase Analytics
-
-<etc. — only include categories with active sources>
+| Data type | Collected | Processed ephemerally | Required, or users choose | Shared | Purpose | Source |
+|---|---|---|---|---|---|---|
+| Personal info → Email address | Yes | No | Data collection is required | No | Account management, Authentication | Supabase / Firebase / Google Sign-In |
+| App activity → App interactions | <Yes/No> | No | <Required / Users can choose> | No | Analytics | PostHog, Firebase Analytics |
+| <…one row per remaining active category…> | | | | | | |
 ```
 
-## Step 7 — Print Play Console checklist
+## Step 7 — Print the Data Safety table + Play Console checklist
 
-Print this verbatim block as the wrap-up:
+**First, print the data-safety table to the terminal** — render the exact same
+`| Data type | Collected | Processed ephemerally | Required, or users choose |
+Shared | Purpose | Source |` table you just wrote into `play_data_safety.md`,
+with the real rows filled in. Many developers won't open the file; they should be
+able to read the toggle answers straight from the terminal and fill the Play form.
+
+Then print this verbatim block as the wrap-up:
 
 > **Now in Play Console:**
 >
