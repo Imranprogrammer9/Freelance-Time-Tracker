@@ -10,6 +10,7 @@ import com.revenuecat.purchases.ui.revenuecatui.PaywallListener
 import com.revenuecat.purchases.ui.revenuecatui.PaywallOptions
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.analytics.ScreenNames
+import dev.shipkaro.kit.core.billing.PurchaseManager
 import org.koin.compose.koinInject
 
 /**
@@ -30,6 +31,7 @@ fun PaywallScreen(
     onDismiss: () -> Unit,
 ) {
     val analytics = koinInject<AnalyticsManager>()
+    val purchaseManager = koinInject<PurchaseManager>()
     LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.PAYWALL) }
 
     Paywall(
@@ -40,11 +42,19 @@ fun PaywallScreen(
                     customerInfo: CustomerInfo,
                     storeTransaction: StoreTransaction,
                 ) {
+                    // RC's prebuilt Paywall completes the purchase internally; it does
+                    // NOT touch PurchaseManager, so refresh() here to re-pull the
+                    // entitlement and update the isPremium StateFlow every screen reads.
+                    // Without this, the purchase succeeds but premium never unlocks.
+                    purchaseManager.refresh()
                     onPurchased()
                 }
 
                 override fun onRestoreCompleted(customerInfo: CustomerInfo) {
-                    if (customerInfo.entitlements.active.isNotEmpty()) onPurchased()
+                    if (customerInfo.entitlements.active.isNotEmpty()) {
+                        purchaseManager.refresh()
+                        onPurchased()
+                    }
                 }
 
                 override fun onPurchaseError(error: PurchasesError) {
