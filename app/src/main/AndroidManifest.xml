@@ -75,17 +75,24 @@
             </intent-filter>
 
             <!--
-              App Links for https deep links. Change the host to your domain and host a
-              /.well-known/assetlinks.json file there to get verified (autoVerify) links.
+              App Links for https deep links — DISABLED by default, on purpose.
+              The kit ships no real domain, and an ACTIVE autoVerify filter for a
+              domain you don't own makes Google Play Console flag "1 domain not
+              verified / failed domain checks" on your app.
+              To enable: uncomment the block below, set android:host to YOUR domain,
+              and host a /.well-known/assetlinks.json (with your app's signing cert
+              SHA-256) on that domain so Play can verify it.
             -->
+            <!--
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="https"
-                    android:host="shipkaro.dev" />
+                    android:host="your-domain.example" />
             </intent-filter>
+            -->
         </activity>
 
         <!-- FCM message receiver. Inert until google-services.json is added. -->
