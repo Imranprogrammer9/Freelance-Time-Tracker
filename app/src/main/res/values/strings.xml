@@ -356,6 +356,8 @@
     <string name="settings_rate_app">Rate this app</string>
     <string name="settings_whats_new">What\'s new</string>
     <string name="settings_oss_licenses">Open source licenses</string>
+    <string name="oss_license_close">Close</string>
+    <string name="oss_license_unavailable">No license text available for this library.</string>
 
     <!-- Update gate -->
     <string name="update_required_title">Update required</string>
