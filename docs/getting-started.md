@@ -1,5 +1,9 @@
 # Getting Started
 
+> 📖 **The full, always-current docs live at [kit.shipkaro.dev/docs](https://kit.shipkaro.dev/docs)** —
+> that's the canonical source. This in-repo copy is a convenience; if anything here differs,
+> the website wins.
+
 This page gets your machine ready and the kit running on a phone — **before** you start
 configuring features. Budget 20–40 minutes the first time (most of it is downloading the
 Android SDK once).
@@ -46,14 +50,24 @@ After that, everything runs from the terminal.
 
 ## 2. Get the kit
 
-After purchase you're added as a collaborator on the private kit repo. Clone it:
+After purchase you're added as a collaborator on the **private kit repo**. You
+start from a copy of it — **that copy becomes your own app**.
+
+**Clone the kit** into a folder named for *your* app (not a repo of your own yet —
+that doesn't exist; you clone the kit and rename it next):
 
 ```bash
-git clone https://github.com/<you>/nowkit-yourapp.git
-cd nowkit-yourapp
+git clone https://github.com/wajahatkarim3/shipkaro-android-kit my-app
+cd my-app
 ```
 
-Open the folder in your AI agent (Claude Code: `claude` in that directory).
+(`my-app` = whatever you want your project folder called.) Open the folder in your
+AI agent (Claude Code: run `claude` in that directory) and continue to the first run.
+
+> The `/kit-*` commands live **inside** this cloned folder (`.claude/commands/`,
+> etc.), so they're available the moment you open it in your agent — no separate
+> install. Later, `/kit-change-app-id` renames it to your app and
+> `/kit-save-to-github` pushes it to **your** new private repo.
 
 ---
 
