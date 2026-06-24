@@ -18,7 +18,41 @@ screen one at a time. Two strict phases:
 Audience: first-time mobile developers / vibe coders. They do NOT write code —
 you do. They describe what they want and approve / redirect.
 
+## Resume check — do this FIRST
+
+This is a two-phase, multi-screen build a developer often returns to across
+sessions. Progress lives in the project files (durable), not this chat — so before
+anything, read the project to see how far it got:
+
+- **Phase 1 done?** Look under `app/src/main/java/<basePackage>/feature/` and in
+  `Route.kt` for screens beyond the kit defaults (home, settings, profile, auth,
+  onboarding, paywall, permissions, catalog, licenses). Any *custom* feature screen
+  means Phase 1 already generated screens.
+- **Phase 2 per-screen?** For each custom screen, check whether it's wired: a
+  `<Name>ViewModel.kt` exists AND `<Name>Screen.kt` reads `vm.state` /
+  `koinViewModel()` (wired) vs still holding `sample…` dummy data + stub callbacks
+  (not wired).
+
+Then branch:
+
+- **Nothing custom yet** (only kit defaults) → fresh build: start at Pre-flight →
+  Phase 1 and walk the whole flow.
+- **Custom screens exist, none wired** → Phase 1 is done. Briefly "Welcome back",
+  show the screen list, confirm it still matches what they want, then resume at
+  **Phase 2** for the first screen.
+- **Some wired, some not** → resume **Phase 2** at the first un-wired screen. Show a
+  ✅ wired / ⬜ to-wire list and ask the user (wait for their answer) which screen to
+  wire next (default: first ⬜).
+
+On a resume, show a short ✅ done / ⬜ to-do status list to match — Phase 1 done,
+plus each custom screen ✅ wired or ⬜ to wire. Then continue from the resume point.
+**Never re-generate a Phase-1 screen that already exists** (see Notes) — only wire it.
+
 ## Pre-flight
+
+> **Resumed into Phase 2?** The kit defaults are already in place — skip the
+> Phase-1 framing below, but still call `/kit-compile-app` once to confirm the graph
+> is green before wiring.
 
 Before starting:
 - Call /kit-compile-app once. If it fails, fix the build before continuing —

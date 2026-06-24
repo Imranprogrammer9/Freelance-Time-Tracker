@@ -26,6 +26,12 @@ SDKs or adding endpoints.
 When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim**. Prose outside those blocks is instructions for you.
 
+## Step 0 — Detect existing legal docs
+
+If `playstore/privacy_policy.html` and `playstore/play_data_safety.md` already
+exist, ask the user (wait for answer) to keep them (exit) or regenerate (re-scan +
+overwrite). Otherwise continue to Step 1. Don't silently overwrite.
+
 ## Step 1 — Scan SDKs + KitConfig
 
 Read in parallel:

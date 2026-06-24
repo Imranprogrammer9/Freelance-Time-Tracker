@@ -28,7 +28,48 @@ steps. They are slow and the wait adds up across the flow. Each sub-command has 
 single build runs once at the very end, in Step 7 (`/kit-run-app`), and it catches
 any compile error introduced by any earlier step.
 
+## Resume check — do this FIRST
+
+A developer can leave mid-setup and come back later — next day, a new session,
+even another machine. Don't rely on memory of this chat; **read the project files
+to see what's already done** (they persist, a conversation doesn't). Check:
+
+- **Rename (Step 1):** `app/build.gradle.kts` `namespace` — done if ≠ `dev.shipkaro.kit`.
+- **Onboarding (Step 2):** `res/values/strings.xml` `onboarding_page1_title` — done if ≠ `Welcome aboard`.
+- **Brand & theme (Step 3):** `core/designsystem/theme/Color.kt` `BrandPrimary` — done if ≠ `Color(0xFF7C3AED)`.
+- **Auth (Step 4):** `KitConfig.kt` `AUTH_ENABLED` — done if `= true`.
+- **Paywall (Step 5):** `KitConfig.kt` `PAYWALL_ENABLED` + `local.properties` `revenuecat.android.api.key` — done if the key is set (`goog_…`) OR `PAYWALL_ENABLED = false` (free app, deliberately off).
+- **Analytics (Step 6):** `local.properties` (`posthog.api.key`, `sentry.dsn`) or `app/google-services.json` — done if any is present.
+
+(`PAYWALL_ENABLED` and `ANALYTICS_ENABLED` both default to `true`, so the flag alone
+isn't proof — Steps 5/6 also need a key/file signal.)
+
+Then branch:
+
+- **Fresh clone** — Steps 1, 2 AND 3 are all still at defaults. Greet fully
+  (Step 0 below) and walk the whole flow as normal.
+- **Resumed setup** — at least one step is already done:
+  1. Greet briefly — "Welcome back 👋 — picking up your NowKit setup where you left
+     off." Skip the long orientation (they've seen it).
+  2. Show a short status list — one line per step, ✅ done (with the detected value,
+     e.g. "Auth — Supabase") or ⬜ to do.
+  3. Ask the user (wait for their answer) how to continue: **Resume from the first
+     ⬜ step** (recommended) / **Review a finished step** (pick any ✅ to revisit —
+     its own command offers keep-as-is / change) / **Start over** (re-run from
+     Step 1; nothing is deleted, each step just re-confirms).
+  4. Run from the chosen point; do NOT re-enter finished steps.
+  5. Only if `local.properties` is missing (e.g. a new machine — it's git-ignored,
+     so it doesn't travel with the repo), run Step 0 parts a–f first.
+
+Every `/kit-setup-*` sub-command also has its own "Step 0 — Detect existing state"
+that re-checks and offers keep-as-is, so finished work is never clobbered.
+
 ## Step 0 — Orientation
+
+> **Resumed setup?** Skip this orientation and the "what are you building?"
+> question (infer free-vs-paid from `PAYWALL_ENABLED`). Run only prerequisite
+> checks a–f below, and only if `local.properties` is missing. Then jump to the
+> resume point.
 
 Open with one line: **NowKit** is a starter kit from **ShipKaro**, a community
 for indie mobile developers who ship fast — ShipKaro's motto is "Stop

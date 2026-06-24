@@ -19,6 +19,31 @@ When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim** — do not paraphrase or improvise. Prose outside those
 blocks is instructions for you.
 
+## Resume check — do this FIRST
+
+Releasing is a long flow with many prepared assets, often done over several
+sessions. The assets live in the repo (durable across sessions), so before Step 1
+scan for what already exists and skip finished work:
+
+- **Keystore (first-version C):** `release.keystore` present, OR `local.properties`
+  has `release.store.file`, OR `$RELEASE_STORE_FILE` set → signing is ready.
+- **Screenshots (E):** PNGs in `playstore/screenshots/` → done.
+- **Listing copy (F):** `playstore/title.txt` + `short_description.txt` +
+  `full_description.txt` all exist → ASO done.
+- **Legal (G):** `playstore/privacy_policy.html` + `play_data_safety.md` exist (and
+  `KitConfig.PRIVACY_URL` set) → legal done; a `landing/` dir → landing page done.
+- **Changelog (J / update D):** `playstore/changelogs/<versionCode>.txt` for the
+  current `versionCode` exists → release notes done.
+
+After the developer picks first-version vs update (Step 1), show a short ✅ done /
+⬜ to-do status list, tell them what you're skipping ("listing copy already in
+`playstore/` — skipping F"), and walk only the remaining steps. Steps that
+**can't** be detected from files (app icon, SHA-1 registration, Play Console app
+creation, analytics insertion, the manual upload) are always offered — confirm them
+with the developer. Each inlined sub-command (`/kit-generate-legal`,
+`/kit-generate-screenshots`, `/kit-generate-aso`) also detects its own output, so
+finished assets aren't redone.
+
 ## Step 1 — First version or update?
 
 Ask the user (wait for their answer):

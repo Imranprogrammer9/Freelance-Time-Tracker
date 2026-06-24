@@ -76,6 +76,12 @@ For each target locale, translate each file. **Hard rules:**
 
 ## Step 4 — Write Play's per-locale layout
 
+**Skip locales already done:** before writing, check which
+`playstore/listings/<play-locale>/` dirs already exist. If a target locale is
+already there, tell the developer "`<locale>` already done — skipping" and don't
+overwrite it (unless they asked to re-translate, e.g. after the English copy or
+changelog changed). Write only the new locales.
+
 For each locale write:
 
     playstore/listings/<play-locale>/title.txt

@@ -40,6 +40,19 @@ Before Step 1, call **TaskCreate** with:
 
 Mark each `in_progress` when entered and `completed` when done.
 
+## Step 0 — Detect existing legal docs
+
+Check whether `playstore/privacy_policy.html` and `playstore/play_data_safety.md`
+already exist.
+
+- If both exist, this command was run before. Ask (**AskUserQuestion**) whether to:
+  - **Keep as-is** (recommended) — exit without changes.
+  - **Regenerate** — re-scan the codebase and overwrite (do this after toggling
+    SDKs / adding endpoints).
+- If neither (or only one) exists, continue to Step 1 and generate.
+
+Do not silently overwrite existing legal docs.
+
 ## Step 1 — Scan SDKs + KitConfig
 
 Read in parallel:

@@ -21,6 +21,10 @@ Confirm:
 - The app compiles (`/kit-compile-app`) before starting. If it does not, stop
   and tell the developer to fix the build first — translations are pointless
   on a broken codebase.
+- **Detect already-translated locales** — list the existing
+  `app/src/main/res/values-*/strings.xml` dirs. These locales are already done;
+  in Step 3 you'll skip them and translate only the new ones (unless the developer
+  explicitly asks to re-translate after copy changes).
 
 ## Step 2 — Pick language buckets
 
@@ -64,6 +68,11 @@ Confirm the resolved language list back to the developer as a short bulleted
 summary before proceeding.
 
 ## Step 3 — Translate
+
+**Skip locales already present** (from the Pre-flight scan): if `values-<TAG>/`
+already exists for a picked language, tell the developer "`<tag>` already done —
+skipping" and don't redo it, unless they asked to re-translate. Translate only the
+new locales.
 
 For each picked language, do the following:
 

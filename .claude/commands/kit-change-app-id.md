@@ -23,6 +23,19 @@ Gradle task in `app/build.gradle.kts`. You do NOT hand-edit package declarations
 to gather inputs, validate them, and run the task — no extra "are you sure?"
 prompts, just go.
 
+## Step 0 — Already renamed?
+
+Read `app/build.gradle.kts` and check the current `namespace` / `applicationId`.
+
+- If it is still `dev.shipkaro.kit`, the kit is unrenamed — continue to Step 1.
+- If it is **anything other than `dev.shipkaro.kit`**, the rename already ran. Tell
+  the developer the current applicationId and ask (**AskUserQuestion**) whether to:
+  - **Keep it as-is** (recommended) — exit without changes.
+  - **Rename again** — continue to Step 1 with a new value (the Gradle task rewrites
+    from the *current* id, so a second rename is safe).
+
+Do not blindly re-run the rename on an already-renamed app.
+
 ## Step 1 — Gather inputs
 
 Arguments passed to this command (may be empty): `$ARGUMENTS`

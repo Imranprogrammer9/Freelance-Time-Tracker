@@ -28,15 +28,69 @@ steps. They are slow and the wait adds up across the flow. Each sub-command has 
 single build runs once at the very end, in Step 7 (`/kit-run-app`), and it catches
 any compile error introduced by any earlier step.
 
+## Resume check — do this FIRST (before greeting or TaskCreate)
+
+A developer can leave mid-setup and come back later — next day, a new chat
+session, even another machine. The kit has no in-memory checklist that survives
+that, so **derive progress from the project files themselves** (they persist; a
+conversation doesn't). Read these signals and classify each step **done** or
+**to do**:
+
+| Step | Read this | Already DONE when | Still TO DO (kit default) |
+|------|-----------|-------------------|----------------------------|
+| 1 Rename | `app/build.gradle.kts` → `namespace` | ≠ `dev.shipkaro.kit` | `= dev.shipkaro.kit` |
+| 2 Onboarding | `res/values/strings.xml` → `onboarding_page1_title` | ≠ `Welcome aboard` | `= Welcome aboard` |
+| 3 Brand & theme | `core/designsystem/theme/Color.kt` → `BrandPrimary` | ≠ `Color(0xFF7C3AED)` | `= Color(0xFF7C3AED)` |
+| 4 Auth | `KitConfig.kt` → `AUTH_ENABLED` | `= true` | `= false` |
+| 5 Paywall | `KitConfig.kt` `PAYWALL_ENABLED` + `local.properties` `revenuecat.android.api.key` | key set (`goog_…`) **or** `PAYWALL_ENABLED = false` (free app, deliberately off) | `PAYWALL_ENABLED = true` **and** no key |
+| 6 Analytics | `local.properties` (`posthog.api.key`, `sentry.dsn`) + `app/google-services.json` | any provider key/file present | none present |
+
+> Note: `PAYWALL_ENABLED` and `ANALYTICS_ENABLED` both **default to `true`**, so the
+> flag alone doesn't prove a step ran — that's why Steps 5/6 also need a key/file
+> signal (mirrors each sub-command's own Step 0).
+
+**Then branch:**
+
+- **Fresh clone** — Steps 1, 2 AND 3 are ALL still at defaults (namespace =
+  `dev.shipkaro.kit` AND title = `Welcome aboard` AND BrandPrimary =
+  `0xFF7C3AED`). Treat as a first run: greet fully (Step 0 — Orientation below),
+  TaskCreate all steps `pending`, walk the whole flow as normal.
+
+- **Resumed setup** — at least one step is already done:
+  1. Greet **briefly** — "Welcome back 👋 — picking up your NowKit setup where you
+     left off." Skip the long orientation blurb (they've seen it).
+  2. Print a short **resume status** list — one line per step, ✅ done (with the
+     detected value, e.g. "Auth — Supabase") or ⬜ to do.
+  3. **TaskCreate** all 8 tasks, then immediately **TaskUpdate** each detected-done
+     step to `completed` with a `[done] ` prefix, so the checklist opens where they
+     are.
+  4. **AskUserQuestion** — "How do you want to continue?":
+     - **Resume from <first ⬜ step>** (recommended) — continue from the first
+       unfinished step.
+     - **Review a finished step** — pick any ✅ step to revisit (its own command
+       offers keep-as-is / change).
+     - **Start over** — re-run every step from Step 1 (nothing is deleted; each
+       step just re-confirms).
+  5. Run from the chosen point. **Do NOT re-enter steps you marked completed.**
+  6. Still confirm prerequisites if `local.properties` is **missing** (e.g. a new
+     machine — it's git-ignored, so it doesn't travel with the repo): run Step 0
+     parts **a–f** only, then continue. If `local.properties` exists, skip straight
+     to the resume point.
+
+**Safety net:** every `/kit-setup-*` sub-command has its own "Step 0 — Detect
+existing state" that re-checks and offers keep-as-is, so even if this
+classification is slightly off, finished work is never clobbered.
+
 ## Progress tracking
 
-Before you greet the developer, call **TaskCreate** with one task per Step
-below, in order, all `pending`. As you enter each Step, mark its task
-`in_progress`; when the Step finishes, mark it `completed`. If a Step is
-**skipped** (e.g. "free app" hard-skips Step 5 Paywall; "no auth" stops Step 4
-early; the developer skips a question), still mark the task `completed` but
-prefix the task content with `[skipped] ` via **TaskUpdate** so the developer
-can tell skips from real completions at a glance.
+On a **fresh clone**, before you greet the developer call **TaskCreate** with one
+task per Step below, in order, all `pending`. (On a **resumed setup**, the Resume
+check above already created the tasks and pre-marked the done ones.) As you enter
+each Step, mark its task `in_progress`; when the Step finishes, mark it
+`completed`. If a Step is **skipped** (e.g. "free app" hard-skips Step 5 Paywall;
+"no auth" stops Step 4 early; the developer skips a question), still mark the task
+`completed` but prefix the task content with `[skipped] ` via **TaskUpdate** so the
+developer can tell skips from real completions at a glance.
 
 Use these task titles verbatim:
 
@@ -50,6 +104,11 @@ Use these task titles verbatim:
 - Step 7 — Build and run
 
 ## Step 0 — Orientation
+
+> **Resumed setup?** Skip this orientation blurb and the "what are you building?"
+> question (infer free-vs-paid from `PAYWALL_ENABLED`). Run only the prerequisite
+> checks **a–f** below, and only if `local.properties` is missing. Then jump to the
+> resume point chosen in the Resume check.
 
 Open with one line: **NowKit** is a starter kit from **ShipKaro**, a community
 for indie mobile developers who ship fast — ShipKaro's motto is "Stop
