@@ -34,6 +34,29 @@ the kit writes the code.
 
 Type `/kit-` any time to see every command.
 
+## License — what you can and can't do
+
+You **bought a license to use NowKit**, not the kit itself — it stays owned by RemoteKaro LLC.
+In plain English:
+
+**✅ You can**
+- Build **as many apps as you want** from this kit — personal or commercial.
+- **Change any code** however you like.
+- **Sell** the apps you build and ship them to Google Play — you keep 100%, no royalty.
+- Use it as **one developer** (or one company).
+
+**🚫 You can't**
+- **Resell or share the kit's source** — no reselling it, repackaging it as a template/
+  starter/boilerplate, or handing the code to other developers.
+- **Make the kit code public** — don't push it to a public repo, paste it online, or feed it
+  to others. (Your *own app* code is yours to do whatever with — this is about the kit itself.)
+- Pass your license to someone else.
+
+Shipping the kit's code **compiled inside your own published app** is exactly the point — that's
+allowed. What's not allowed is giving people the kit as reusable source.
+
+Full terms: [LICENSE](LICENSE). Questions: remotekarollc@gmail.com
+
 ## 📚 Full docs — the central, always-current source
 
 Everything lives at **https://kit.shipkaro.dev/docs**:
