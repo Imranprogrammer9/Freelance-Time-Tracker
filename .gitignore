@@ -18,6 +18,10 @@ local.properties
 # Firebase config — app-specific, not committed to the kit
 google-services.json
 
+# RevenueCat / Google Cloud service-account key (credential — never commit)
+revenuecat-key.json
+*-key.json
+
 # Ruby / Bundler
 /vendor/bundle
 .bundle/
