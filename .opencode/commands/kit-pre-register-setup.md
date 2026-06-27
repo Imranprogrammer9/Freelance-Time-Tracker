@@ -141,7 +141,11 @@ care whether the entitlement was granted by a subscription or a one-time product
 So the whole job is: make a one-time product, and attach it to that same
 entitlement. **No app code changes are needed.**
 
-**4.1 — Create the one-time product in Play Console** (present verbatim):
+**Pace this — one sub-step at a time. Present 4.1 and wait for the developer to say
+"done" before showing 4.2; then wait again before 4.3. Do NOT dump all three blocks
+at once** (these are two different dashboards — they'll lose their place).
+
+**4.1 — Create the one-time product in Play Console** (present verbatim, then wait):
 
 > **Create the reward product in Play Console:**
 > 1. Play Console → your app → **Monetize → Products → In-app products →
@@ -152,8 +156,10 @@ entitlement. **No app code changes are needed.**
 >    selectable as a reward; users won't pay — they receive it free).
 > 5. **Save** and make sure its status is **Active**.
 
+Wait for "done".
+
 **4.2 — Map it to your entitlement in RevenueCat** (present verbatim, substituting
-the real `<ENTITLEMENT_ID>`):
+the real `<ENTITLEMENT_ID>`, then wait):
 
 > **Make the pass unlock premium in RevenueCat:**
 > 1. RevenueCat dashboard → your project → **Products → + New** → import/select the
@@ -162,6 +168,8 @@ the real `<ENTITLEMENT_ID>`):
 > 3. Because it's a one-time (non-subscription) product, RevenueCat asks for a
 >    **duration** — set it to match the perk (e.g. **1 month** for a 30-day pass).
 >    After that window the entitlement expires and your paywall returns.
+
+Wait for "done".
 
 **4.3 — Confirm the unlock is automatic (no code).** Reassure the developer:
 
