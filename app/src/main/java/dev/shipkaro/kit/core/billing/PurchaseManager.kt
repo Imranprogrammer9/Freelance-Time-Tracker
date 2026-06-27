@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 /**
  * Single owner of RevenueCat state — ported from the ShipKaro KMM starter's
@@ -121,7 +122,27 @@ class PurchaseManager(private val appContext: Context) {
 
     private fun applyCustomerInfo(info: CustomerInfo) {
         _customerInfo.value = info
-        _isPremium.value = info.entitlements[KitConfig.ENTITLEMENT_ID]?.isActive == true
+        val entitlementActive = info.entitlements[KitConfig.ENTITLEMENT_ID]?.isActive == true
+        _isPremium.value = entitlementActive || isPreRegisterRewardActive(info)
+    }
+
+    /**
+     * True while a pre-registration reward (a one-time product with **no** RevenueCat
+     * entitlement) is still inside its window. Disabled when [KitConfig.PRE_REGISTER_REWARD_PRODUCT_ID]
+     * is blank. The window is measured from the **Play purchase date** carried in
+     * [CustomerInfo.nonSubscriptionTransactions] (server-side — survives reinstalls and can't be
+     * reset by clearing app data). "Now" uses the device clock, so a user who rolls their clock
+     * back could extend it — an acceptable trade for a free reward.
+     */
+    private fun isPreRegisterRewardActive(info: CustomerInfo): Boolean {
+        val productId = KitConfig.PRE_REGISTER_REWARD_PRODUCT_ID
+        if (productId.isBlank()) return false
+        val purchaseDate = info.nonSubscriptionTransactions
+            .filter { it.productIdentifier == productId }
+            .maxByOrNull { it.purchaseDate }
+            ?.purchaseDate ?: return false
+        val windowMs = TimeUnit.DAYS.toMillis(KitConfig.PRE_REGISTER_REWARD_DURATION_DAYS.toLong())
+        return System.currentTimeMillis() - purchaseDate.time < windowMs
     }
 }
 

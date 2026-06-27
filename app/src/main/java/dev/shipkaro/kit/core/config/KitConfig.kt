@@ -87,6 +87,22 @@ object KitConfig {
     enum class PaywallMode { SOFT, HARD }
     val PAYWALL_MODE: PaywallMode = PaywallMode.SOFT
 
+    /**
+     * Pre-registration reward — a **time-limited** premium unlock (set up by
+     * `/kit-pre-register-setup`). Leave [PRE_REGISTER_REWARD_PRODUCT_ID] blank to disable
+     * (the default — no behaviour change).
+     *
+     * Why this exists: a Play pre-registration reward must be a one-time product, and
+     * RevenueCat grants a one-time product's entitlement **for life** — so a *timed* reward
+     * (e.g. "30 days free") can't come from RevenueCat config. Instead, attach **no**
+     * entitlement to the reward product in RevenueCat, set its product ID here, and
+     * [PurchaseManager] grants premium for [PRE_REGISTER_REWARD_DURATION_DAYS] days measured
+     * from the **Play purchase date** (read from `CustomerInfo`, server-side — survives
+     * reinstalls, doesn't reset or stack).
+     */
+    const val PRE_REGISTER_REWARD_PRODUCT_ID: String = ""
+    const val PRE_REGISTER_REWARD_DURATION_DAYS: Int = 30
+
     /** Wire PostHog / Firebase analytics + Crashlytics. */
     const val ANALYTICS_ENABLED: Boolean = true
 
