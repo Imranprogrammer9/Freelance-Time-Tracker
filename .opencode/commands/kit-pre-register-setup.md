@@ -25,6 +25,39 @@ auto-installs the app. It builds day-one installs and an early ranking signal.
 The build you upload to the pre-registration track is used **only to determine
 which devices can pre-register** — it is **never shipped** to users.
 
+## Step 0 — Is pre-registration even right for you? (be honest, ask first)
+
+**Pre-registration is NOT a shortcut to launching — it's a marketing tool that
+needs almost the full launch setup.** Set this expectation before they sink hours
+in. To pre-register you still need:
+- a **complete store listing** (full description, screenshots, icon), and
+- **every "Set up your app" content declaration** (privacy policy, Data Safety,
+  content rating, target audience, ads, financial features, health), and
+- for a **new personal account** (created on/after 13 Nov 2023): **closed testing
+  with your real app, 12 testers, 14 continuous days** — same as launching.
+
+What pre-registration actually buys you (all marketing, not effort saved):
+1. a **public store listing before the app is shippable** (collect interest while
+   you keep building),
+2. a **day-one install spike + auto-install** to everyone who pre-registered → an
+   early ranking signal,
+3. a coordinated launch-date / hype tool (common for games building a wishlist).
+
+So ask (AskUserQuestion) before doing any work:
+
+> **Pre-registration needs nearly the same setup as launching — it just delays the
+> ship. Is it right for you?**
+> - **Yes — I want the pre-launch runway** — my app needs more time but I want to
+>   start collecting sign-ups and day-one momentum now.
+> - **No — my app is basically ready** — then just publish. Pre-registration would
+>   be the full launch checklist only to *not* ship yet. → run
+>   **`/kit-upload-on-google-play`** instead.
+> - **Not sure** — explain the trade-off for my case and help me decide.
+
+Only continue this command if they pick **Yes**. If **No**, point them at
+`/kit-upload-on-google-play` and stop. If **Not sure**, talk it through (a ready
+app → publish; a not-ready app with a marketing reason → pre-register).
+
 ## Why your existing build already qualifies
 
 If the developer has run **`/kit-sign-release`**, they already have a **signed
@@ -42,7 +75,8 @@ So this command **reuses** that build. It does not rebuild or re-sign anything.
 Call **TaskCreate** with these tasks; mark each `in_progress` on entry and
 `completed` when done (prefix `[skipped] ` via **TaskUpdate** if skipped):
 
-- 1 — Check preconditions (signed AAB, RC↔Play, listing readiness)
+- 0 — Confirm pre-registration is the right call (not just publishing)
+- 1 — Check preconditions (signed AAB, RC↔Play, full app setup readiness)
 - 2 — New-account testing-gate eligibility
 - 3 — Decide on a pre-registration reward
 - 4 — (If reward) create the one-time product + map it in RevenueCat
@@ -78,12 +112,20 @@ remind: pre-registration and rewards assume the RC↔Play connection from
 `/kit-setup-paywall` is done. If they haven't, the reward path (Step 4) won't work
 — the non-reward path still does.
 
-**1.4 — Store listing readiness.** Pre-registration shows your **public** store
-listing, so it should look finished. Check whether they've generated copy +
-assets; if not, recommend (don't force) running these first:
-- **`/kit-generate-aso`** — title, short + long description.
-- **`/kit-generate-screenshots`** — Play screenshots.
-- **`/kit-generate-legal`** — privacy policy (required for any public listing).
+**1.4 — Full app setup readiness (same as launching).** Pre-registration publishes
+your **public** listing, so Play requires the **entire "Set up your app" checklist**
+done first — exactly what a production launch needs. **Don't re-document it here —
+delegate to `/kit-upload-on-google-play`**, which walks: app icon, screenshots,
+store listing copy (`/kit-generate-aso`), privacy policy + Data Safety + hosted
+terms URL (`/kit-generate-legal` + `/kit-generate-landing`). Tell the developer to
+run that first if it's not done.
+
+The remaining **content declarations** Play forces (and that block the closed-testing
+/ pre-reg release with "you must complete…" errors) are **manual in Play Console** →
+**App content / Dashboard "Set up your app"**: content rating, target audience + ads,
+**financial features** (a typical utility app = *No*), **health** (= *No* unless it's
+a health app), government apps. Walk the developer through answering these honestly if
+they hit the errors — they're quick, but nothing auto-fills them.
 
 ## Step 2 — New-account testing-gate eligibility
 
