@@ -73,27 +73,40 @@ git checkout upstream/main -- \
 
 - Run `git show --stat HEAD` (or `git diff --stat HEAD~1`) to list the refreshed
   command/skill files.
-- Summarise the notable command/skill changes in plain language — read the kit's
-  `CHANGELOG.md` from `upstream/main`, or
-  https://kit.shipkaro.dev/changelog, for entries since the developer's last
-  update. Keep it short.
+- Summarise the notable command/skill changes in plain language — read
+  https://kit.shipkaro.dev/changelog for entries since the developer's last update.
+  Keep it short.
 
 ## Step 4 — Offer code-level fixes (opt-in)
 
 Command/skill updates (Steps 1–3) are safe and automatic. **Code** bug fixes are
-**not** pulled — the developer owns `app/`. But some fixes live in `.kt` files and
-matter (e.g. billing, auth). So:
+**not** pulled — the developer owns `app/`. But some fixes live in the app's code
+(billing, auth, gradle deps) and matter. The kit records each as a **patch recipe**
+in the `patches/` directory of the kit repo; this step reads those and re-applies the
+ones the developer wants.
 
-1. From the changelog, identify the **code-level** fixes since their last update —
-   the ones that change files under `app/` (e.g. *paywall premium-unlock*,
-   *Supabase quoted name/avatar*, *neutral gray theme*, *edge-to-edge insets*).
-2. List each with a one-line **what + why**, then **AskUserQuestion (multi-select)**:
-   which to apply.
-3. For each chosen fix: find the matching file in **their** repo (respect their
-   package rename + any customizations), and apply the same change. If they've
-   heavily customised that file, **show the change and confirm** before editing.
-   If the file/pattern isn't found (already fixed, or that feature removed), say
-   so and skip cleanly.
+**The `patches/` files are NOT checked out into their repo** (Step 2 only pulls
+command/skill dirs). Read them straight from the fetched ref:
+
+```bash
+git ls-tree --name-only upstream/main patches/    # filenames are patches/<date>-<slug>.md
+git show upstream/main:patches/<file>             # read one patch's recipe
+```
+
+1. List the patch filenames (the date prefix sorts chronologically). Read the ones
+   **newer than the developer's last update** — if that's unknown, read recent ones
+   and rely on idempotency (a patch already present is skipped, see step 4). Skip any
+   patch whose **Applies when** condition doesn't match this app (e.g. a paywall
+   patch when `KitConfig.PAYWALL_ENABLED` is false).
+2. For each applicable patch, show its one-line **title + why**, then
+   **AskUserQuestion (multi-select)**: which to apply.
+3. For each chosen patch: follow its recipe and apply **every edit it lists** in
+   **their** repo — including any `gradle/libs.versions.toml` + `app/build.gradle.kts`
+   dependency additions, not only the `.kt` edit. Respect their package rename and
+   refer to classes by name (the recipe does too). If they've heavily customised a
+   file, **show the change and confirm** before editing. If an edit is already
+   present, or the file/feature is gone, say so and skip cleanly. A new dependency
+   means the next compile re-syncs Gradle — expected.
 4. After applying, run **`/kit-compile-app`** to confirm the build is green.
 
 ## Step 5 — Wrap up
@@ -106,5 +119,7 @@ matter (e.g. billing, auth). So:
     just delete the branch.
 - Suggest a commit / `/kit-save-to-github` once they're happy.
 
-> This command edits `app/` **only** for the specific code fixes the developer
-> explicitly approves in Step 4 — never as part of the commands/skills refresh.
+> This command edits app code — and, when an approved fix adds a dependency, the
+> `gradle/libs.versions.toml` catalog + `app/build.gradle.kts` — **only** for the
+> specific code fixes the developer explicitly approves in Step 4, never as part of
+> the commands/skills refresh.
