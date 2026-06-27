@@ -65,7 +65,7 @@ Show this verbatim, then ask the user (wait for their answer) — "Start these n
   1. Play Console account + **app entry** (the first blocker — needs the $25 account).
   2. **Signed build on a testing track** via **`/kit-sign-release`** — this is what
      *unblocks product creation* and starts the first-review clock.
-  3. **In-app products** (now unblocked) + activate.
+  3. **One-time products** (now unblocked) + activate.
   4. **Service-account JSON → RevenueCat** — starts the ~36 h propagation clock.
   5. **Offerings + paywall** in RevenueCat.
 

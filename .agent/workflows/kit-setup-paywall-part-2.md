@@ -85,13 +85,13 @@ charge real users"); present it paced, not all at once:
    signed AAB (the BILLING permission is already in the manifest) and walks the
    **internal testing** upload. *This is what unblocks product creation* and starts
    the first-review clock. Open the **tester opt-in URL** on your test device after.
-3. **In-app products** *(now unblocked by step 2)* — the fiddly part: Google Play
+3. **One-time products** *(now unblocked by step 2)* — the fiddly part: Google Play
    nests subscriptions as **Subscription → Base plan**, and you must activate
    *both*. **STOP and wait** while the developer creates + activates each one.
 
    **For subscriptions** (recurring — most apps), show this verbatim:
    > **Create a subscription in Play Console:**
-   > 1. Play Console → your app → **Monetize → Products → Subscriptions → Create
+   > 1. Play Console → your app → **Monetize with Play → Products → Subscriptions → Create
    >    subscription**.
    > 2. **Product ID** — the permanent identifier you'll paste into RevenueCat,
    >    e.g. `premium_monthly` or `pro_yearly` (lowercase, digits, underscores).
@@ -111,7 +111,7 @@ charge real users"); present it paced, not all at once:
    > 6. Repeat for each tier. **Note every Product ID** — you'll import them into
    >    RevenueCat in piece 5.
 
-   **For one-time unlocks** (non-recurring) use **In-app products** instead —
+   **For one-time unlocks** (non-recurring) use **One-time products** instead —
    simpler: an ID + price, then **Activate**. Note each Product ID.
 
 That covers the Play-side pieces (account, signed build, products). Next, connect

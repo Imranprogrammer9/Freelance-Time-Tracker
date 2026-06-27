@@ -122,7 +122,7 @@ Console won't unlock product creation without it in the uploaded build.
 The rest is dashboard-side, so confirm it with the developer. Show verbatim:
 
 > **You have a paywall — is billing wired up?** Before real users can pay, you need:
-> 1. **In-app products** created + activated in Play Console.
+> 1. **One-time products** created + activated in Play Console.
 > 2. **A service-account JSON** uploaded to RevenueCat (~36 h to propagate).
 > 3. **An offering + published paywall** in RevenueCat.
 > 4. **This build live on a testing track + the tester opt-in URL opened** on your
