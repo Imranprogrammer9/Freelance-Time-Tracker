@@ -1,6 +1,9 @@
 package dev.shipkaro.kit
 
 import android.app.Application
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import dev.shipkaro.kit.core.analytics.AnalyticsManager
 import dev.shipkaro.kit.core.billing.PurchaseManager
 import dev.shipkaro.kit.core.config.KitConfig
@@ -49,7 +52,19 @@ class KitApplication : Application() {
         }
         // RevenueCat init. No-ops when no API key is configured.
         if (KitConfig.PAYWALL_ENABLED) {
-            get<PurchaseManager>().configure()
+            val purchaseManager = get<PurchaseManager>()
+            purchaseManager.configure()
+            // Re-pull entitlements every time the app comes to the foreground. Catches
+            // entitlements granted out-of-band — e.g. a Play pre-registration reward claimed
+            // in the Play Store, or a purchase made on another device — so the paywall unlocks
+            // without waiting for the next cold start. refresh() no-ops without an API key.
+            ProcessLifecycleOwner.get().lifecycle.addObserver(
+                object : DefaultLifecycleObserver {
+                    override fun onStart(owner: LifecycleOwner) {
+                        purchaseManager.refresh()
+                    }
+                },
+            )
         }
         // Analytics init. No-ops when ANALYTICS_ENABLED is off / no providers configured.
         if (KitConfig.ANALYTICS_ENABLED) {

@@ -130,6 +130,7 @@ dependencies {
     implementation(libs.androidx.appcompat) // per-app locale switching (AppCompatDelegate)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.process) // ProcessLifecycleOwner → refresh entitlements on app foreground
     implementation(libs.androidx.activity.compose)
 
     implementation(platform(libs.androidx.compose.bom))
