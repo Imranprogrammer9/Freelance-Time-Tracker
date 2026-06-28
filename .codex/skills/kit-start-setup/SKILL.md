@@ -2,6 +2,7 @@
 name: kit-start-setup
 description: Guided end-to-end setup of NowKit — run this first
 ---
+
 You are running **`/kit-start-setup`**, the master setup command for NowKit.
 
 This is the FIRST command a developer runs after cloning the kit. Your job: walk
@@ -14,10 +15,10 @@ edits, they answer questions.
 
 ## How this command works
 
-Each setup step has its own command file in `.claude/commands/`. For each step
-below, **Read that file and follow its instructions fully**, then return here and
-continue to the next step. The sub-command files contain a literal `$ARGUMENTS`
-token — ignore it (treat it as empty) when running them as part of this flow.
+Each setup step has its own command file. For each step below, **Read that file
+and follow its instructions fully**, then return here and continue to the next
+step. The sub-command files contain a literal `$ARGUMENTS` token — ignore it
+(treat it as empty) when running them as part of this flow.
 
 Every step is independent. If the developer wants to stop after any step, that is
 fine — they can resume later by running that single command on its own.
@@ -28,48 +29,62 @@ steps. They are slow and the wait adds up across the flow. Each sub-command has 
 single build runs once at the very end, in Step 7 (`/kit-run-app`), and it catches
 any compile error introduced by any earlier step.
 
-## Resume check — do this FIRST
+## Resume check — do this FIRST (before greeting)
 
-A developer can leave mid-setup and come back later — next day, a new session,
-even another machine. Don't rely on memory of this chat; **read the project files
-to see what's already done** (they persist, a conversation doesn't). Check:
+A developer can leave mid-setup and come back later — next day, a new chat
+session, even another machine. The kit has no in-memory checklist that survives
+that, so **derive progress from the project files themselves** (they persist; a
+conversation doesn't). Read these signals and classify each step **done** or
+**to do**:
 
-- **Rename (Step 1):** `app/build.gradle.kts` `namespace` — done if ≠ `dev.shipkaro.kit`.
-- **Onboarding (Step 2):** `res/values/strings.xml` `onboarding_page1_title` — done if ≠ `Welcome aboard`.
-- **Brand & theme (Step 3):** `core/designsystem/theme/Color.kt` `BrandPrimary` — done if ≠ `Color(0xFF7C3AED)`.
-- **Auth (Step 4):** `KitConfig.kt` `AUTH_ENABLED` — done if `= true`.
-- **Paywall (Step 5):** `KitConfig.kt` `PAYWALL_ENABLED` + `local.properties` `revenuecat.android.api.key` — done if the key is set (`goog_…`) OR `PAYWALL_ENABLED = false` (free app, deliberately off).
-- **Analytics (Step 6):** `local.properties` (`posthog.api.key`, `sentry.dsn`) or `app/google-services.json` — done if any is present.
+| Step | Read this | Already DONE when | Still TO DO (kit default) |
+|------|-----------|-------------------|----------------------------|
+| 1 Rename | `app/build.gradle.kts` → `namespace` | ≠ `dev.shipkaro.kit` | `= dev.shipkaro.kit` |
+| 2 Onboarding | `res/values/strings.xml` → `onboarding_page1_title` | ≠ `Welcome aboard` | `= Welcome aboard` |
+| 3 Brand & theme | `core/designsystem/theme/Color.kt` → `BrandPrimary` | ≠ `Color(0xFF7C3AED)` | `= Color(0xFF7C3AED)` |
+| 4 Auth | `KitConfig.kt` → `AUTH_ENABLED` | `= true` | `= false` |
+| 5 Paywall | `KitConfig.kt` `PAYWALL_ENABLED` + `local.properties` `revenuecat.android.api.key` | key set (`goog_…`) **or** `PAYWALL_ENABLED = false` (free app, deliberately off) | `PAYWALL_ENABLED = true` **and** no key |
+| 6 Analytics | `local.properties` (`posthog.api.key`, `sentry.dsn`) + `app/google-services.json` | any provider key/file present | none present |
 
-(`PAYWALL_ENABLED` and `ANALYTICS_ENABLED` both default to `true`, so the flag alone
-isn't proof — Steps 5/6 also need a key/file signal.)
+> Note: `PAYWALL_ENABLED` and `ANALYTICS_ENABLED` both **default to `true`**, so the
+> flag alone doesn't prove a step ran — that's why Steps 5/6 also need a key/file
+> signal (mirrors each sub-command's own Step 0).
 
-Then branch:
+**Then branch:**
 
-- **Fresh clone** — Steps 1, 2 AND 3 are all still at defaults. Greet fully
-  (Step 0 below) and walk the whole flow as normal.
+- **Fresh clone** — Steps 1, 2 AND 3 are ALL still at defaults (namespace =
+  `dev.shipkaro.kit` AND title = `Welcome aboard` AND BrandPrimary =
+  `0xFF7C3AED`). Treat as a first run: greet fully (Step 0 — Orientation below),
+  walk the whole flow as normal.
+
 - **Resumed setup** — at least one step is already done:
-  1. Greet briefly — "Welcome back 👋 — picking up your NowKit setup where you left
-     off." Skip the long orientation (they've seen it).
-  2. Show a short status list — one line per step, ✅ done (with the detected value,
-     e.g. "Auth — Supabase") or ⬜ to do.
-  3. Ask the user (wait for their answer) how to continue: **Resume from the first
-     ⬜ step** (recommended) / **Review a finished step** (pick any ✅ to revisit —
-     its own command offers keep-as-is / change) / **Start over** (re-run from
-     Step 1; nothing is deleted, each step just re-confirms).
-  4. Run from the chosen point; do NOT re-enter finished steps.
-  5. Only if `local.properties` is missing (e.g. a new machine — it's git-ignored,
-     so it doesn't travel with the repo), run Step 0 parts a–f first.
+  1. Greet **briefly** — "Welcome back 👋 — picking up your NowKit setup where you
+     left off." Skip the long orientation blurb (they've seen it).
+  2. Print a short **resume status** list — one line per step, ✅ done (with the
+     detected value, e.g. "Auth — Supabase") or ⬜ to do.
+  3. Ask the developer (wait for their answer) — "How do you want to continue?":
+     - **Resume from <first ⬜ step>** (recommended) — continue from the first
+       unfinished step.
+     - **Review a finished step** — pick any ✅ step to revisit (its own command
+       offers keep-as-is / change).
+     - **Start over** — re-run every step from Step 1 (nothing is deleted; each
+       step just re-confirms).
+  4. Run from the chosen point. **Do NOT re-enter steps already done.**
+  5. Still confirm prerequisites if `local.properties` is **missing** (e.g. a new
+     machine — it's git-ignored, so it doesn't travel with the repo): run Step 0
+     parts **a–f** only, then continue. If `local.properties` exists, skip straight
+     to the resume point.
 
-Every `/kit-setup-*` sub-command also has its own "Step 0 — Detect existing state"
-that re-checks and offers keep-as-is, so finished work is never clobbered.
+**Safety net:** every `/kit-setup-*` sub-command has its own "Step 0 — Detect
+existing state" that re-checks and offers keep-as-is, so even if this
+classification is slightly off, finished work is never clobbered.
 
 ## Step 0 — Orientation
 
-> **Resumed setup?** Skip this orientation and the "what are you building?"
-> question (infer free-vs-paid from `PAYWALL_ENABLED`). Run only prerequisite
-> checks a–f below, and only if `local.properties` is missing. Then jump to the
-> resume point.
+> **Resumed setup?** Skip this orientation blurb and the "what are you building?"
+> question (infer free-vs-paid from `PAYWALL_ENABLED`). Run only the prerequisite
+> checks **a–f** below, and only if `local.properties` is missing. Then jump to the
+> resume point chosen in the Resume check.
 
 Open with one line: **NowKit** is a starter kit from **ShipKaro**, a community
 for indie mobile developers who ship fast — ShipKaro's motto is "Stop
@@ -91,7 +106,7 @@ Then show the developer what NowKit gives them — present this list as-is:
 
 Then say you will now configure it together.
 
-Then ask the user (wait for their answer): **what they are building**:
+Then ask the developer (wait for their answer) **what they are building**:
 - A free app
 - A paid / subscription app
 - Just exploring the kit
@@ -146,7 +161,7 @@ If anything fails, help fix it before continuing. Tell the developer that
 `local.properties` holds their SDK path and all secret keys, is git-ignored, and
 must never be committed — later steps write keys into it.
 
-## Step 1 — Rename the kit  →  `.claude/commands/kit-change-app-id.md`
+## Step 1 — Rename the kit  →  /kit-change-app-id
 
 Make the kit theirs: new package name, applicationId, app display name. Do this
 first — before any other code is added — so the rename stays clean.
@@ -177,12 +192,124 @@ Do NOT add new string IDs, and do NOT bring up other locales — the kit ships
 English-only and `/kit-translate` handles every other language later. Keep
 entity escapes (`'` → `\'`, `&` → `&amp;`) correct.
 
-## Step 3 — Brand & theme  →  `.claude/commands/kit-kit-setup-theme.md`
+## Step 3 — Brand & theme  →  /kit-setup-theme
 
 Set their brand color and app icon.
 
-## Step 4 — Authentication  →  `.claude/commands/kit-kit-setup-auth.md`
+## Step 4 — Authentication  →  /kit-setup-auth
 
 Pick and configure the auth provider (Stub / Supabase / Firebase).
 
-Then call /kit-start-setup-part-2 to continue.
+## Step 5 — Paywall & subscriptions  →  /kit-setup-paywall
+
+If the developer chose **"free app"** in Step 0, SKIP the full setup but DO
+flip the kit's paywall switch off — otherwise the kit's nav still shows the
+default Paywall screen after Auth on first launch. Find `KitConfig.kt`
+(under `app/src/main/java`, package `...core.config`) and set:
+
+    const val PAYWALL_ENABLED: Boolean = false
+
+Then tell the developer the paywall is disabled and they can run
+`/kit-setup-paywall` later if they ever add subscriptions. Move to Step 6.
+
+Otherwise (paid app, or just exploring), configure RevenueCat via the command
+file.
+
+## Step 6 — Analytics & crash reporting  →  /kit-setup-analytics
+
+Configure PostHog and/or Firebase Analytics + Crashlytics.
+
+## Step 7 — Build & run  →  /kit-run-app
+
+Final verification. Run **`/kit-run-app`** — it compiles the app, installs it on
+the connected device, and launches it. This is the single build that runs
+during `/kit-start-setup` (every earlier step skipped its own verify).
+
+If the developer just wants a compile check without installing, they can use
+`/kit-compile-app` instead.
+
+## Step 8 — Kick off the slow billing setup early (only if the app sells)
+
+Read `KitConfig.kt`. **If `PAYWALL_ENABLED = false`, skip this step entirely** —
+nothing to sell, no billing clocks to start.
+
+If `PAYWALL_ENABLED = true`, there are **two things that take real time** and can be
+started **now**, while the developer keeps building — so the clocks aren't waiting at
+the end:
+
+1. **RevenueCat ↔ Google Play connection** (the service-account JSON) — Google takes
+   **~36 hours** to propagate the permission before purchases validate.
+2. **A build on an internal testing track** — Google Play only serves your products to
+   a build that's live on a track, and the **first review** of a new app can take hours
+   to a few days. Until a build is on a track (+ tester opt-in), the paywall shows
+   "offerings empty" — so you can't test real purchases.
+
+Both can run **in the background** while the developer builds their app's features.
+Show this verbatim, then ask the developer (wait for their answer) ("Start these now" / "Later"):
+
+> **Heads up — billing has two slow steps.** Connecting Google Play to RevenueCat
+> takes **~36 hours** to go live, and your first build needs to sit on a Play test
+> track (first review can take a few days) before purchases work. Good news: you can
+> **start both now** and keep building while the clocks tick — by the time your app's
+> done, billing is ready.
+>
+> **Start them now, or later?**
+
+- **Start now** — run **`/kit-setup-paywall`** and take its sub-step 2.6 **"Now"**
+  path. That walks the whole chain **in dependency order** (it's the one place that
+  gets the ordering right, so don't reorder it here):
+  1. Play Console account + **app entry** (the first blocker — needs the $25 account).
+  2. **Signed build on a testing track** via **`/kit-sign-release`** — this is what
+     *unblocks product creation* and starts the first-review clock.
+  3. **One-time products** (now unblocked) + activate.
+  4. **Service-account JSON → RevenueCat** — starts the ~36 h propagation clock.
+  5. **Offerings + paywall** in RevenueCat.
+
+  Then tell them to **keep building** their app's features while the clocks tick;
+  check back in ~36 h and test a real purchase. Full reference:
+  https://kit.shipkaro.dev/docs/paywall
+- **Later** — fine. Note the kit will walk all of this in
+  `/kit-upload-on-google-play` before they ship, and they can start it anytime with
+  `/kit-setup-paywall` → "Set up products + Play billing". Move on.
+
+## Step 9 — Back up to GitHub?
+
+Ask the developer (wait for their answer) — don't write a paragraph; the options carry the why:
+
+- **Yes, create a private repo** (recommended) — free, private (only you see it),
+  gives you a backup + full history. I'll create the repo and push everything via
+  the GitHub CLI.
+- **Not now** — your app stays only on this laptop; you can run
+  `/kit-save-to-github` anytime later.
+
+If **Yes** → Call `/kit-save-to-github` (it handles GitHub login, creates the
+repo, pushes, and shows its own short done summary). If **Not now** → one line, move
+on. Don't dump command explanations.
+
+## Wrap up
+
+Keep the wrap-up **short** — a vibe coder shouldn't have to scroll. Three parts:
+
+1. A **"Setup complete"** table: one row per configured step (Rename / Onboarding /
+   Brand & theme / Auth / Paywall / Analytics / Build), Result column with the
+   concrete value. End with a one-line **Skipped:** note.
+2. **Next moves** — at most 3 short lines (e.g. build your first screen with
+   `/kit-design-app`; before release run `/kit-upload-on-google-play`). Include
+   one line: "Run the app yourself anytime — no AI agent needed — with the
+   commands saved in **`RUN.md`**" (Step 7's run wrote it).
+3. The compact optional-commands list below, verbatim.
+
+> **Run these later when you need them** (type `/kit-` to see all):
+>
+> - `/kit-design-app` — build your app's own screens
+> - `/kit-design-onboarding` — personalised onboarding flow
+> - `/kit-setup-ai` — AI features (OpenRouter, one key)
+> - `/kit-translate` — add more languages
+> - `/kit-setup-updates` — update gate + remote config
+> - `/kit-setup-review-dialog` — in-app review prompt
+> - `/kit-save-to-github` — back up to GitHub
+> - `/kit-generate-screenshots` — Play Store screenshots
+> - `/kit-generate-aso` — Play listing copy (title + descriptions)
+> - `/kit-generate-landing` — static landing + privacy + terms page
+> - `/kit-upload-on-google-play` — ship to Google Play
+> - `/kit-env-check` — check your machine's tools
