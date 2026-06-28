@@ -64,13 +64,32 @@ to an app that's already on Google Play?"*
 
 # First-release path
 
-## Phase 0 — Play account ready
+## Phase 0 — Play account ready + account type (decides the whole path)
 
-Ask the developer (wait for their answer): *"Do you have a verified Google Play Console
-account?"*
-- **Yes** → continue.
+**0.1 — Account exists?** Ask the developer (wait for their answer): *"Do you have a verified
+Google Play Console account?"*
+- **Yes** → continue to 0.2.
 - **No** → tell them to create one at https://play.google.com/console (one-time **$25**
   fee) and complete identity verification, then resume. Stop here.
+
+**0.2 — Account type (ask this NOW — it decides whether the 14-day closed-testing gate
+applies).** Ask the developer (wait for their answer): *"What kind of Play Console account
+is this?"*
+- **Organisation account** → **exempt** from the closed-testing requirement.
+- **Personal account created BEFORE 13 Nov 2023** → **exempt**.
+- **Personal account created ON/AFTER 13 Nov 2023** → **not exempt** — must run closed
+  testing (12 testers / 14 continuous days) before applying for production.
+
+**Branch on the answer — set this for the rest of the run:**
+- **Exempt** → there is **NO closed-testing gate**. The path is shorter:
+  Phase 1 → 2 → 3 (optional) → 4 → 5 → **straight to Phase 7 (production)**. **Skip Phase 6
+  entirely** (don't present the 14-day flow, it'll just confuse them). Tell the developer
+  plainly: *"Your account is exempt, so you can publish to production right after the 'Set up
+  your app' checklist — no 14-day test needed."*
+- **Not exempt** → the **Phase 6 closed-testing gate applies** (the 12-tester / 14-day
+  long pole).
+
+Carry this exempt/not-exempt decision through the whole run.
 
 ## Phase 1 — Set the version, then build the signed AAB
 
@@ -87,8 +106,8 @@ them to back it up — losing it means they can never update the app) and builds
 
 ## Phase 2 — Create the app on Play Console
 
-Ask the developer (wait for their answer): *"Have you already created this app on Play
-Console — for example while connecting RevenueCat to Google Play?"*
+Ask the developer (wait for their answer): *"Have you already created this app on Play Console
+— for example while connecting RevenueCat to Google Play?"*
 - **Yes** → skip to Phase 3.
 - **No** → first read `applicationId` from `app/build.gradle.kts`, substitute it below,
   present verbatim, and wait:
@@ -133,8 +152,12 @@ Skip if they already have a build on any track (e.g. from RevenueCat setup). Oth
 The "Set up your app" checklist (Phase 5) needs a **public privacy URL** and Data safety
 answers. Generate + host them now so they're ready.
 
-**4.1 — Screenshots.** Call **`/kit-generate-screenshots`** (the landing hero + the
-store listing both need them) → `playstore/screenshots/`.
+**4.1 — Screenshots (REQUIRED — do not defer).** Call **`/kit-generate-screenshots`**
+→ `playstore/screenshots/`. These are **not optional**: the store listing (5.11) won't save
+without **≥ 2 phone screenshots**, and the listing is part of the "Set up your app"
+checklist that **gates the closed-testing and production tracks** — so you can't start
+closed testing without them. If the developer doesn't want generated ones, they must drop
+their own PNGs into `playstore/screenshots/` now. Don't skip past this step.
 
 **4.2 — Listing copy.** Call **`/kit-generate-aso`** → `playstore/title.txt`,
 `short_description.txt`, `full_description.txt` (used in 5.11).
@@ -228,15 +251,19 @@ When this is saved the checklist shows **11/11** and the public tracks unlock.
 
 ## Phase 6 — Closed testing (the 12-tester / 14-day gate)
 
-First ask the developer (wait for their answer): *"Is your Play account exempt from closed
-testing? (exempt = an organisation account, or a personal account created BEFORE 13 Nov
-2023)."*
-- **Exempt** → skip to Phase 7.
-- **Not exempt (personal, on/after 13 Nov 2023)** → closed testing is **required** before
-  production. This is a **14-day** process — start it now and keep building meanwhile.
+**Only for NOT-exempt accounts** (decided back in Phase 0.2). **If the account is exempt,
+you already skipped this — go straight to Phase 7.** Do not run the 14-day flow for an
+exempt account.
 
-> ⏰ This is the long pole. The app you closed-test must be your **real app** (build your
-> core features first with `/kit-design-app`) — an empty shell can be rejected in review.
+For a not-exempt account, closed testing is **required** before production — a **14-day**
+process. Two prerequisites:
+- **"Set up your app" must be 11/11 (Phase 5)** — including the **store listing with
+  screenshots**. Closed testing won't start until the checklist is complete (the Closed
+  testing card literally says *"finish setting up your app"* first).
+- The app you closed-test must be your **real app** (build your core features first with
+  `/kit-design-app`) — an empty shell can be rejected in review.
+
+> ⏰ This is the long pole — start it as soon as Phase 5 is done and keep polishing meanwhile.
 
 **6.1 — Set up the closed test track** (Dashboard → Closed testing → tasks): **Select
 countries and regions**, then **Select testers** — add a list with **≥ 12 testers**. Each

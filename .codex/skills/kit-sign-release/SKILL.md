@@ -152,6 +152,27 @@ the manifest must have an uncommented
 `<uses-permission android:name="com.android.vending.BILLING" />`. Without it, Play
 won't unlock product creation later.
 
+### Step 3.5 — Archive a versioned copy (keep build history)
+
+Gradle always overwrites `app-release.aab`, so each build wipes the last. Copy it into
+`releases/` under a **versioned name** so every build is kept as history (never delete the
+old ones). Derive the app name + version, then copy:
+
+```bash
+APP_NAME=$(grep -m1 '<string name="app_name">' app/src/main/res/values/strings.xml \
+  | sed 's/.*>\(.*\)<.*/\1/' | tr ' ' '_')
+VN=$(grep -m1 'versionName' app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
+VC=$(grep -m1 'versionCode' app/build.gradle.kts | sed 's/[^0-9]//g')
+mkdir -p releases
+cp app/build/outputs/bundle/release/app-release.aab "releases/${APP_NAME}_v${VN}_${VC}.aab"
+echo "archived: releases/${APP_NAME}_v${VN}_${VC}.aab"
+```
+
+So e.g. `releases/Focus5_v1.0.0_1.aab`. The `versionCode` suffix keeps every build unique
+(two builds of the same `versionName` won't overwrite each other). Upload either this
+archived file or the original `app-release.aab` to Play — they're identical. The `releases/`
+folder is git-ignored (signed AABs are large binaries — local history only).
+
 ## Step 4 — Create the Play Console app (if not done)
 
 Manual web step. **First read the `applicationId`** from `app/build.gradle.kts`

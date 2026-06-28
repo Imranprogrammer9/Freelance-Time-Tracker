@@ -25,3 +25,6 @@ revenuecat-key.json
 # Ruby / Bundler
 /vendor/bundle
 .bundle/
+
+# Signed AAB build history (local only)
+/releases/

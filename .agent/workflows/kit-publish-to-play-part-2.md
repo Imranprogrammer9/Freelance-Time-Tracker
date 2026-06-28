@@ -79,15 +79,19 @@ When this is saved the checklist shows **11/11** and the public tracks unlock.
 
 ## Phase 6 — Closed testing (the 12-tester / 14-day gate)
 
-First ask the developer (wait for their answer): *"Is your Play account exempt from closed
-testing? (exempt = an organisation account, or a personal account created BEFORE 13 Nov
-2023)."*
-- **Exempt** → skip to Phase 7.
-- **Not exempt (personal, on/after 13 Nov 2023)** → closed testing is **required** before
-  production. This is a **14-day** process — start it now and keep building meanwhile.
+**Only for NOT-exempt accounts** (decided back in Phase 0.2). **If the account is exempt,
+you already skipped this — go straight to Phase 7.** Do not run the 14-day flow for an
+exempt account.
 
-> ⏰ This is the long pole. The app you closed-test must be your **real app** (build your
-> core features first with `/kit-design-app`) — an empty shell can be rejected in review.
+For a not-exempt account, closed testing is **required** before production — a **14-day**
+process. Two prerequisites:
+- **"Set up your app" must be 11/11 (Phase 5)** — including the **store listing with
+  screenshots**. Closed testing won't start until the checklist is complete (the Closed
+  testing card literally says *"finish setting up your app"* first).
+- The app you closed-test must be your **real app** (build your core features first with
+  `/kit-design-app`) — an empty shell can be rejected in review.
+
+> ⏰ This is the long pole — start it as soon as Phase 5 is done and keep polishing meanwhile.
 
 **6.1 — Set up the closed test track** (Dashboard → Closed testing → tasks): **Select
 countries and regions**, then **Select testers** — add a list with **≥ 12 testers**. Each
