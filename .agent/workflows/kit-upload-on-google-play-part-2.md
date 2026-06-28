@@ -33,7 +33,7 @@ files end up at:
 Skip this step if the developer already has listing copy they're
 happy with from a previous run.
 
-## G. Data Safety, Privacy policy + Landing page
+## G. App content — privacy, Data Safety + content declarations
 
 **G.1 — Legal.** Call /kit-generate-legal. That command scans the active
 SDKs + KitConfig, asks the developer the legal questions (company name, contact
@@ -67,6 +67,60 @@ After the privacy page is hosted (via the landing page or directly), show:
 
 Wait for the developer to confirm the policy is hosted and the Data Safety
 form is submitted before continuing.
+
+**G.3 — The rest of the "Set up your app" content declarations (codebase-aware).**
+These are the **App content** declarations Play forces beyond Data Safety — content
+rating, target audience, ads, financial features, health, government. They're what
+trigger the "*You must complete…*" / "*You must let us know whether…*" errors that
+block a release. Nothing auto-fills them, but you can **infer almost all from the
+codebase** so the developer just confirms instead of guessing.
+
+**First, inspect the app** (do this for them; don't ask what you can read):
+- App identity → `app/build.gradle.kts` `namespace` + `applicationId`, app display
+  name in `strings.xml`, and the `feature/` folder names → infer the app's category
+  (productivity / health / finance / social / kids / …).
+- **Ads** → grep deps for an ads SDK (`play-services-ads` / AdMob / AppLovin / any
+  ad network) in `app/build.gradle.kts` + `gradle/libs.versions.toml`. None → **No
+  ads** (the kit ships none).
+- **Financial features** → grep for banking / crypto / lending / investing / money-
+  transfer / insurance SDKs. None → **No**. ⚠️ Selling a subscription or IAP via
+  RevenueCat / Play Billing is **NOT** a "financial feature" — don't flag it as one.
+- **Health** → grep for Health Connect (`androidx.health`) / Google Fit / medical
+  SDKs, and check whether the app's purpose is health/fitness (feature names,
+  strings). None and not a health app → **No**.
+- **Target audience / children** → check for any child-directed signal (a kids
+  feature, COPPA flag). The kit isn't child-directed by default → **not designed for
+  children**, target **13+**.
+- **Government / news** → almost always **No** for a kit app.
+
+**Then write `playstore/app_content_declarations.md`** — a cheat-sheet with the
+**suggested answer + the evidence** for each declaration (e.g. "Ads: **No** — no ad
+SDK in build.gradle"), so the developer fills the Play form fast and it survives
+across sessions. Present the suggestions and let them **confirm or correct each one**
+— these are legal-ish declarations, so they own the final answer.
+
+Then show (substitute the inferred app category + suggested answers):
+
+> **Complete Play Console → your app → "Set up your app" → these App content
+> sections** (each is required; the release stays blocked until all are green). Use
+> `playstore/app_content_declarations.md` as your answer key:
+> 1. **Content rating** — start the IARC questionnaire, enter your email, pick the
+>    category (e.g. *<inferred category>*). For a typical app, answer **No** to the
+>    violence / sexual content / gambling / drug-reference questions; the rating is
+>    auto-calculated. Submit.
+> 2. **Target audience and content** — pick age groups. Suggested: **<13+ / not
+>    designed for children>**. Saying it's for children triggers extra
+>    Families/COPPA rules — only do that if it's truly a kids' app.
+> 3. **Ads** — declare whether the app contains ads. Suggested: **<No>**.
+> 4. **Financial features** — suggested: **<No>** (a paid subscription is *not* a
+>    financial feature). Tick the categories that apply, or "My app doesn't provide
+>    any financial features".
+> 5. **Health** — suggested: **<No>**. If it *is* a health/fitness app, select the
+>    relevant items and complete the **health declaration**.
+> 6. **Government apps** (and **News**, if shown) — suggested: **<No>**.
+
+Wait for the developer to confirm all App content sections are green before
+continuing.
 
 ## H. Plan release analytics
 
