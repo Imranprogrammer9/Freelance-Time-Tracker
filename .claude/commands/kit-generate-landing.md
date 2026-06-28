@@ -75,6 +75,7 @@ landing/
 ├── index.html        ← hero + features + screenshots + Play badge + footer
 ├── privacy.html      ← privacy policy (from playstore/privacy_policy.html)
 ├── terms.html        ← terms of service (from the filled template)
+├── data-safety.html  ← UNLISTED readable view of the Data safety answers (if present)
 ├── styles.css        ← one stylesheet, shared by all pages
 └── assets/           ← copied screenshots + any icon
 ```
@@ -95,6 +96,12 @@ Requirements for the HTML/CSS you write:
     copyright line with the company name + year.
 - **`privacy.html` / `terms.html`** — the legal content inside the same shell
   (same header/footer/styles), with a "← Back" link to `index.html`.
+- **`data-safety.html`** — only if `playstore/play_data_safety.md` exists. Render its
+  Data safety answers (the data-type table + the toggles) into the same shell as a
+  clean, readable page. It is **unlisted** — do **NOT** link it from the index footer or
+  nav; it's reachable only by its direct URL. It gives the developer a styled page to read
+  while filling Play's Data safety form (better than opening a `.md`). Skip silently if
+  the file isn't there.
 - Accessibility basics: `<title>` per page, `alt` on every image, semantic tags
   (`<header> <main> <section> <footer>`), `lang="en"`.
 - **No external requests** — no Google Fonts, no CDN CSS, no analytics, no JS

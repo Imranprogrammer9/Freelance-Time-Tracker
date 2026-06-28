@@ -2,6 +2,7 @@
 name: kit-generate-landing
 description: Generate a simple static landing page for your app (hero + features + privacy + terms + contact)
 ---
+
 You are running **`/kit-generate-landing`** for NowKit. Goal: generate a
 **simple static HTML + CSS landing page** for the developer's app — no
 framework, no build step, no JS dependencies. One folder, hosted free (Step 4
@@ -23,9 +24,9 @@ Step G offers it inline (the privacy page it produces is the URL Play needs).
 
 ## Step 0 — Detect existing state
 
-- If `landing/index.html` already exists — Ask the user (wait for their answer): **Keep as-is**
-  (exit), **Regenerate** (overwrite), or **Update content** (re-ask the inputs,
-  rewrite). 
+- If `landing/index.html` already exists — Ask the developer (wait for their
+  answer): **Keep as-is** (exit), **Regenerate** (overwrite), or **Update
+  content** (re-ask the inputs, rewrite).
 - Read what you can reuse so you don't re-ask:
   - **App name** → `app/src/main/res/values/strings.xml` (`app_name`).
   - **Brand color** → `BrandPrimary` in `core/designsystem/theme/Color.kt`.
@@ -75,6 +76,7 @@ landing/
 ├── index.html        ← hero + features + screenshots + Play badge + footer
 ├── privacy.html      ← privacy policy (from playstore/privacy_policy.html)
 ├── terms.html        ← terms of service (from the filled template)
+├── data-safety.html  ← UNLISTED readable view of the Data safety answers (if present)
 ├── styles.css        ← one stylesheet, shared by all pages
 └── assets/           ← copied screenshots + any icon
 ```
@@ -95,6 +97,12 @@ Requirements for the HTML/CSS you write:
     copyright line with the company name + year.
 - **`privacy.html` / `terms.html`** — the legal content inside the same shell
   (same header/footer/styles), with a "← Back" link to `index.html`.
+- **`data-safety.html`** — only if `playstore/play_data_safety.md` exists. Render its
+  Data safety answers (the data-type table + the toggles) into the same shell as a
+  clean, readable page. It is **unlisted** — do **NOT** link it from the index footer or
+  nav; it's reachable only by its direct URL. It gives the developer a styled page to read
+  while filling Play's Data safety form (better than opening a `.md`). Skip silently if
+  the file isn't there.
 - Accessibility basics: `<title>` per page, `alt` on every image, semantic tags
   (`<header> <main> <section> <footer>`), `lang="en"`.
 - **No external requests** — no Google Fonts, no CDN CSS, no analytics, no JS
@@ -111,8 +119,8 @@ Don't run a build (it's static HTML). First let them preview:
 > `landing/index.html` in a browser.
 
 Then host it to get the **public Privacy-policy URL Google Play requires**.
-Ask the user (wait for their answer) which path, GitHub Pages first
-(recommended). **Include the Firebase Hosting option ONLY if
+Ask the developer (wait for their answer) which path they want, GitHub Pages
+first (recommended). **Include the Firebase Hosting option ONLY if
 `app/google-services.json` exists** (i.e. they already configured Firebase for
 auth/analytics/etc) — otherwise omit it:
 
