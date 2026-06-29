@@ -41,6 +41,42 @@ Ask the user (wait for their answer):
 
 Branch on the answer.
 
+## Step 2A.0 — Set up the Gemini image MCP (only if it's missing)
+
+The skill renders the polished screenshots with **Nano Banana Pro via a Gemini MCP
+server**. **First check if it's already there:** is a `generate_image` tool available
+(from a Gemini MCP)? If yes → skip straight to Step 2A.
+
+If it's **not** present, **walk the developer through setup ONE step at a time — wait for
+"done" after each. Do NOT paste the whole setup as one block** (that's the thing we're
+fixing). Use the **same MCP the skill's source repo specifies** —
+`@houtini/gemini-mcp` (github.com/adamlyttleapps/claude-skill-aso-appstore-screenshots) —
+not any other gemini-mcp fork.
+
+**Step A — API key** (present, wait):
+> Get a **Gemini API key** (Nano Banana Pro is the `gemini-3-pro-image` model — **paid**
+> tier): open https://aistudio.google.com/apikey, create a key, copy it. Say "done".
+
+**Step B — Install the MCP server** (present, wait):
+> Install it:
+> ```
+> npm install -g @houtini/gemini-mcp
+> ```
+> Say "done".
+
+**Step C — Register + add your key** (present, wait):
+> Add it to your Claude Code MCP config (`~/.claude/settings.json` or the project's
+> `.mcp.json`) under `mcpServers`, with your key in `env.GEMINI_API_KEY`. Exact config
+> block is in the skill's repo README:
+> github.com/adamlyttleapps/claude-skill-aso-appstore-screenshots
+> Say "done".
+
+**Step D — Restart** (present, wait):
+> **Restart Claude Code** so the MCP server loads. Say "done".
+
+Then re-check the `generate_image` tool exists. If it does → continue to Step 2A. If not,
+point them at the skill repo's README and stop (don't guess at the config).
+
 ## Step 2A — Generate via the skill
 
 Invoke the `aso-appstore-screenshots` skill. When it asks for output target /
