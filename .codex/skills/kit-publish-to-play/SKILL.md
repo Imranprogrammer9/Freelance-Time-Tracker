@@ -106,28 +106,50 @@ if the developer already replaced it. Ask the developer which way (wait for thei
 
 - **B) Generate with Gemini (Nano Banana)** — you write the prompt from the app, they
   generate. First **survey the app** (purpose/category from `namespace` + `feature/` +
-  `strings.xml`; brand colour from `core/designsystem/theme/Color.kt`), then fill this
-  JSON template and present it **verbatim** for them to paste into Gemini (Nano Banana
-  Pro, `gemini-3-pro-image`) — fill every `{…}` from the survey, no blanks left:
-  > ```json
-  > {
-  >   "style": "flat 2D illustration, cute and minimal, soft gradients, bold outlines, app icon style, playful and friendly",
-  >   "scene": "a {character_type} face close-up",
-  >   "elements": {
-  >     "main_subject": "{character_type} face",
-  >     "expression": "{expression}",
-  >     "eye_style": "{eye_style}",
-  >     "colors": { "primary": "{primary_color}", "secondary": "{secondary_color}", "details": "{detail_colors}" },
-  >     "extras": "{optional_details}"
-  >   },
-  >   "composition": { "framing": "centered close-up face", "cropping": "tight crop so face fills the frame", "perspective": "flat, no depth" },
-  >   "formatting": { "background": "{background_color_or_gradient}", "corner_radius": "no radius", "aspect_ratio": "1:1", "resolution": "4000x4000" }
-  > }
-  > ```
+  `strings.xml`; brand colour from `core/designsystem/theme/Color.kt`), then
+  fill every `{…}` in this JSON template from the survey (no blanks left):
+  ```json
+  {
+    "style": "flat 2D illustration, cute and minimal, soft gradients, bold outlines, app icon style, playful and friendly",
+    "scene": "a {character_type} face close-up",
+    "elements": {
+      "main_subject": "{character_type} face",
+      "expression": "{expression}",
+      "eye_style": "{eye_style}",
+      "colors": { "primary": "{primary_color}", "secondary": "{secondary_color}", "details": "{detail_colors}" },
+      "extras": "{optional_details}"
+    },
+    "composition": { "framing": "centered close-up face", "cropping": "tight crop so face fills the frame", "perspective": "flat, no depth" },
+    "formatting": { "background": "{background_color_or_gradient}", "corner_radius": "no radius", "aspect_ratio": "1:1", "resolution": "4000x4000" }
+  }
+  ```
   Pick a `{character_type}` that fits the app (e.g. a habit app → a friendly mascot animal;
-  a finance app → a coin/owl), set `{primary_color}` to the brand colour, etc. Then say:
-  *"Generate this in Gemini, then send me the saved PNG path."* Wait for the path → install
-  via the resize step below.
+  a finance app → a coin/owl), set `{primary_color}` to the brand colour, etc.
+
+  **Do not paste the filled prompt into the chat** — the terminal's gutter and line-wrap make
+  it impossible for the developer to copy cleanly. Instead **write the filled JSON to
+  `playstore/icon-prompt.txt`** (use your file-write tool — overwrite if it exists), then copy
+  it straight to their clipboard:
+  ```bash
+  if command -v pbcopy >/dev/null; then pbcopy < playstore/icon-prompt.txt
+  elif command -v wl-copy >/dev/null; then wl-copy < playstore/icon-prompt.txt
+  elif command -v xclip >/dev/null; then xclip -selection clipboard < playstore/icon-prompt.txt
+  elif command -v clip.exe >/dev/null; then clip.exe < playstore/icon-prompt.txt
+  else echo "NO_CLIPBOARD"; fi
+  ```
+  Then walk them through generating it (present verbatim):
+  > **Your icon prompt is copied to your clipboard** (also saved at `playstore/icon-prompt.txt`).
+  > 1. Open **https://gemini.google.com** and sign in.
+  > 2. Click **Create images** (the image tool in the prompt bar) and pick the **Thinking**
+  >    model — that's **Nano Banana Pro** (`gemini-3-pro-image`), best for crisp icons. (Free
+  >    tier may fall back to the faster model after a few generations — fine for an icon.)
+  > 3. **Paste** the prompt (⌘V / Ctrl-V) and send.
+  > 4. When the image appears, hover it and **download the PNG** (download icon, or the
+  >    three-dot menu → Download).
+  > 5. Send me the saved PNG path.
+
+  If the copy step printed `NO_CLIPBOARD`, tell them to open `playstore/icon-prompt.txt` and
+  copy it manually. Wait for the path → install via the resize step below.
 
 - **C) I have my own icon** — present, wait:
   > Give me a **square PNG, at least 512×512** (1024+ ideal). Send me the path.
