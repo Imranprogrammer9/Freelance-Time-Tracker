@@ -73,7 +73,7 @@ Show this verbatim, then ask the user (wait for their answer) — "Start these n
   check back in ~36 h and test a real purchase. Full reference:
   https://kit.shipkaro.dev/docs/paywall
 - **Later** — fine. Note the kit will walk all of this in
-  `/kit-upload-on-google-play` before they ship, and they can start it anytime with
+  `/kit-publish-to-play` before they ship, and they can start it anytime with
   `/kit-setup-paywall` → "Set up products + Play billing". Move on.
 
 ## Step 9 — Back up to GitHub?
@@ -98,7 +98,7 @@ Keep the wrap-up **short** — a vibe coder shouldn't have to scroll. Three part
    Brand & theme / Auth / Paywall / Analytics / Build), Result column with the
    concrete value. End with a one-line **Skipped:** note.
 2. **Next moves** — at most 3 short lines (e.g. build your first screen with
-   `/kit-design-app`; before release run `/kit-upload-on-google-play`). Include
+   `/kit-design-app`; before release run `/kit-publish-to-play`). Include
    one line: "Run the app yourself anytime — no AI agent needed — with the
    commands saved in **`RUN.md`**" (Step 7's run wrote it).
 3. The compact optional-commands list below, verbatim.
@@ -115,5 +115,5 @@ Keep the wrap-up **short** — a vibe coder shouldn't have to scroll. Three part
 > - `/kit-generate-screenshots` — Play Store screenshots
 > - `/kit-generate-aso` — Play listing copy (title + descriptions)
 > - `/kit-generate-landing` — static landing + privacy + terms page
-> - `/kit-upload-on-google-play` — ship to Google Play
+> - `/kit-publish-to-play` — ship to Google Play
 > - `/kit-env-check` — check your machine's tools

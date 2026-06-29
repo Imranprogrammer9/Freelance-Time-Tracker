@@ -22,7 +22,7 @@ declares the BILLING permission is live on a track**. So the build comes
 **If running as part of `/kit-start-setup`: skip ALL of the now/later content
 below** — don't ask the question, and don't show the "before your first release"
 block. It only confuses a vibe coder this early and tempts them to run
-`/kit-upload-on-google-play` prematurely. Instead, just confirm the paywall config
+`/kit-publish-to-play` prematurely. Instead, just confirm the paywall config
 is set and add **one neutral line** — e.g. "Real Play billing gets set up later;
 the kit asks you about it after your first build runs." — then continue to the
 next sub-step. Don't name release/upload commands here. The full now/later decision
@@ -54,7 +54,7 @@ Ask the user (wait for their answer):
 > Note that the integration between Google Play and RevenueCat takes around
 > **36 hours** to propagte.
 >
-> The kit reminds you again in `/kit-upload-on-google-play` before you ship. Say
+> The kit reminds you again in `/kit-publish-to-play` before you ship. Say
 > "got it" to continue.
 
 **If "Now"** — walk these pieces **in this exact order** (each unblocks the next),

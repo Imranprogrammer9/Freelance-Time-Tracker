@@ -84,4 +84,4 @@ move on.
 
 One or two lines: where the file was written, its character count vs the 500
 limit, and the single next action (usually: "paste this into the Play Console
-release notes, or it's auto-picked up if you upload via `/kit-upload-on-google-play`").
+release notes, or it's auto-picked up if you upload via `/kit-publish-to-play`").

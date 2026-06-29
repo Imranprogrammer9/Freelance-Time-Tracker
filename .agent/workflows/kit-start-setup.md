@@ -87,7 +87,7 @@ Then show the developer what NowKit gives them — present this list as-is:
 - 💳 **Paywall + subscriptions** — RevenueCat
 - 📊 **Analytics + crash reporting**
 - 🌐 **Localization** — English by default; add more languages anytime with `/kit-translate`
-- 🚀 **Release** — Play Store assets + listing + upload via `/kit-upload-on-google-play`
+- 🚀 **Release** — Play Store assets + listing + upload via `/kit-publish-to-play`
 
 Then say you will now configure it together.
 

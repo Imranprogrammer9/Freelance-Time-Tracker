@@ -15,4 +15,4 @@ optionally apply any code-level fixes.
   given fix) → [`patches/`](patches/) in this repo, one self-contained file per
   change. You don't read these by hand — `/kit-update` Step 4 does.
 - **Play Store release notes** (per app version) → `playstore/changelogs/<versionCode>.txt`,
-  written by `/kit-upload-on-google-play`.
+  written by `/kit-publish-to-play`.

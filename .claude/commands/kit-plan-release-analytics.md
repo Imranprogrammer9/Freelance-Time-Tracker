@@ -182,7 +182,7 @@ Analytics → Funnel exploration.
 
 ## Step 7 — Verify
 
-**Skip this step if you are running as part of `/kit-upload-on-google-play`** —
+**Skip this step if you are running as part of `/kit-publish-to-play`** —
 that orchestrator builds at the end. Otherwise run
 `./gradlew :app:compileDebugKotlin`.
 

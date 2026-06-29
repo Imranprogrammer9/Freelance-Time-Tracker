@@ -19,7 +19,7 @@ Reference style: clean, single-column, calm — like https://www.habitkit.app/.
 Audience: first-time mobile developers / vibe coders. Be brief; don't paste
 walls of text. Everything lands in a new top-level **`landing/`** folder.
 
-This command is **standalone** — run it anytime. `/kit-upload-on-google-play`
+This command is **standalone** — run it anytime. `/kit-publish-to-play`
 Step G offers it inline (the privacy page it produces is the URL Play needs).
 
 ## Step 0 — Detect existing state

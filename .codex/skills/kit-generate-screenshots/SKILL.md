@@ -13,7 +13,7 @@ Audience: first-time mobile developers / vibe coders. Be brief; do not paste wal
 Final images must end up at `playstore/screenshots/`.
 
 This command is **standalone** — run it anytime to refresh screenshots (before a release,
-after a UI redesign, when re-shooting for a new tier of device). `/kit-upload-on-google-play`
+after a UI redesign, when re-shooting for a new tier of device). `/kit-publish-to-play`
 Step E and `/kit-publish-to-play` Phase 3.1 invoke it inline.
 
 ## Step 0 — Detect existing state
@@ -193,7 +193,7 @@ phone screenshots and ask them to add more. If ≥ 2:
 
 - Print the count + the full path to the folder (`/absolute/path/to/playstore/screenshots/`).
 - Mention they can preview by opening `1.png` in their file viewer.
-- Mention `/kit-upload-on-google-play` Step E (and `/kit-publish-to-play` Phase 3.1) will
+- Mention `/kit-publish-to-play` Phase 3.1 will
   reference whatever's in this folder when it's time to ship.
 
 Don't run any build — screenshots are static assets, no compile needed.

@@ -51,11 +51,11 @@ So ask (AskUserQuestion) before doing any work:
 >   start collecting sign-ups and day-one momentum now.
 > - **No — my app is basically ready** — then just publish. Pre-registration would
 >   be the full launch checklist only to *not* ship yet. → run
->   **`/kit-upload-on-google-play`** instead.
+>   **`/kit-publish-to-play`** instead.
 > - **Not sure** — explain the trade-off for my case and help me decide.
 
 Only continue this command if they pick **Yes**. If **No**, point them at
-`/kit-upload-on-google-play` and stop. If **Not sure**, talk it through (a ready
+`/kit-publish-to-play` and stop. If **Not sure**, talk it through (a ready
 app → publish; a not-ready app with a marketing reason → pre-register).
 
 ## Why your existing build already qualifies
@@ -115,7 +115,7 @@ remind: pre-registration and rewards assume the RC↔Play connection from
 **1.4 — Full app setup readiness (same as launching).** Pre-registration publishes
 your **public** listing, so Play requires the **entire "Set up your app" checklist**
 done first — exactly what a production launch needs. **Don't re-document it here —
-delegate to `/kit-upload-on-google-play`**, which walks: app icon, screenshots,
+delegate to `/kit-publish-to-play`**, which walks: app icon, screenshots,
 store listing copy (`/kit-generate-aso`), privacy policy + Data Safety + hosted
 terms URL (`/kit-generate-legal` + `/kit-generate-landing`). Tell the developer to
 run that first if it's not done.
@@ -347,7 +347,7 @@ Summarise in a few lines and leave them with the clock + next action:
 - 📣 Share the store listing link (with Google's pre-registration badge) on socials
   / landing page — see **`/kit-generate-landing`**.
 - 🚀 When ready to launch, finish the full production release with
-  **`/kit-upload-on-google-play`**.
+  **`/kit-publish-to-play`**.
 - 🎁 If you set the 30-day pass reward: the kit grants Premium for
   `PRE_REGISTER_REWARD_DURATION_DAYS` days from the Play purchase date and re-checks
   on app foreground, so it applies the same session the user claims it — then expires.

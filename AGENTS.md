@@ -108,7 +108,7 @@ Key ones:
 - **Maintain:** `/kit-update` — pull the latest kit commands + skills (your code is untouched)
 - **Release:** `/kit-generate-legal`, `/kit-generate-aso`, `/kit-generate-screenshots`,
   `/kit-generate-changelog`, `/kit-generate-landing`, `/kit-plan-release-analytics`,
-  `/kit-sign-release`, `/kit-upload-on-google-play`, `/kit-save-to-github`,
+  `/kit-sign-release`, `/kit-publish-to-play`, `/kit-save-to-github`,
   `/kit-translate`, `/kit-translate-listing`
 
 Full reference: https://kit.shipkaro.dev/docs/commands

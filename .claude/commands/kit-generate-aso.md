@@ -11,7 +11,7 @@ Audience: first-time mobile developers / vibe coders. Be brief; do not paste
 walls of text.
 
 This command is **standalone** — run it anytime to (re)write your listing copy.
-`/kit-upload-on-google-play` Step F invokes it inline. The actual generation is
+`/kit-publish-to-play` Phase 3.2 invokes it inline. The actual generation is
 done by the `aso-googleplay-listing` skill shipped with the kit; this command
 just drives it and handles the keep/regenerate branch.
 

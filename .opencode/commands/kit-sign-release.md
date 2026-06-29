@@ -27,7 +27,7 @@ a track**: product creation needs the `BILLING` permission in an uploaded build,
 and RevenueCat can only verify the Play connection once the package is live on a
 track. So the order is: **keystore → signed AAB → upload to a testing track**.
 Products, store listing, and screenshots are a separate later step
-(`/kit-upload-on-google-play`).
+(`/kit-publish-to-play`).
 
 ## Progress tracking
 
@@ -231,4 +231,4 @@ Summarise in a few lines:
   then finish the RevenueCat ↔ Play connection (`/kit-setup-paywall`)."
 
 For products, store listing, screenshots, and the full Production release, point
-them to **`/kit-upload-on-google-play`**.
+them to **`/kit-publish-to-play`**.

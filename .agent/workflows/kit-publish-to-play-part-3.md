@@ -125,6 +125,48 @@ listing) row. Present verbatim:
 
 When this is saved the checklist shows **11/11** and the public tracks unlock.
 
+## Phase 5.5 — Register your release SHA-1 (so Google sign-in works on Play builds)
+
+**Only if Google sign-in is on** — from the Survey: `GOOGLE_WEB_CLIENT_ID` is set and
+`AUTH_PROVIDER` ≠ `STUB`. If Google sign-in is off, **skip this phase.** Do it now (after the
+checklist, before closed testing / production) so sign-in works for testers and live users.
+
+Play re-signs your app with **App Signing by Google**, so the certificate users actually get is
+**Google's**, not your upload key — and native Google sign-in only accepts the SHA-1s registered
+during `/kit-setup-auth` (that was your *debug* key). Register the **release** SHA-1 now, or
+sign-in works on your dev machine but **fails for every Play user**. (Needs a build already on a
+track — your Phase 4 internal-testing upload covers it.)
+
+**Get the SHA-1** (present verbatim, wait for the value):
+> Get your **release SHA-1** from Play Console:
+> 1. Left sidebar → **Test and release → App integrity → App signing** (or the top search bar →
+>    `app signing` — nav-proof if Google moved it).
+> 2. Under **App signing key certificate**, copy the **SHA-1** value → paste it back here.
+> (The page only appears once a build is on a track — give it a minute after the upload finishes.)
+
+*(Self-managed keystore instead of Play App Signing? Read it from the keystore yourself:
+`keytool -list -v -keystore release.keystore -alias upload | grep SHA1` — using the `release.*`
+values from `local.properties`.)*
+
+**Register it** — branch on `AUTH_PROVIDER`:
+- **Supabase** — present verbatim, wait for "done":
+  > Add the **release** SHA-1 to Google Cloud Console:
+  > 1. https://console.cloud.google.com → the **same project** as the OAuth clients from
+  >    `/kit-setup-auth`.
+  > 2. **APIs & Services → Credentials → + Create credentials → OAuth client ID**.
+  > 3. Type **Android**, Name `Android (release)`, Package = your `applicationId`, **SHA-1
+  >    certificate fingerprint** = the value above → **Create**.
+  > 4. Keep the existing `Android (debug)` client too — debug sign-in keeps working in dev.
+  >    Say **done**.
+- **Firebase** — present verbatim, wait for the file path:
+  > Add the **release** SHA-1 to Firebase:
+  > 1. https://console.firebase.google.com → your project → **Project settings → General**.
+  > 2. Under **Your apps** → your Android app → **Add fingerprint** → paste the release SHA-1 →
+  >    Save.
+  > 3. **Download google-services.json** (it now lists both debug + release) → tell me the path.
+  When they give the path, copy that file to `app/google-services.json` (overwrite) — the next
+  build picks it up.
+
 ---
 
 **Continued in `kit-publish-to-play-part-4.md` (Phases 6, 7, the Update path, wrap up).**

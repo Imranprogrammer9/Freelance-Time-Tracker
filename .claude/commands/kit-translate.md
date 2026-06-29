@@ -210,4 +210,4 @@ Then report back:
 
 That is the whole job. Do not touch screenshots, listing copy, or anything in
 `playstore/` — translating store listing copy is a separate concern and is
-handled by `/kit-upload-on-google-play`.
+handled by `/kit-publish-to-play`.

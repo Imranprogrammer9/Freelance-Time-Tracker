@@ -170,6 +170,26 @@ events into the code.
 
 ## Phase 4 — Build the signed AAB + put it on internal testing
 
+**4.0 — Paywall billing readiness (only if the app sells — do this BEFORE the build).** From the
+Survey: if `PAYWALL_ENABLED = false`, **skip this** (free app, no billing). If
+`PAYWALL_ENABLED = true`:
+- **Verify the billing permission is declared:** `app/src/main/AndroidManifest.xml` must have an
+  **uncommented** `<uses-permission android:name="com.android.vending.BILLING" />`. If it's still
+  commented, **uncomment it now** — Play won't unlock product creation without it in the uploaded
+  build, and the build must carry it. Present verbatim to confirm the dashboard side:
+> **You have a paywall — is billing wired up?** Before real users can pay you need:
+> 1. **Products** (one-time and/or subscription) created **+ activated** in Play Console.
+> 2. **A service-account JSON** uploaded to RevenueCat (~24–36 h to propagate — the RevenueCat ↔
+>    Play connection should show **Verified**).
+> 3. **An offering + published paywall** in RevenueCat.
+> 4. The build **on a testing track + the tester opt-in URL opened** on your device — Play only
+>    serves products to a build on a track, to opted-in testers (the internal-testing upload
+>    below puts it on a track; just open the opt-in URL afterwards or products stay empty).
+>
+> Not done yet? Full guide: **https://kit.shipkaro.dev/docs/paywall** (or `/kit-setup-paywall` →
+> "Set up products + Play billing"). Don't block the build on it — but finish billing on the test
+> track before promoting to production.
+
 **4.1 — Build the signed AAB.** Call **`/kit-sign-release`** — it creates the release
 **keystore** (first time; remind them to back it up — losing it means they can never update
 the app) and builds the **signed** `app-release.aab`, now carrying the **new icon (Phase 1)

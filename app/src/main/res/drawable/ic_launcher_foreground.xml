@@ -2,7 +2,7 @@
 <!--
   Adaptive-icon foreground. Wraps the NowKit brand mark in a 19% inset so the
   logo sits inside Android's safe zone (66 of 108 dp). Replace with your own
-  logo via `/kit-upload-on-google-play` (icon.kitchen flow) before release.
+  logo via `/kit-publish-to-play` (icon.kitchen flow) before release.
 -->
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
     android:drawable="@drawable/ic_shipkaro_mark"
