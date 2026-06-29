@@ -47,31 +47,38 @@ The skill renders the polished screenshots with **Nano Banana Pro via a Gemini M
 server**. **First check if it's already there:** is a `generate_image` tool available
 (from a Gemini MCP)? If yes → skip straight to Step 2A.
 
-If it's **not** present, **walk the developer through setup ONE step at a time — wait for
-"done" after each. Do NOT paste the whole setup as one block** (that's the thing we're
-fixing). Use the **same MCP the skill's source repo specifies** —
+If it's **not** present, set it up. **You (the agent) do the install and the registration
+yourself — only the API key and the final restart need the developer.** Don't ask them to
+run commands you can run. Use the **same MCP the skill's source repo specifies** —
 `@houtini/gemini-mcp` (github.com/adamlyttleapps/claude-skill-aso-appstore-screenshots) —
 not any other gemini-mcp fork.
 
-**Step A — API key** (present, wait):
+**Step A — API key** (the developer does this; present, wait):
 > Get a **Gemini API key** (Nano Banana Pro is the `gemini-3-pro-image` model — **paid**
-> tier): open https://aistudio.google.com/apikey, create a key, copy it. Say "done".
+> tier): open https://aistudio.google.com/apikey, create a key, and **paste it here**.
 
-**Step B — Install the MCP server** (present, wait):
-> Install it:
-> ```
-> npm install -g @houtini/gemini-mcp
-> ```
-> Say "done".
+Wait for them to paste the key. Hold it for Step C — **never echo the key back into the
+chat.**
 
-**Step C — Register + add your key** (present, wait):
-> Add it to your Claude Code MCP config (`~/.claude/settings.json` or the project's
-> `.mcp.json`) under `mcpServers`, with your key in `env.GEMINI_API_KEY`. Exact config
-> block is in the skill's repo README:
-> github.com/adamlyttleapps/claude-skill-aso-appstore-screenshots
-> Say "done".
+**Step B — Install the server (you run this).** Run it yourself with Bash:
+```bash
+npm install -g @houtini/gemini-mcp
+```
+Only if it fails with `EACCES`/permission, tell the developer to re-run it with `sudo` or
+fix their npm prefix (`npm config set prefix ~/.npm-global` then add `~/.npm-global/bin` to
+PATH) and retry — don't hand it to them otherwise.
 
-**Step D — Restart** (present, wait):
+**Step C — Register it (you run this).** Register the server with the key from Step A. Use
+the CLI so you don't hand-edit JSON and the key lands in user-scope config (never the
+repo):
+```bash
+claude mcp add gemini -s user -e GEMINI_API_KEY=<the key from Step A> -- gemini-mcp
+```
+Substitute the real key in the command; **do not print the expanded command (with the key)
+back to the developer.** If `claude` isn't on PATH or it errors, fall back to telling them
+to add it manually per the skill repo's README and stop.
+
+**Step D — Restart** (the developer does this; present, wait):
 > **Restart Claude Code** so the MCP server loads. Say "done".
 
 Then re-check the `generate_image` tool exists. If it does → continue to Step 2A. If not,

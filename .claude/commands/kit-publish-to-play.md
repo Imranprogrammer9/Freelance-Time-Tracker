@@ -27,15 +27,32 @@ web step, **one at a time**.
 
 ## Resume check — do this FIRST
 
-Figure out where they are before greeting, so you resume instead of restarting:
+A first release is **multi-day**, and one step (the screenshots' Gemini MCP) makes the
+developer **restart Claude Code**, which ends the session. So progress is **persisted to a
+file** — read it before greeting and resume, never restart.
+
+**1. Read the durable progress file** `playstore/.publish-progress.md` if it exists. It
+records the release type, the Phase 0 account-exempt decision, and which phases are done.
+It's a **hint, not the source of truth** — always re-verify against the filesystem below
+(disk wins on any conflict; e.g. if the AAB was deleted, rebuild it).
+
+**2. Re-verify against the project** (also covers a project with no progress file yet — work
+done before it existed):
+- **App icon done?** `playstore/play_store_icon.png` exists **and** the `mipmap-*` launcher
+  PNGs differ from the kit placeholder → Phase 1's icon step is done; skip it.
 - **Signed AAB?** `ls app/build/outputs/bundle/release/app-release.aab`; `release.*` keys in
   `local.properties`.
 - **Legal generated?** `ls playstore/privacy_policy.md playstore/play_data_safety.md`.
 - **Listing copy?** `ls playstore/title.txt playstore/full_description.txt`.
-- **Screenshots?** `ls playstore/screenshots/`.
-- Ask the developer (you can't detect Play Console state from code): *"Have you already
-  created the app on Play Console / uploaded a build to a track / started closed testing?"*
-  Resume at the right phase, mark earlier ones done.
+- **Screenshots?** `ls playstore/screenshots/` (≥ 2 PNGs).
+- **Gemini image MCP installed?** is a `generate_image` tool available — if yes, the MCP
+  setup inside `/kit-generate-screenshots` is already done; don't reinstall.
+
+**3. Ask only what code can't tell you** (Play Console state): *"Have you already created the
+app on Play Console / uploaded a build to a track / started closed testing?"*
+
+Reconcile all three, resume at the first unfinished phase, mark earlier ones done, and
+**rewrite the progress file** to match.
 
 ## Survey the project (do this once, up front)
 
@@ -52,9 +69,35 @@ Read these so your guidance is accurate — never assume:
 
 ## Progress tracking
 
-Call **TaskCreate** with the tasks for the path the developer picks (Step 1), mark each
-`in_progress` on entry, `completed` when done (prefix `[skipped] ` via **TaskUpdate** if
-skipped).
+Keep two records in sync:
+- **Live, in-session:** call **TaskCreate** with the tasks for the path the developer picks
+  (Step 1), mark each `in_progress` on entry, `completed` when done (prefix `[skipped] ` via
+  **TaskUpdate** if skipped). This is wiped when Claude Code restarts.
+- **Durable, across restarts:** maintain `playstore/.publish-progress.md`. **Write it when
+  the path is chosen**, **update it at the end of every phase**, and **always update it right
+  before any step that ends the session** — i.e. before invoking `/kit-generate-screenshots`
+  (it may install an MCP and ask for a restart). This file is what the Resume check reads.
+  Keep it short:
+
+  ```markdown
+  # /kit-publish-to-play progress  (auto-written — safe to delete to start over)
+  release_type: first          # first | update
+  account_exempt: no           # yes | no | unknown  (the Phase 0 decision)
+
+  - [x] phase0  Play account + account type
+  - [x] phase1  App icon + version
+  - [ ] phase2  Create app on Play Console
+  - [ ] phase3  Listing assets + legal + host (screenshots, ASO, legal, landing)
+  - [ ] phase4  Build signed AAB + internal testing
+  - [ ] phase5  Set up your app (11-task checklist)
+  - [ ] phase6  Closed testing (12-tester / 14-day)
+  - [ ] phase7  Production release
+
+  last_step: phase3 — screenshots; Gemini MCP installed, awaiting restart
+  ```
+
+  The `last_step` line is a free-text breadcrumb — make it specific enough to resume from
+  (which phase, which sub-step, what you were waiting on).
 
 ---
 
@@ -217,11 +260,15 @@ The build (Phase 4) and the "Set up your app" checklist (Phase 5) both need fini
 and a **public privacy URL**. Generate + host them now — **before** the build, so the app's
 in-app Settings links are baked in.
 
-**3.1 — Screenshots (REQUIRED — do not defer).** Run **`/kit-generate-screenshots`** inline
-→ `playstore/screenshots/`. These are **not optional**: the store listing (5.11) won't save
-without **≥ 2 phone screenshots**, and the listing is part of the "Set up your app"
+**3.1 — Screenshots (REQUIRED — do not defer).** **First update `playstore/.publish-progress.md`**
+(mark phases 0–2 done, phase3 in-progress) — `/kit-generate-screenshots` may install the
+Gemini MCP and ask the developer to **restart Claude Code**, which ends this session, and
+the progress file is how you pick up here afterwards. Then run **`/kit-generate-screenshots`**
+inline → `playstore/screenshots/`. These are **not optional**: the store listing (5.11) won't
+save without **≥ 2 phone screenshots**, and the listing is part of the "Set up your app"
 checklist that **gates the closed-testing and production tracks**. If the developer doesn't
-want generated ones, they must drop their own PNGs into `playstore/screenshots/` now.
+want generated ones, they must drop their own PNGs into `playstore/screenshots/` now. After a
+restart, re-running `/kit-publish-to-play` lands you back here via the Resume check.
 
 **3.2 — Listing copy.** Run **`/kit-generate-aso`** inline → `playstore/title.txt`,
 `short_description.txt`, `full_description.txt` (used in 5.11).

@@ -28,3 +28,6 @@ revenuecat-key.json
 
 # Signed AAB build history (local only)
 /releases/
+
+# /kit-publish-to-play resume state (local scratch)
+playstore/.publish-progress.md

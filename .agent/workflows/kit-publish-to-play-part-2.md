@@ -10,11 +10,15 @@ The build (Phase 4) and the "Set up your app" checklist (Phase 5) both need fini
 and a **public privacy URL**. Generate + host them now — **before** the build, so the app's
 in-app Settings links are baked in.
 
-**3.1 — Screenshots (REQUIRED — do not defer).** Call **`/kit-generate-screenshots`**
+**3.1 — Screenshots (REQUIRED — do not defer).** **First update `playstore/.publish-progress.md`**
+(mark phases 0–2 done, phase3 in-progress) — `/kit-generate-screenshots` may install the
+Gemini MCP and ask the developer to **restart Claude Code**, which ends this session, and the
+progress file is how you pick up here afterwards. Then call **`/kit-generate-screenshots`**
 → `playstore/screenshots/`. These are **not optional**: the store listing (5.11) won't save
 without **≥ 2 phone screenshots**, and the listing is part of the "Set up your app"
 checklist that **gates the closed-testing and production tracks**. If the developer doesn't
-want generated ones, they must drop their own PNGs into `playstore/screenshots/` now.
+want generated ones, they must drop their own PNGs into `playstore/screenshots/` now. After a
+restart, re-running `/kit-publish-to-play` lands you back here via the Resume check.
 
 **3.2 — Listing copy.** Call **`/kit-generate-aso`** → `playstore/title.txt`,
 `short_description.txt`, `full_description.txt` (used in 5.11).
