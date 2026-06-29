@@ -123,11 +123,16 @@ Then show this verbatim, filling in the real passwords if you generated them:
 
 ## Step 3 — Build the signed AAB
 
-Run from the project root:
+**Run this yourself** (you, the agent — via Bash, from the project root). The signing config
+reads the `release.*` keys from `local.properties`, so the build is **non-interactive**: don't
+hand it to the developer and don't prefix it with `!`. It can take a few minutes.
 
 ```bash
 ./gradlew :app:bundleRelease --no-daemon
 ```
+
+*(Only if your environment genuinely can't run Gradle — no JDK / Android SDK on PATH — present
+the command for the developer to run, and wait for "done".)*
 
 Output lands at:
 

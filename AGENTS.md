@@ -122,3 +122,10 @@ Full reference: https://kit.shipkaro.dev/docs/commands
 ```
 
 Use the Gradle **wrapper** (`./gradlew`, 8.14.5) — not a system `gradle`.
+
+**Run shell steps yourself.** Gradle builds, `npm install`, signing, `adb`, file ops and any
+other command a `/kit-*` step lists are **non-interactive — run them directly with your shell
+tool.** Don't hand them to the developer or tell them to type `! <command>`. Only ask the
+developer to run something themselves when it's genuinely interactive (e.g. an OAuth/`gcloud`
+login, a browser step) or when your environment truly can't run it (no JDK / Android SDK / Node
+on PATH) — then present the exact command and wait.
