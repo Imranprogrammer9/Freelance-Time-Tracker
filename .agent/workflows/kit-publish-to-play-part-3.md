@@ -1,8 +1,81 @@
 ---
-description: kit-publish-to-play (part 3 of 3) — closed testing's 12-tester / 14-day gate, production, the fast Update path, wrap up
+description: kit-publish-to-play (part 3 of 3) — the 11-task "Set up your app" checklist, closed testing's 12-tester / 14-day gate, production, the fast Update path, wrap up
 ---
 
 Continued from kit-publish-to-play.md.
+
+## Phase 5 — Set up your app (the 11-task checklist)
+
+> **Always work from the Dashboard checklist.** Go to **Dashboard → "Set up your app" →
+> View tasks** — it shows a **"X of 11 complete"** progress bar. **The loop for every
+> task: open it from this checklist → fill it → Save → return to the checklist** (✓, the
+> counter ticks up). Walk top to bottom, **one task at a time, waiting for "done"** after
+> each. 11 tasks.
+
+**5.1 — Set privacy policy:** paste the hosted **privacy** URL (3.4) into the *Privacy
+policy URL* field → **Save**.
+
+**5.2 — Sign in details:** (auth survey result drives this)
+> *"Is any part of your app restricted?"* — **Yes** if the app has auth (any provider) or
+> a paywall; **No** only if neither.
+- On Yes → **+ Add details** → **Name** (`Reviewer test account`) + account:
+  - **Email login available** → create a **test email + password** user; enter it.
+  - **Google sign-in only** → provide a **real Google account you own with 2-Step
+    Verification + OTP turned OFF** in its Security settings (reviewers can't pass 2FA),
+    or document a guest/demo mode in "Any other information".
+  - **No auth, paywall only** → no login; explain premium access in "Any other information".
+  - ☑ **full-access checkbox** only if that account actually unlocks Premium (grant it the
+    entitlement first — reviewers can't purchase). → **Save**.
+
+**5.3 — Ads:** ad-SDK survey → none → **No**; present → **Yes** (adds "Contains ads" label). Save.
+
+**5.4 — Content rating:** **Start questionnaire** (IARC) → Step 1 email + **Category** (suggest
+**All Other App Types** unless game/social) + agree ToS → Step 2: **for a typical
+productivity/utility app answer "No" to every content question** (the form only grows if
+you say Yes) → Step 3 Summary → **Submit**.
+
+**5.5 — Target audience:** **Target age** → tick **13+ groups** (`13-15`, `16-17`,
+`18 and over`); **do not** tick under-13 unless it's truly a kids' app (triggers a heavy
+Families burden). No under-13 → steps 2–4 auto-skip → **Summary → Save**.
+
+**5.6 — Data safety (one-click via CSV):**
+- **Template:** use **`data_safety_sample_reference.csv`** (repo root — Google's Data safety
+  import format, all ~780 rows) as the template if it's present. If it isn't (e.g. an older
+  buyer who pulled via `/kit-update`), have the developer open the **Data safety** page →
+  **Export to CSV** (top-right) — an empty export gives the exact current template instead.
+- **Fill it:** keep the 5 columns, and set **`true`** in the **Response value** column on
+  exactly the rows the app covers (from the survey + `playstore/play_data_safety.md`):
+  collects data = Yes; encrypted in transit = Yes; account-creation method per auth survey;
+  the data types the SDKs collect (email / name / avatar from auth, purchase history from
+  RevenueCat, approximate location + device IDs from PostHog, crash logs from
+  Crashlytics/Sentry) + their per-type usage/purpose rows; and `PSL_ACCOUNT_DELETION_URL` =
+  the hosted privacy URL. Leave everything else blank. Write the filled file to
+  `playstore/play_data_safety.csv`.
+> On the **Data safety** page → **Import from CSV** → upload `playstore/play_data_safety.csv`
+> → the whole 5-stage form fills → review the **Preview** → **Submit**.
+- *(Fallback if import fails: walk the wizard by hand from `play_data_safety.md` / the
+  hosted `data-safety.html`.)*
+
+**5.7 — Government apps:** indie/company app → **No** → Save.
+
+**5.8 — Financial features:** financial-SDK survey → none → tick **"My app doesn't provide
+any financial features"** → Save. *(A subscription / IAP is NOT a financial feature.)*
+
+**5.9 — Health:** health-SDK survey → none → tick **"My app does not have any health
+features"** → Save.
+
+**5.10 — Store settings (category + contact):** **App category** → App + a best-fit
+**Category** (suggest from the app's purpose, e.g. Productivity, Health & Fitness, Tools)
++ optional Tags. **Contact details** → support **email** (required), phone (optional),
+**website** = your landing URL. Leave **External marketing** on. Save each.
+
+**5.11 — Set up your store listing:**
+> **Create default store listing** → **App name** (≤30) from `playstore/title.txt`, **Short
+> description** (≤80) from `short_description.txt`, **Full description** (≤4000) from
+> `full_description.txt`. **Graphics:** App icon (512×512), Feature graphic (1024×500),
+> **Phone screenshots** (≥2) from `playstore/screenshots/`. **Save**.
+
+When this is saved the checklist shows **11/11** and the public tracks unlock.
 
 ## Phase 6 — Closed testing (the 12-tester / 14-day gate)
 

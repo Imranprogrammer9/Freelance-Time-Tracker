@@ -223,9 +223,20 @@ falls back to the new legacy PNGs. Verify the new icon actually shows (it appear
 > Note: icon.kitchen (A) yields the cleanest **adaptive** icon. B/C from a single flat PNG
 > give a standard icon — fine to ship, just not safe-zone-tuned for adaptive masks.
 
-**1.2 — Version.** Read `versionCode` / `versionName` in `app/build.gradle.kts`.
-- **First upload ever:** `versionCode = 1` is fine — leave it.
-- (Every later upload must have a **higher** `versionCode` — the Update path handles that.)
+**1.2 — Version (must beat anything already on Play).** Read `versionCode` / `versionName` in
+`app/build.gradle.kts`. **The trap:** connecting RevenueCat — or any earlier attempt — may have
+**already uploaded a build to a track, consuming a `versionCode`**, and Play **rejects a
+duplicate `versionCode`**. So the build you're about to make (Phase 4) must be **strictly
+higher** than the highest already on Play. Ask the user (wait for their answer): *"Is any build
+already uploaded to a Play track — e.g. a placeholder from connecting RevenueCat, or an earlier
+attempt?"* (carry this answer to Phase 4):
+- **No build anywhere** → `versionCode = 1` is fine; leave it.
+- **Yes, a build exists** → find its `versionCode` (Play Console → **Test and release → App
+  bundle explorer**, or the track's release page). **Edit `app/build.gradle.kts` now: set
+  `versionCode` to that number + 1** (and bump `versionName` too if you like, e.g. `0.1.0` →
+  `0.1.1` — only `versionCode` must be unique). Do this **before** Phase 4 builds; confirm the
+  new values back to the developer. If they're unsure but a placeholder likely exists, bump to
+  at least `2` to be safe.
 
 > The build comes **later** (Phase 4) — *after* the landing page exists, so the app's
 > privacy/terms URLs are baked into the build.
