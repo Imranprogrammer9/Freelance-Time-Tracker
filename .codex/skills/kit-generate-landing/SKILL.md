@@ -179,7 +179,7 @@ Show this verbatim:
 
 > Once it's live:
 > 1. Copy your **privacy URL** (`…/privacy.html`).
-> 2. Play Console → **App content → Privacy policy** → paste it.
+> 2. Play Console → **Dashboard → "Set up your app" → Set privacy policy** → paste it (there is no "App content" menu in the current console).
 > 3. Set `KitConfig.PRIVACY_URL` = `…/privacy.html` and `KitConfig.TERMS_URL` =
 >    `…/terms.html` so Settings → Privacy / Terms open the live pages in-app.
 

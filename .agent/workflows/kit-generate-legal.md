@@ -242,6 +242,34 @@ row if `ANALYTICS_ENABLED = false`, etc.>
 | <…one row per remaining active category…> | | | | | | |
 ```
 
+## Step 6.5 — Generate the Data safety import CSV (one-click upload)
+
+The kit ships **`data_safety_sample_reference.csv`** at the repo root — Google's official Data
+safety **import format** (every `Question ID` / `Response ID` row the form supports). Fill it
+from the **same active-SDK list** (Step 1) and write the result to
+**`playstore/play_data_safety.csv`**, so the developer can import the whole form in one click and
+so `/kit-publish-to-play` 5.6 has a file to import (generate it **here** — it always exists after
+legal generation).
+
+Read the template, and in the **`Response value`** column set **`true`** on exactly the rows the
+app covers; leave the rest as the template has them:
+- `PSL_DATA_COLLECTION_COLLECTS_PERSONAL_DATA` → `true` (anything active in Step 1; else `false`).
+- `PSL_DATA_COLLECTION_ENCRYPTED_IN_TRANSIT` → `true`.
+- **Account-creation method** (`PSL_SUPPORTED_ACCOUNT_CREATION_METHODS …`) → the row matching the
+  auth survey — email/password → `PSL_ACM_USER_ID_PASSWORD`; Google/OAuth → `PSL_ACM_USER_ID_OTHER_AUTH`.
+  Only if auth is on.
+- **Per data type the active SDKs collect**, set the collection row **and** its purpose/sharing
+  rows: email / name / avatar (auth), purchase history (RevenueCat), approximate location +
+  device IDs (PostHog), crash logs + diagnostics (Crashlytics / Sentry). Drop any whose source
+  SDK is off in Step 1.
+- The **data-deletion** row → point at the hosted **privacy URL** (the policy describes the
+  in-app delete flow).
+
+Write the filled file to **`playstore/play_data_safety.csv`**.
+
+> This CSV is a **best-effort draft from the SDK scan** — skim `playstore/play_data_safety.md`
+> (the human-readable table) and adjust any row before importing.
+
 ## Step 7 — Print the Data Safety table + Play Console checklist
 
 **First, print the data-safety table to the terminal** — render the exact same
@@ -252,17 +280,15 @@ able to read the toggle answers straight from the terminal and fill the Play for
 
 Then print this verbatim block as the wrap-up:
 
-> **Now in Play Console:**
+> **Now in Play Console** — every item is a **row in Dashboard → "Set up your app"** (there is
+> no "App content" menu in the current console):
 >
-> 1. **App content → Privacy policy** → paste the URL where you host
->    `privacy_policy.html`.
-> 2. **App content → Data safety** → open `playstore/play_data_safety.md`
->    side-by-side and fill the web form using its answers.
-> 3. **App content → Data deletion** → point at a section of the hosted
->    privacy policy that describes the in-app delete flow (the policy already
->    explains it under "Your rights").
-> 4. Set `KitConfig.PRIVACY_URL` to the hosted URL so Settings → Privacy
->    opens it inside the app.
+> 1. **Set privacy policy** → paste the URL where you host `privacy_policy.html`.
+> 2. **Data safety** → top-right **Import from CSV** → upload `playstore/play_data_safety.csv`
+>    → review the **Preview** → **Submit**. (Use `playstore/play_data_safety.md` only as a
+>    cross-check, or to fill the wizard by hand if an import ever fails.)
+> 3. Set `KitConfig.PRIVACY_URL` to the hosted URL so **Settings → Privacy** opens it inside
+>    the app.
 
 Final reminder to the developer:
 

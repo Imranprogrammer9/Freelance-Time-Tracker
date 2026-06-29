@@ -148,6 +148,43 @@ Show this verbatim. Then **STOP and wait** for "done":
 >
 > Say "done" when the files are in place.
 
+## Step 4.5 — Feature graphic (1024×500 — required by the store listing)
+
+Runs **regardless of which source path** the developer picked. Play's **Main store listing
+requires a 1024×500 feature graphic**, and the kit doesn't ship one — so generate a simple one
+(the app's **logo centered on the brand colour with the app name beneath**) to
+`playstore/feature_graphic.png`, so the developer isn't blocked. Skip only if
+`playstore/feature_graphic.png` already exists and the developer wants to keep it.
+
+Gather:
+- **App name** → `playstore/title.txt` if present, else the `app_name` string in
+  `app/src/main/res/values/strings.xml`.
+- **Brand colour** → the primary in `core/designsystem/theme/Color.kt` (base package from the
+  `namespace` — don't hardcode it).
+- **Logo** → `playstore/play_store_icon.png` (the 512 icon).
+
+**Render it.** Write `playstore/.feature_graphic.html` — a 1024×500 page, the brand colour as
+background, the logo centred (~200px) with the app name beneath in a contrasting colour. Embed
+the logo as a **base64 data URI** (`base64 -i playstore/play_store_icon.png`) so Chrome can load
+it without file-access flags. Then render to PNG with headless Chrome:
+```bash
+CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser)"
+[ -z "$CHROME" ] && [ -x "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ] && CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+"$CHROME" --headless --disable-gpu --force-device-scale-factor=1 --hide-scrollbars \
+  --window-size=1024,500 --screenshot="$(pwd)/playstore/feature_graphic.png" \
+  "file://$(pwd)/playstore/.feature_graphic.html"
+```
+If no Chrome/Chromium is found, fall back to **ImageMagick**:
+```bash
+magick -size 1024x500 xc:"<brand hex>" \
+  \( playstore/play_store_icon.png -resize 200x200 \) -gravity center -geometry +0-50 -composite \
+  -gravity center -fill white -pointsize 64 -annotate +0+120 "<App Name>" \
+  playstore/feature_graphic.png
+```
+If neither tool is available, tell the developer to drop a **1024×500 PNG** at
+`playstore/feature_graphic.png` (logo + app name on the brand colour). Confirm the file exists
+and is exactly **1024×500**, then clean up the temp HTML.
+
 ## Step 5 — Verify
 
 After whichever path finished, `ls playstore/screenshots/`. Count the `*.png` / `*.jpg` files

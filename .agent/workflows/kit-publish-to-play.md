@@ -19,8 +19,15 @@ web step, **one at a time**.
 - **Pace it — ONE sub-step at a time.** Present a step, then **wait for the developer to
   say "done"** before the next. **Never dump multiple Play Console screens at once** —
   they will lose their place. This is the #1 rule.
-- When a block is quoted with `>`, show it to the developer **verbatim**. Prose outside
-  `>` blocks is instructions for *you*.
+- **The Play Console steps here are transcribed from the real, current console — screen titles,
+  button labels and radio-option wording are captured from actual screenshots.** When a block is
+  quoted with `>`, present it to the developer **verbatim** — the exact titles/labels/options.
+  **Do NOT paraphrase a step, reorder it, or swap in a menu path or label from your own memory.**
+  Play's UI changes and your training data is stale (for example: there is **no "App content →
+  …" menu** anymore — every task is a **row in the Dashboard "Set up your app" checklist**; the
+  "App access" page is now **"Sign in details"**). If the real screen ever differs from the text,
+  **trust the screen, do the step, and tell the developer the kit's wording looks outdated** —
+  never silently invent a different path. Prose outside `>` blocks is instructions for *you*.
 - A first release is **multi-day** — Phase 6 (closed testing) alone is **14 days**. Save
   progress by reading the project each run (see Resume check) and pick up where they left.
 - **Docs:** https://kit.shipkaro.dev/docs/release
@@ -103,7 +110,7 @@ The `last_step` line is a free-text breadcrumb — make it specific enough to re
 Ask the developer (wait for their answer): *"Is this your app's first release, or an update
 to an app that's already on Google Play?"*
 - **First release (never published)** → do the **First-release path** below (Phases 0–7).
-- **Update (already on Play)** → jump to the **Update path** (much shorter) in part 3.
+- **Update (already on Play)** → jump to the **Update path** (much shorter) in part 4.
 
 ---
 

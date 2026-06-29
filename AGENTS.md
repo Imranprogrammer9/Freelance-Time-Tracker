@@ -129,3 +129,12 @@ tool.** Don't hand them to the developer or tell them to type `! <command>`. Onl
 developer to run something themselves when it's genuinely interactive (e.g. an OAuth/`gcloud`
 login, a browser step) or when your environment truly can't run it (no JDK / Android SDK / Node
 on PATH) — then present the exact command and wait.
+
+**Present third-party UI steps verbatim — don't improvise from memory.** When a `/kit-*` command
+gives exact steps for an external console (Google Play Console, RevenueCat, Supabase, Firebase),
+those screen titles / button labels / menu paths are **transcribed from the real, current UI**.
+Show them **exactly as written**; do **not** paraphrase or substitute a path/label from your own
+training data — these UIs change and your memory is stale (e.g. Play's old "App content" menu is
+gone; tasks are rows in the Dashboard checklist). If the live screen differs from the command
+text, **trust the screen, do the step, and tell the developer the wording looks outdated** — never
+silently invent a different path.

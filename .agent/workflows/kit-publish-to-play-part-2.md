@@ -1,5 +1,5 @@
 ---
-description: kit-publish-to-play (part 2 of 3) — app icon + version, create app, listing assets + legal + host, signed build + internal testing
+description: kit-publish-to-play (part 2 of 4) — app icon + version, create app, listing assets + legal + host, signed build + internal testing
 ---
 
 Continued from kit-publish-to-play.md.
@@ -198,4 +198,4 @@ sub-step at a time:
 
 ---
 
-**Continued in `kit-publish-to-play-part-3.md` (Phases 5, 6, 7, the Update path, wrap up).**
+**Continued in `kit-publish-to-play-part-3.md` (Phase 5).**

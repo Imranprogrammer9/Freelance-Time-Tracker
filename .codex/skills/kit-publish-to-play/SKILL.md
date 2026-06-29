@@ -20,8 +20,15 @@ web step, **one at a time**.
 - **Pace it — ONE sub-step at a time.** Present a step, then **wait for the developer to
   say "done"** before the next. **Never dump multiple Play Console screens at once** —
   they will lose their place. This is the #1 rule.
-- When a block is quoted with `>`, show it to the developer **verbatim**. Prose outside
-  `>` blocks is instructions for *you*.
+- **The Play Console steps here are transcribed from the real, current console — screen titles,
+  button labels and radio-option wording are captured from actual screenshots.** When a block is
+  quoted with `>`, present it to the developer **verbatim** — the exact titles/labels/options.
+  **Do NOT paraphrase a step, reorder it, or swap in a menu path or label from your own memory.**
+  Play's UI changes and your training data is stale (for example: there is **no "App content →
+  …" menu** anymore — every task is a **row in the Dashboard "Set up your app" checklist**; the
+  "App access" page is now **"Sign in details"**). If the real screen ever differs from the text,
+  **trust the screen, do the step, and tell the developer the kit's wording looks outdated** —
+  never silently invent a different path. Prose outside `>` blocks is instructions for *you*.
 - A first release is **multi-day** — Phase 6 (closed testing) alone is **14 days**. Save
   progress by reading the project each run (see Resume check) and pick up where they left.
 - **Docs:** https://kit.shipkaro.dev/docs/release
@@ -331,28 +338,70 @@ sub-step at a time:
 
 ## Phase 5 — Set up your app (the 11-task checklist)
 
-> **Always work from the Dashboard checklist.** Go to **Dashboard → "Set up your app" →
-> View tasks** — it shows a **"X of 11 complete"** progress bar. **The loop for every
-> task: open it from this checklist → fill it → Save → return to the checklist** (✓, the
-> counter ticks up). Walk top to bottom, **one task at a time, waiting for "done"** after
-> each. 11 tasks.
+> **Everything here lives in ONE place: Dashboard → "Set up your app" → View tasks** (a
+> **"X of 11 complete"** bar). **Do NOT send the developer to an "App content" menu, a
+> "Policy" side-menu, or anywhere else** — that's the older Play Console layout. In the
+> current console **all 11 tasks are rows in this one Dashboard checklist**: Set privacy
+> policy · Sign in details · Ads · Content rating · Target audience · Data safety · Government
+> apps · Financial features · Health · Select an app category and provide contact details ·
+> Set up your store listing. **The loop for every task: click its row in this checklist →
+> fill it → Save → return to the checklist** (✓, the counter ticks up). Top to bottom, **one
+> task at a time, waiting for "done"** after each.
 
-**5.1 — Set privacy policy:** paste the hosted **privacy** URL (3.4) into the *Privacy
-policy URL* field → **Save**.
+Each task below is titled with the **exact row label**. **Open that row from the Dashboard
+checklist — never improvise a different menu path.**
 
-**5.2 — Sign in details:** (auth survey result drives this)
-> *"Is any part of your app restricted?"* — **Yes** if the app has auth (any provider) or
-> a paywall; **No** only if neither.
-- On Yes → **+ Add details** → **Name** (`Reviewer test account`) + account:
-  - **Email login available** → create a **test email + password** user; enter it.
-  - **Google sign-in only** → provide a **real Google account you own with 2-Step
-    Verification + OTP turned OFF** in its Security settings (reviewers can't pass 2FA),
-    or document a guest/demo mode in "Any other information".
-  - **No auth, paywall only** → no login; explain premium access in "Any other information".
-  - ☑ **full-access checkbox** only if that account actually unlocks Premium (grant it the
-    entitlement first — reviewers can't purchase). → **Save**.
+> **After you Save a task, Play often pops a "Go to Publishing overview?" dialog. Click "Not
+> now".** Don't submit task-by-task — you batch *everything* into a single review submission at
+> the very end (the **Publishing overview → Send app for review** step in Phase 7). Submitting
+> piecemeal scatters the review and is slower.
 
-**5.3 — Ads:** ad-SDK survey → none → **No**; present → **Yes** (adds "Contains ads" label). Save.
+**5.1 — Set privacy policy:** open the **Set privacy policy** row → paste the hosted **privacy**
+URL (3.4) into the *Privacy policy URL* field → **Save**.
+
+**5.2 — Sign in details** — open the **Sign in details** row from the checklist. The page itself
+notes *"This declaration was previously called 'App access'"* — **do NOT** hunt for an "App
+access" menu, and **do NOT** use the old "All or some functionality is restricted" option; the
+current screen is a simple **Yes / No** question.
+
+**Survey first** (`KitConfig.kt`): `AUTH_PROVIDER` (`SUPABASE`/`FIREBASE`/`STUB`=off),
+`GOOGLE_WEB_CLIENT_ID` (set = Google sign-in on), `PAYWALL_ENABLED`. The page asks
+**"Is any part of your app restricted?"** — pick from the survey:
+- **Auth ON (any provider) and/or paywall ON** → **Yes** (account sign-in **and** payments are
+  both listed under the Yes option as restrictions).
+- **Auth OFF and paywall OFF** → **No** → **Save** → done.
+
+On **Yes**, present verbatim:
+> Select **Yes**. A **Sign in details** card appears → click **+ Add details** (opens the
+> *"Add sign in details"* dialog). Fill it top to bottom:
+> 1. **Name** * (required, ≤60) — a label so Google knows what it's for, e.g.
+>    `Reviewer test account`.
+> 2. **Username, email address, or phone number** (≤100) — the account a reviewer logs in with:
+>    - **Email login** → create a **test email + password** user in your auth backend and enter
+>      that email here (simplest — recommended).
+>    - **Google-sign-in only** → a **real Google account you own** with **2-Step Verification +
+>      OTP turned OFF** in its *Security* settings (reviewers can't pass 2FA).
+> 3. **Password** (≤100) — that account's password.
+> 4. **Any other information required to access your app** (≤500) — leave **blank** if a
+>    username + password is all that's needed. Use it only for extras: a **guest/demo mode**,
+>    how a reviewer **reaches Premium**, or bypassing 2FA/biometrics.
+> 5. ☑ **"Sign in details in this declaration provide full access to all the features and
+>    content within this app, including premium or paid content"** — tick **only if** this
+>    account unlocks Premium. Reviewers can't purchase, so grant it the entitlement first
+>    (e.g. a RevenueCat **promotional entitlement** on that user).
+> 6. Click **Add** (bottom-right of the dialog), then **Save** on the page.
+
+(Auth OFF but paywall ON → no login to hand over: pick **Yes**, leave username/password blank,
+and use **"Any other information"** to explain the app opens freely and how a reviewer reaches
+Premium.) Create the test account, fill it in, then say **done**.
+
+**5.3 — Ads** — open the **Ads** row from the checklist. Survey first: grep `app/build.gradle.kts`
++ `gradle/libs.versions.toml` for an ad SDK (`play-services-ads`/AdMob/AppLovin/any ad network —
+the kit ships none). The page asks **"Does your app contain ads?"** — present verbatim:
+> Pick one, then **Save**:
+> - **No, my app does not contain ads** — if no ad SDK is in the project (the kit default).
+> - **Yes, my app contains ads** — if an ad SDK is present (Play then shows a **"Contains ads"**
+>   label next to your app).
 
 **5.4 — Content rating:** **Start questionnaire** (IARC) → Step 1 email + **Category** (suggest
 **All Other App Types** unless game/social) + agree ToS → Step 2: **for a typical
@@ -363,25 +412,26 @@ you say Yes) → Step 3 Summary → **Submit**.
 `18 and over`); **do not** tick under-13 unless it's truly a kids' app (triggers a heavy
 Families burden). No under-13 → steps 2–4 auto-skip → **Summary → Save**.
 
-**5.6 — Data safety (one-click via CSV):**
-- **Template:** use **`data_safety_sample_reference.csv`** (repo root — Google's Data safety
-  import format, all ~780 rows) as the template if it's present. If it isn't (e.g. an older
-  buyer who pulled via `/kit-update`), have the developer open the **Data safety** page →
-  **Export to CSV** (top-right) — an empty export gives the exact current template instead.
-- **Fill it:** keep the 5 columns, and set **`true`** in the **Response value** column on
-  exactly the rows the app covers (from the survey + `playstore/play_data_safety.md`):
-  collects data = Yes; encrypted in transit = Yes; account-creation method per auth survey;
-  the data types the SDKs collect (email / name / avatar from auth, purchase history from
-  RevenueCat, approximate location + device IDs from PostHog, crash logs from
-  Crashlytics/Sentry) + their per-type usage/purpose rows; and `PSL_ACCOUNT_DELETION_URL` =
-  the hosted privacy URL. Leave everything else blank. Write the filled file to
-  `playstore/play_data_safety.csv`.
-> On the **Data safety** page → **Import from CSV** → upload `playstore/play_data_safety.csv`
-> → the whole 5-stage form fills → review the **Preview** → **Submit**.
-- *(Fallback if import fails: walk the wizard by hand from `play_data_safety.md` / the
-  hosted `data-safety.html`.)*
+**5.6 — Data safety (one-click CSV import)** — open the **Data safety** row from the checklist.
+`/kit-generate-legal` (Phase 3.3) already wrote **`playstore/play_data_safety.csv`** from your
+SDK scan — confirm it exists (`ls playstore/play_data_safety.csv`). **If it's missing** (older
+app, or legal was generated before this feature), fill the template
+`data_safety_sample_reference.csv` (repo root — Google's import format) now: set **`true`** in
+the **`Response value`** column on the rows the app covers (collection; encrypted-in-transit;
+account-creation method per the auth survey; the active SDKs' data types — email/name/avatar from
+auth, purchase history from RevenueCat, approximate location + device IDs from PostHog, crash
+logs from Crashlytics/Sentry — plus their purpose rows; deletion row = hosted privacy URL), and
+write it to `playstore/play_data_safety.csv`. Then present verbatim:
+> On the **Data safety** page → top-right **Import from CSV** → upload
+> `playstore/play_data_safety.csv` → the whole 5-step form fills → review the **Preview** →
+> **Submit**.
+*(If an import ever fails, fall back to filling the wizard by hand from `play_data_safety.md` /
+the hosted `data-safety.html`.)*
 
-**5.7 — Government apps:** indie/company app → **No** → Save.
+**5.7 — Government apps** — open the **Government apps** row. The page asks **"Is your app
+developed by or on behalf of a government?"** (e.g. a national health, city parking, or state
+licensing app). For a normal indie/company app, present verbatim:
+> Select **No** → **Save**.
 
 **5.8 — Financial features:** financial-SDK survey → none → tick **"My app doesn't provide
 any financial features"** → Save. *(A subscription / IAP is NOT a financial feature.)*
@@ -389,16 +439,21 @@ any financial features"** → Save. *(A subscription / IAP is NOT a financial fe
 **5.9 — Health:** health-SDK survey → none → tick **"My app does not have any health
 features"** → Save.
 
-**5.10 — Store settings (category + contact):** **App category** → App + a best-fit
-**Category** (suggest from the app's purpose, e.g. Productivity, Health & Fitness, Tools)
-+ optional Tags. **Contact details** → support **email** (required), phone (optional),
-**website** = your landing URL. Leave **External marketing** on. Save each.
+**5.10 — Select an app category and provide contact details:** open that row → **App category**
+→ App + a best-fit **Category** (suggest from the app's purpose, e.g. Productivity, Health &
+Fitness, Tools) + optional Tags. **Contact details** → support **email** (required), phone
+(optional), **website** = your landing URL. Leave **External marketing** on. Save each.
 
-**5.11 — Set up your store listing:**
-> **Create default store listing** → **App name** (≤30) from `playstore/title.txt`, **Short
-> description** (≤80) from `short_description.txt`, **Full description** (≤4000) from
-> `full_description.txt`. **Graphics:** App icon (512×512), Feature graphic (1024×500),
-> **Phone screenshots** (≥2) from `playstore/screenshots/`. **Save**.
+**5.11 — Set up your store listing** — open the **Set up your store listing** (Main store
+listing) row. Present verbatim:
+> **App name** (≤30) from `playstore/title.txt`, **Short description** (≤80) from
+> `short_description.txt`, **Full description** (≤4000) from `full_description.txt`.
+> **Graphics:**
+> - **App icon** (512×512) → `playstore/play_store_icon.png`
+> - **Feature graphic** (1024×500) → `playstore/feature_graphic.png` (generated by
+>   `/kit-generate-screenshots`)
+> - **Phone screenshots** (≥2) → from `playstore/screenshots/`
+> **Save**.
 
 When this is saved the checklist shows **11/11** and the public tracks unlock.
 
@@ -450,7 +505,16 @@ Call **`/kit-generate-changelog`** for the "What's new" notes, then present verb
 > 4. **Preview → Review release → Start rollout to Production** (full, or a staged % you
 >    ramp up).
 
-After Google's review clears, the app is **live on Google Play**. 🎉
+**Then submit everything for review (this is the step people miss).** All your saved tasks +
+this release sit as **pending changes** until you submit them in one batch:
+> Left sidebar → **Publishing overview** → under **"Changes not yet submitted for review"**
+> click **Send app for review**. Play runs quick checks first (a few minutes — "Up to N
+> minutes remaining") and sends it once they pass. This is where all the **"Not now"** dialogs
+> from Phase 5 finally get submitted, together.
+
+(For an **exempt** account that skipped Phase 6, this Publishing-overview submit *is* your
+production submission — there's no separate "apply for production" gate.) After Google's review
+clears, the app is **live on Google Play**. 🎉
 
 ---
 
