@@ -110,7 +110,7 @@ The `last_step` line is a free-text breadcrumb — make it specific enough to re
 Ask the developer (wait for their answer): *"Is this your app's first release, or an update
 to an app that's already on Google Play?"*
 - **First release (never published)** → do the **First-release path** below (Phases 0–7).
-- **Update (already on Play)** → jump to the **Update path** (much shorter) in part 4.
+- **Update (already on Play)** → jump to the **Update path** (much shorter) in part 5.
 
 ---
 
@@ -145,4 +145,4 @@ Carry this exempt/not-exempt decision through the whole run.
 
 ---
 
-**Continued in `kit-publish-to-play-part-2.md` (Phases 1, 2, 3, 4).**
+**Continued in `kit-publish-to-play-part-2.md` (Phases 1, 2).**

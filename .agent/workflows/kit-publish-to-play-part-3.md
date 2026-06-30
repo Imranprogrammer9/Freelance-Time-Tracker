@@ -1,172 +1,95 @@
 ---
-description: kit-publish-to-play (part 3 of 4) — the 11-task "Set up your app" checklist
+description: kit-publish-to-play (part 3 of 5) — listing assets + legal + host, signed build + internal testing
 ---
 
 Continued from kit-publish-to-play.md.
 
-## Phase 5 — Set up your app (the 11-task checklist)
+## Phase 3 — Listing assets + legal + host (generates the privacy/terms URLs)
 
-> **Everything here lives in ONE place: Dashboard → "Set up your app" → View tasks** (a
-> **"X of 11 complete"** bar). **Do NOT send the developer to an "App content" menu, a
-> "Policy" side-menu, or anywhere else** — that's the older Play Console layout. In the
-> current console **all 11 tasks are rows in this one Dashboard checklist**: Set privacy
-> policy · Sign in details · Ads · Content rating · Target audience · Data safety · Government
-> apps · Financial features · Health · Select an app category and provide contact details ·
-> Set up your store listing. **The loop for every task: click its row in this checklist →
-> fill it → Save → return to the checklist** (✓, the counter ticks up). Top to bottom, **one
-> task at a time, waiting for "done"** after each.
+The build (Phase 4) and the "Set up your app" checklist (Phase 5) both need finished assets
+and a **public privacy URL**. Generate + host them now — **before** the build, so the app's
+in-app Settings links are baked in.
 
-Each task below is titled with the **exact row label**. **Open that row from the Dashboard
-checklist — never improvise a different menu path.**
+**3.1 — Screenshots (REQUIRED — do not defer).** **First update `playstore/.publish-progress.md`**
+(mark phases 0–2 done, phase3 in-progress) — `/kit-generate-screenshots` may install the
+Gemini MCP and ask the developer to **restart Claude Code**, which ends this session, and the
+progress file is how you pick up here afterwards. Then call **`/kit-generate-screenshots`**
+→ `playstore/screenshots/`. These are **not optional**: the store listing (5.11) won't save
+without **≥ 2 phone screenshots**, and the listing is part of the "Set up your app"
+checklist that **gates the closed-testing and production tracks**. If the developer doesn't
+want generated ones, they must drop their own PNGs into `playstore/screenshots/` now. After a
+restart, re-running `/kit-publish-to-play` lands you back here via the Resume check.
 
-> **After you Save a task, Play often pops a "Go to Publishing overview?" dialog. Click "Not
-> now".** Don't submit task-by-task — you batch *everything* into a single review submission at
-> the very end (the **Publishing overview → Send app for review** step in Phase 7). Submitting
-> piecemeal scatters the review and is slower.
+**3.2 — Listing copy.** Call **`/kit-generate-aso`** → `playstore/title.txt`,
+`short_description.txt`, `full_description.txt` (used in 5.11).
 
-**5.1 — Set privacy policy:** open the **Set privacy policy** row → paste the hosted **privacy**
-URL (3.4) into the *Privacy policy URL* field → **Save**.
+**3.3 — Legal content.** Call **`/kit-generate-legal`** → `playstore/privacy_policy.md`
++ `.html`, terms, and `playstore/play_data_safety.md` (the Data safety answers, used in 5.6).
 
-**5.2 — Sign in details** — open the **Sign in details** row from the checklist. The page itself
-notes *"This declaration was previously called 'App access'"* — **do NOT** hunt for an "App
-access" menu, and **do NOT** use the old "All or some functionality is restricted" option; the
-current screen is a simple **Yes / No** question.
+**3.4 — Landing page (hosts privacy + terms → public URLs).** Call **`/kit-generate-landing`**.
+It builds + hosts the static site and produces the styled **`privacy.html`**,
+**`terms.html`**, and an unlisted **`data-safety.html`**. Capture the public URLs:
+- Privacy: `https://<site>/privacy.html` → used in 3.5 + 5.1
+- Terms: `https://<site>/terms.html` → used in 3.5 + by a pre-registration reward later
+- Data safety (unlisted): `https://<site>/data-safety.html` → handy reference for 5.6
 
-**Survey first** (`KitConfig.kt`): `AUTH_PROVIDER` (`SUPABASE`/`FIREBASE`/`STUB`=off),
-`GOOGLE_WEB_CLIENT_ID` (set = Google sign-in on), `PAYWALL_ENABLED`. The page asks
-**"Is any part of your app restricted?"** — pick from the survey:
-- **Auth ON (any provider) and/or paywall ON** → **Yes** (account sign-in **and** payments are
-  both listed under the Yes option as restrictions).
-- **Auth OFF and paywall OFF** → **No** → **Save** → done.
+**3.5 — Write the URLs into the app (so Settings links work).** Set
+`KitConfig.PRIVACY_URL` and `KitConfig.TERMS_URL` (`core/config/`) to the hosted URLs from
+3.4. The in-app **Settings → Privacy policy / Terms** entries open these — they must be in
+the code **before** Phase 4 builds the AAB, or the shipped app links to the placeholders.
 
-On **Yes**, present verbatim:
-> Select **Yes**. A **Sign in details** card appears → click **+ Add details** (opens the
-> *"Add sign in details"* dialog). Fill it top to bottom:
-> 1. **Name** * (required, ≤60) — a label so Google knows what it's for, e.g.
->    `Reviewer test account`.
-> 2. **Username, email address, or phone number** (≤100) — the account a reviewer logs in with:
->    - **Email login** → create a **test email + password** user in your auth backend and enter
->      that email here (simplest — recommended).
->    - **Google-sign-in only** → a **real Google account you own** with **2-Step Verification +
->      OTP turned OFF** in its *Security* settings (reviewers can't pass 2FA).
-> 3. **Password** (≤100) — that account's password.
-> 4. **Any other information required to access your app** (≤500) — leave **blank** if a
->    username + password is all that's needed. Use it only for extras: a **guest/demo mode**,
->    how a reviewer **reaches Premium**, or bypassing 2FA/biometrics.
-> 5. ☑ **"Sign in details in this declaration provide full access to all the features and
->    content within this app, including premium or paid content"** — tick **only if** this
->    account unlocks Premium. Reviewers can't purchase, so grant it the entitlement first
->    (e.g. a RevenueCat **promotional entitlement** on that user).
-> 6. Click **Add** (bottom-right of the dialog), then **Save** on the page.
+**3.6 — Plan release analytics.** Call **`/kit-plan-release-analytics`** (don't ask
+permission — a funnel is load-bearing for "did this launch work?"). It wires 3–5 release
+events into the code.
 
-(Auth OFF but paywall ON → no login to hand over: pick **Yes**, leave username/password blank,
-and use **"Any other information"** to explain the app opens freely and how a reviewer reaches
-Premium.) Create the test account, fill it in, then say **done**.
+## Phase 4 — Build the signed AAB + put it on internal testing
 
-**5.3 — Ads** — open the **Ads** row from the checklist. Survey first: grep `app/build.gradle.kts`
-+ `gradle/libs.versions.toml` for an ad SDK (`play-services-ads`/AdMob/AppLovin/any ad network —
-the kit ships none). The page asks **"Does your app contain ads?"** — present verbatim:
-> Pick one, then **Save**:
-> - **No, my app does not contain ads** — if no ad SDK is in the project (the kit default).
-> - **Yes, my app contains ads** — if an ad SDK is present (Play then shows a **"Contains ads"**
->   label next to your app).
+**4.0 — Paywall billing readiness (only if the app sells — do this BEFORE the build).** From the
+Survey: if `PAYWALL_ENABLED = false`, **skip this** (free app, no billing). If
+`PAYWALL_ENABLED = true`:
+- **Verify the billing permission is declared:** `app/src/main/AndroidManifest.xml` must have an
+  **uncommented** `<uses-permission android:name="com.android.vending.BILLING" />`. If it's still
+  commented, **uncomment it now** — Play won't unlock product creation without it in the uploaded
+  build, and the build must carry it. Present verbatim to confirm the dashboard side:
+> **You have a paywall — is billing wired up?** Before real users can pay you need:
+> 1. **Products** (one-time and/or subscription) created **+ activated** in Play Console.
+> 2. **A service-account JSON** uploaded to RevenueCat (~24–36 h to propagate — the RevenueCat ↔
+>    Play connection should show **Verified**).
+> 3. **An offering + published paywall** in RevenueCat.
+> 4. The build **on a testing track + the tester opt-in URL opened** on your device — Play only
+>    serves products to a build on a track, to opted-in testers (the internal-testing upload
+>    below puts it on a track; just open the opt-in URL afterwards or products stay empty).
+>
+> Not done yet? Full guide: **https://kit.shipkaro.dev/docs/paywall** (or `/kit-setup-paywall` →
+> "Set up products + Play billing"). Don't block the build on it — but finish billing on the test
+> track before promoting to production.
 
-**5.4 — Content rating:** **Start questionnaire** (IARC) → Step 1 email + **Category** (suggest
-**All Other App Types** unless game/social) + agree ToS → Step 2: **for a typical
-productivity/utility app answer "No" to every content question** (the form only grows if
-you say Yes) → Step 3 Summary → **Submit**.
+**4.1 — Build the signed AAB.** Call **`/kit-sign-release`** — it creates the release
+**keystore** (first time; remind them to back it up — losing it means they can never update
+the app) and builds the **signed** `app-release.aab`, now carrying the **new icon (Phase 1)
+and the privacy/terms URLs (Phase 3.5)**.
 
-**5.5 — Target audience:** **Target age** → tick **13+ groups** (`13-15`, `16-17`,
-`18 and over`); **do not** tick under-13 unless it's truly a kids' app (triggers a heavy
-Families burden). No under-13 → steps 2–4 auto-skip → **Summary → Save**.
+> ✅ Signed build at `app/build/outputs/bundle/release/app-release.aab`.
 
-**5.6 — Data safety (one-click CSV import)** — open the **Data safety** row from the checklist.
-`/kit-generate-legal` (Phase 3.3) already wrote **`playstore/play_data_safety.csv`** from your
-SDK scan — confirm it exists (`ls playstore/play_data_safety.csv`). **If it's missing** (older
-app, or legal was generated before this feature), fill the template
-`data_safety_sample_reference.csv` (repo root — Google's import format) now: set **`true`** in
-the **`Response value`** column on the rows the app covers (collection; encrypted-in-transit;
-account-creation method per the auth survey; the active SDKs' data types — email/name/avatar from
-auth, purchase history from RevenueCat, approximate location + device IDs from PostHog, crash
-logs from Crashlytics/Sentry — plus their purpose rows; deletion row = hosted privacy URL), and
-write it to `playstore/play_data_safety.csv`. Then present verbatim:
-> On the **Data safety** page → top-right **Import from CSV** → upload
-> `playstore/play_data_safety.csv` → the whole 5-step form fills → review the **Preview** →
-> **Submit**.
-*(If an import ever fails, fall back to filling the wizard by hand from `play_data_safety.md` /
-the hosted `data-safety.html`.)*
+**Then put it on internal testing.** This is **instant, no review**, registers your package
+on Play, and (for paid apps) confirms the RevenueCat ↔ Play connection. **Skip if a build is
+already on a track** (e.g. the placeholder `/kit-setup-paywall` uploaded). Otherwise, one
+sub-step at a time:
 
-**5.7 — Government apps** — open the **Government apps** row. The page asks **"Is your app
-developed by or on behalf of a government?"** (e.g. a national health, city parking, or state
-licensing app). For a normal indie/company app, present verbatim:
-> Select **No** → **Save**.
+**4.2 — Select testers** (present, wait):
+> Play Console → your app → **Test and release → Testing → Internal testing → Testers**
+> tab. Tick a tester list, or **Create email list** and add emails. **Save**. (Up to 100;
+> the join link appears after you publish.)
 
-**5.8 — Financial features:** financial-SDK survey → none → tick **"My app doesn't provide
-any financial features"** → Save. *(A subscription / IAP is NOT a financial feature.)*
+**4.3 — Create the release** (present, wait):
+> **Create new release** (top-right). App signing by Google is on automatically. Under
+> **App bundles**, **Upload** `app/build/outputs/bundle/release/app-release.aab`. Set a
+> **Release name** (auto-filled is fine) + optional notes. **Next**.
 
-**5.9 — Health:** health-SDK survey → none → tick **"My app does not have any health
-features"** → Save.
-
-**5.10 — Select an app category and provide contact details:** open that row → **App category**
-→ App + a best-fit **Category** (suggest from the app's purpose, e.g. Productivity, Health &
-Fitness, Tools) + optional Tags. **Contact details** → support **email** (required), phone
-(optional), **website** = your landing URL. Leave **External marketing** on. Save each.
-
-**5.11 — Set up your store listing** — open the **Set up your store listing** (Main store
-listing) row. Present verbatim:
-> **App name** (≤30) from `playstore/title.txt`, **Short description** (≤80) from
-> `short_description.txt`, **Full description** (≤4000) from `full_description.txt`.
-> **Graphics:**
-> - **App icon** (512×512) → `playstore/play_store_icon.png`
-> - **Feature graphic** (1024×500) → `playstore/feature_graphic.png` (generated by
->   `/kit-generate-screenshots`)
-> - **Phone screenshots** (≥2) → from `playstore/screenshots/`
-> **Save**.
-
-When this is saved the checklist shows **11/11** and the public tracks unlock.
-
-## Phase 5.5 — Register your release SHA-1 (so Google sign-in works on Play builds)
-
-**Only if Google sign-in is on** — from the Survey: `GOOGLE_WEB_CLIENT_ID` is set and
-`AUTH_PROVIDER` ≠ `STUB`. If Google sign-in is off, **skip this phase.** Do it now (after the
-checklist, before closed testing / production) so sign-in works for testers and live users.
-
-Play re-signs your app with **App Signing by Google**, so the certificate users actually get is
-**Google's**, not your upload key — and native Google sign-in only accepts the SHA-1s registered
-during `/kit-setup-auth` (that was your *debug* key). Register the **release** SHA-1 now, or
-sign-in works on your dev machine but **fails for every Play user**. (Needs a build already on a
-track — your Phase 4 internal-testing upload covers it.)
-
-**Get the SHA-1** (present verbatim, wait for the value):
-> Get your **release SHA-1** from Play Console:
-> 1. Left sidebar → **Test and release → App integrity → App signing** (or the top search bar →
->    `app signing` — nav-proof if Google moved it).
-> 2. Under **App signing key certificate**, copy the **SHA-1** value → paste it back here.
-> (The page only appears once a build is on a track — give it a minute after the upload finishes.)
-
-*(Self-managed keystore instead of Play App Signing? Read it from the keystore yourself:
-`keytool -list -v -keystore release.keystore -alias upload | grep SHA1` — using the `release.*`
-values from `local.properties`.)*
-
-**Register it** — branch on `AUTH_PROVIDER`:
-- **Supabase** — present verbatim, wait for "done":
-  > Add the **release** SHA-1 to Google Cloud Console:
-  > 1. https://console.cloud.google.com → the **same project** as the OAuth clients from
-  >    `/kit-setup-auth`.
-  > 2. **APIs & Services → Credentials → + Create credentials → OAuth client ID**.
-  > 3. Type **Android**, Name `Android (release)`, Package = your `applicationId`, **SHA-1
-  >    certificate fingerprint** = the value above → **Create**.
-  > 4. Keep the existing `Android (debug)` client too — debug sign-in keeps working in dev.
-  >    Say **done**.
-- **Firebase** — present verbatim, wait for the file path:
-  > Add the **release** SHA-1 to Firebase:
-  > 1. https://console.firebase.google.com → your project → **Project settings → General**.
-  > 2. Under **Your apps** → your Android app → **Add fingerprint** → paste the release SHA-1 →
-  >    Save.
-  > 3. **Download google-services.json** (it now lists both debug + release) → tell me the path.
-  When they give the path, copy that file to `app/google-services.json` (overwrite) — the next
-  build picks it up.
+**4.4 — Roll out** (present, wait):
+> Review the preview (a "no debug symbols" warning is fine to ignore). **Save → Start
+> rollout to Internal testing**. The track goes **Active** with your release live.
 
 ---
 
-**Continued in `kit-publish-to-play-part-4.md` (Phases 6, 7, the Update path, wrap up).**
+**Continued in `kit-publish-to-play-part-4.md` (Phase 5).**
