@@ -592,25 +592,38 @@ time, waiting for "done".**
 `app/build.gradle.kts`: **increment `versionCode` by 1**, and bump `versionName` to the
 next release string (ask the developer, e.g. `0.1.0 → 0.1.1`).
 
-**U2 — Release notes.** Run **`/kit-generate-changelog`** inline → writes the user-facing
+**U2 — Regenerate legal if your SDKs changed.** Ask: *"Since your last release, did you toggle
+any SDK — turn the paywall on/off, add/remove analytics, enable AI, change auth?"* (cross-check
+`KitConfig` if unsure). If **yes**, your privacy policy + **Play Data Safety** are generated from
+which SDKs are active, so they're now **stale** — and Play strikes apps whose Data Safety doesn't
+match real behaviour. Run **`/kit-generate-legal`** inline to regenerate `privacy_policy.*` +
+`playstore/play_data_safety.csv`, then **re-host the privacy page** (re-run
+**`/kit-generate-landing`**, or re-upload `privacy_policy.html` to the same URL) and **re-import
+the new `play_data_safety.csv`** on the Play **Data safety** row. If **no SDKs changed**, skip.
+
+**U3 — Release notes.** Run **`/kit-generate-changelog`** inline → writes the user-facing
 "What's new" to `playstore/changelogs/<versionCode>.txt` from git history.
 
-**U3 — Screenshots (only if the UI changed).** If this update changed screens, run
+**U4 — Screenshots (only if the UI changed).** If this update changed screens, run
 **`/kit-generate-screenshots`** inline to refresh `playstore/screenshots/`. Otherwise skip.
 
-**U4 — Remote config (if wired).** If `RemoteAppConfig` is on a backend (not LOCAL), remind
+**U5 — Plan release analytics (if there's something new to measure).** If this update ships a
+feature worth tracking (or you never wired a funnel), run **`/kit-plan-release-analytics`**
+inline to add the events + funnel **before the build**. Skip if nothing new to track.
+
+**U6 — Remote config (if wired).** If `RemoteAppConfig` is on a backend (not LOCAL), remind
 the developer they can bump the **force/soft-update version** + **changelog** there so
 existing users get the update prompt — **no app change needed**. Skip if LOCAL.
 
-**U5 — Build the signed AAB.** Run **`/kit-sign-release`** inline (reuses the existing
+**U7 — Build the signed AAB.** Run **`/kit-sign-release`** inline (reuses the existing
 keystore) → fresh `app-release.aab` with the new `versionCode`.
 
-**U6 — Upload.** Present verbatim:
+**U8 — Upload.** Present verbatim:
 > **Upload the update in Play Console:**
 > 1. Open your app → the track you ship from (**Production**, or a testing track).
 > 2. **Create new release** → upload `app/build/outputs/bundle/release/app-release.aab`.
 > 3. Paste the release notes from `playstore/changelogs/<versionCode>.txt`.
-> 4. If you refreshed screenshots (U3), upload them on the store listing.
+> 4. If you refreshed screenshots (U4), upload them on the store listing.
 > 5. **Save → Review release → Start rollout**.
 
 After review clears, the update is live.
