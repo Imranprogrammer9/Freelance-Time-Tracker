@@ -18,7 +18,9 @@ They own the code; the commands/skills are kit-owned and safe to refresh.
 
 - **Updated (overwritten with the latest kit version) — agent files only:**
   `.claude/commands/`, `.claude/skills/`, `.cursor/commands/`,
-  `.opencode/commands/`, `.agent/workflows/`, `.codex/skills/`, and `AGENTS.md`.
+  `.opencode/commands/`, `.agent/workflows/`, `.codex/skills/`, `AGENTS.md`, and the
+  release-asset templates the commands rely on — currently `data_safety_sample_reference.csv`
+  (Google's Data safety import schema, filled by `/kit-generate-legal`; older clones predate it).
   These are package-agnostic, identical across every buyer, and the developer
   doesn't edit them — so they refresh with zero conflicts and the kit's package
   rename is irrelevant here.
@@ -61,7 +63,8 @@ git checkout upstream/main -- \
   .claude/commands .claude/skills \
   .cursor/commands .opencode/commands \
   .agent/workflows .codex/skills \
-  AGENTS.md
+  AGENTS.md \
+  data_safety_sample_reference.csv
 ```
 
 - `git checkout <ref> -- <path>` only needs the fetched ref — **no merge-base /
