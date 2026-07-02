@@ -149,10 +149,17 @@ actually exists: `test -d "<path>" && echo "SDK OK" || echo "NOT FOUND"`. If it
 is not found, ask the developer for the correct path (or to open it in their
 file explorer to confirm) and re-check — do not continue on a guessed path.
 
-**e. Write `sdk.dir`.** Set the `sdk.dir` line in `local.properties` to the
-verified path. On **Windows, write the path with forward slashes** —
-`sdk.dir=C:/Users/Name/AppData/Local/Android/Sdk` — because single backslashes
-need escaping in this file and that trips people up constantly.
+**e. Write `sdk.dir` — ONE line, the real resolved path (no placeholder left behind).** First
+**remove any existing `sdk.dir` line** in `local.properties` — a fresh clone ships a placeholder
+(e.g. `sdk.dir=/Users/YOUR_USERNAME/Library/Android/sdk`), and on Windows the agent often *adds* a
+line without deleting that macOS default, leaving two wrong lines. There must be exactly one
+`sdk.dir`, pointing at the verified path:
+- **macOS / Linux:** use the path as-is — `sdk.dir=/Users/<name>/Library/Android/sdk`.
+- **Windows: escape every backslash (double them)** —
+  `sdk.dir=C:\\Users\\<name>\\AppData\\Local\\Android\\Sdk`. A Java `.properties` file reads a
+  single `\` as an escape character, so a real Windows path only parses correctly with each `\`
+  **doubled**. This is the reliable format — **do not** use forward slashes (`C:/Users/…`); they
+  work on some setups but silently fail on others.
 
 **f. Gradle check.** Run `./gradlew --version` to confirm the Gradle wrapper
 works.
