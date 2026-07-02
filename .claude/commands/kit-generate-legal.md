@@ -26,6 +26,15 @@ SDKs or adding endpoints.
 When a section below shows a block quoted with `>`, present that block to the
 developer **verbatim**. Prose outside those blocks is instructions for you.
 
+**Never invent behaviour you didn't verify from the code.** Do NOT write claims like
+"on-device", "processed locally", "audio is never stored", or "nothing is sent to us"
+unless you confirmed it by reading the actual code. If the app has a voice / audio /
+camera / upload feature and you cannot prove **from the code** that it stays on the
+device, **ask the developer where the data goes** (Steps 2–3) and state only what they
+confirm. A wrong "we don't collect / don't send X" claim is a Play policy violation and
+legal exposure — far worse than omitting it. The kit ships **no** voice/audio feature by
+default, so if you see one, it's custom — treat its data flow as unknown until confirmed.
+
 ## Progress tracking
 
 Before Step 1, call **TaskCreate** with:
@@ -87,29 +96,47 @@ rows inactive.
 For PostHog, read `local.properties` (if it exists) and check whether
 `posthog.api.key` is non-empty.
 
-## Step 2 — Scan custom endpoints
+## Step 2 — Scan for ALL outbound data flows (not just Retrofit)
 
-Grep `app/src/main/java` for:
+Step 1 covers the kit's own SDKs. This step catches **anything the developer wired by hand** —
+and a scan that only looks for Retrofit annotations will **miss raw OkHttp / WebSocket calls**,
+which is exactly how transcription, AI, and upload code is usually written (e.g. streaming audio
+to Deepgram over a WebSocket has no `@POST` marker at all). Grep the **whole** `app/src/main/java`
+tree — including any new `core/` folders the developer added — for:
 
-- `@GET`, `@POST`, `@PUT`, `@DELETE`, `@PATCH` annotations (Retrofit interfaces).
-- `client.from("…")` calls (Supabase Postgrest table accesses).
+- **Retrofit interfaces:** `@GET`, `@POST`, `@PUT`, `@DELETE`, `@PATCH`.
+- **Raw HTTP / streaming:** `OkHttpClient`, `Request.Builder`, `newCall`, `newWebSocket`,
+  `WebSocket`, `HttpURLConnection`, Ktor `HttpClient`, `callbackFlow` near a `socket`.
+- **External hosts:** any `.url("http…")`, `"https://…"`, or hardcoded base-URL / hostname string.
+- **Third-party keys / auth:** `Authorization`, `Bearer`, `apiKey`, `X-Api-Key`, and any
+  `*_API_KEY` / `*_KEY` — plus any `local.properties` key that **isn't** a known kit one
+  (supabase / revenuecat / posthog / openrouter).
+- **Supabase tables:** `client.from("…")`.
+- **Media / sensitive capture:** `MediaRecorder`, `AudioRecord`, `SpeechRecognizer`,
+  `RECORD_AUDIO`, `CameraX` / `Camera`, `ACCESS_FINE_LOCATION` / location providers, file
+  pickers / uploads.
 
-Build a list of every endpoint the dev's own code talks to (skip the
-OpenRouter and Supabase auth interfaces — those are kit-provided).
+**Collect the distinct external hosts** the app sends data to (e.g. `openrouter.ai`,
+`api.deepgram.com`, `api.assemblyai.com`, `api.openai.com`). **Do NOT skip a host because it
+looks kit-provided** — a hand-wired call to `openrouter.ai` *outside* `core/ai` still shares
+user data and must be disclosed. If the scan finds **any** audio / camera / location / file
+capture, treat that as a data flow to resolve here — never assume it stays on-device.
 
-If the list is empty, skip Step 3's endpoint sub-question.
+Show every finding back and **wait** for the answers:
 
-If the list is non-empty, show it back to the developer and ask:
-
-> I found these endpoints / tables your app talks to:
+> I scanned your code for outbound data. Here's every external service / endpoint your app sends
+> data to, and any device capture I found:
 >
-> - <list each path>
+> - <host / endpoint / capture> — <what the code appears to send>
 >
-> For each, does the request body include personal data (email, name, free-form
-> user text, location, photos)? Pick one per endpoint: (a) personal data, (b)
-> anonymous usage only, (c) skip — not user data.
+> For **each one**, tell me what it actually sends: (a) **audio / voice**, (b) **images / video /
+> files**, (c) **location**, (d) **free-form user text or content**, (e) **email / name / account
+> info**, (f) **anonymous usage only**, or (g) **not user data — skip**. If a service transcribes,
+> analyses, or stores anything, say so.
 
-Record the answers; they feed Step 4's "Data we collect" section.
+Record every answer — they feed Step 4 **and** the Data Safety form. **Any service you send audio
+or user content to is a third-party data recipient and MUST be listed**, even if you added it by
+hand and it isn't one of the kit's SDKs.
 
 ## Step 3 — Ask legal questions
 
@@ -127,6 +154,16 @@ makes sense):
    purged (default 30 days).
 8. **Server region** — where their backend hosts data (matters under GDPR /
    data-residency claims).
+9. **Anything the scan couldn't see (ALWAYS ask this).** The automated scan misses
+   hand-written code, so ask verbatim:
+   > Last check — since you cloned the kit, did you add **any** SDK, API, or service it
+   > didn't ship? Transcription (Deepgram, AssemblyAI, Whisper), AI (OpenAI, your own
+   > OpenRouter calls), maps, payments, file uploads, ads, chat — anything. And does your
+   > app send **audio, images, video, files, or location** anywhere off the device? List
+   > whatever you added, or say "no".
+
+   Fold every answer into the data table + Data Safety — a service that receives audio or
+   user content is a third-party recipient you must disclose.
 
 ## Step 4 — Generate Markdown
 
@@ -283,6 +320,13 @@ app covers; leave the rest as the template has them:
   rows: email / name / avatar (auth), purchase history (RevenueCat), approximate location +
   device IDs (PostHog), crash logs + diagnostics (Crashlytics / Sentry). Drop any whose source
   SDK is off in Step 1.
+- **Anything from Step 2 / Step 3** (services or captures you added by hand) → set its rows too,
+  not just the kit SDKs. In particular: **audio / voice** → the *Audio → Voice or sound
+  recordings* rows; **images/video** → *Photos and videos*; **files** → *Files and docs*;
+  **precise location** → *Location → Precise*; **free-form text sent to an AI/transcription
+  service** → the relevant content row **+ its "Data shared" row** (a third party like Deepgram,
+  AssemblyAI, or OpenRouter receiving it counts as **shared**, not just collected). Never leave a
+  hand-added audio/media/content flow out of the CSV.
 - The **data-deletion** row → point at the hosted **privacy URL** (the policy describes the
   in-app delete flow).
 
