@@ -239,8 +239,8 @@ higher** than the highest already on Play. Ask the user (wait for their answer):
 already uploaded to a Play track — e.g. a placeholder from connecting RevenueCat, or an earlier
 attempt?"* (carry this answer to Phase 4):
 - **No build anywhere** → `versionCode = 1` is fine; leave it.
-- **Yes, a build exists** → find its `versionCode` (Play Console → **Test and release → App
-  bundle explorer**, or the track's release page). **Edit `app/build.gradle.kts` now: set
+- **Yes, a build exists** → find its `versionCode` (Play Console → **Test and release → Latest releases and bundles**,
+  under the **Latest app bundles** table — the *Version code* column; or open any track's release). **Edit `app/build.gradle.kts` now: set
   `versionCode` to that number + 1** (and bump `versionName` too if you like, e.g. `0.1.0` →
   `0.1.1` — only `versionCode` must be unique). Do this **before** Phase 4 builds; confirm the
   new values back to the developer. If they're unsure but a placeholder likely exists, bump to
