@@ -102,6 +102,9 @@ Key ones:
 - **`/kit-start-setup`** — the first command. Rename → onboarding → brand/theme → auth → paywall →
   analytics → build. Runs the setup commands inline.
 - **`/kit-design-app`** — build the app's own screens (UI first with dummy data, then wire data).
+- **`/kit-plan-monetization`** — after the app's screens exist, decide the pricing model, which
+  features to lock behind the paywall, and the prices — then wire the `premium` gates into those
+  screens (entitlement-only; products + prices stay in the RevenueCat / Play dashboards).
 - **Setup:** `/kit-change-app-id`, `/kit-setup-theme`, `/kit-setup-auth`, `/kit-setup-paywall`,
   `/kit-setup-analytics`, `/kit-setup-ai`, `/kit-setup-updates`, `/kit-setup-review-dialog`
 - **Run:** `/kit-compile-app`, `/kit-run-app`, `/kit-env-check`
