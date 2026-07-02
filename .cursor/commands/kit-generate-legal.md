@@ -125,30 +125,29 @@ hand and it isn't one of the kit's SDKs.
 
 ## Step 3 — Ask legal questions
 
-Ask the user (wait for their answer) to collect the following — one screen per
-question, batched where it makes sense:
+Ask the user (wait for their answer) to collect the following. Ask each as a plain question — the
+open-ended ones need a typed answer; the Yes/No ones can be a quick pick. Don't force a free-text
+answer (name, email, region) into a fixed-option picker.
 
+**Open-ended — ask as a plain question, wait for the typed answer:**
 1. **Company / individual name** — appears as "we" in the policy.
 2. **Contact email** — where users send privacy questions. Required.
-3. **Jurisdiction** — country / state. Affects which laws to call out
-   (GDPR / CCPA / LGPD / DPDPA).
-4. **Target users in EU?** → triggers GDPR section.
+3. **Jurisdiction** — country / state (affects GDPR / CCPA / LGPD / DPDPA callouts).
+7. **Data retention window** — how long after account deletion data is fully purged (default 30 days).
+8. **Server region** — where the backend hosts data (matters under GDPR / data-residency).
+9. **Anything the scan couldn't see (ALWAYS ask this)** — present verbatim, wait for a typed answer:
+   > Last check — since you cloned the kit, did you add **any** SDK, API, or service it didn't
+   > ship? Transcription (Deepgram, AssemblyAI, Whisper), AI (OpenAI, your own OpenRouter calls),
+   > maps, payments, file uploads, ads, chat — anything. And does your app send **audio, images,
+   > video, files, or location** anywhere off the device? List whatever you added, or say "no".
+
+   Fold every answer into the data table + Data Safety — a service that receives audio or user
+   content is a third-party recipient you must disclose.
+
+**Yes/No:**
+4. **Target users in the EU / EEA?** → triggers GDPR section.
 5. **Target users in California?** → triggers CCPA section.
 6. **Target users under 13?** → triggers COPPA + Play family-policies warning.
-7. **Data retention window** — how long after account deletion is data fully
-   purged (default 30 days).
-8. **Server region** — where their backend hosts data (matters under GDPR /
-   data-residency claims).
-9. **Anything the scan couldn't see (ALWAYS ask this).** The automated scan misses
-   hand-written code, so ask verbatim:
-   > Last check — since you cloned the kit, did you add **any** SDK, API, or service it
-   > didn't ship? Transcription (Deepgram, AssemblyAI, Whisper), AI (OpenAI, your own
-   > OpenRouter calls), maps, payments, file uploads, ads, chat — anything. And does your
-   > app send **audio, images, video, files, or location** anywhere off the device? List
-   > whatever you added, or say "no".
-
-   Fold every answer into the data table + Data Safety — a service that receives audio or
-   user content is a third-party recipient you must disclose.
 
 ## Step 4 — Generate Markdown
 
