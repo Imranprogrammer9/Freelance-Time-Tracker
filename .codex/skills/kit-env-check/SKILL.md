@@ -43,7 +43,6 @@ commands are independent.
 | android CLI | `android --version 2>&1 \| head -1` | exits 0 with a version line |
 | Android Skills | `android skills list 2>&1 \| wc -l` | result > 1 |
 | scrcpy (optional) | `scrcpy --version 2>&1 \| head -1` | exits 0 with a version line |
-| Holo (optional) | `command -v holo` | prints a path (Holo is on PATH) — Holo has no `--version` flag, so only check that it is installed, never run `holo --version` |
 | gh / GitHub CLI (optional) | `gh --version 2>&1 \| head -1` | output starts with `"gh version"` — needed only for `/kit-save-to-github` (backing your app up to GitHub) |
 
 For `ANDROID_HOME` on Windows under Git Bash, also accept `%LOCALAPPDATA%\Android\Sdk`
@@ -63,7 +62,6 @@ Print this verbatim (with the actual pass/fail per row):
 > ✓ / ✗  android CLI
 > ✓ / ✗  Android Skills
 > ○      scrcpy (optional)
-> ○      Holo (optional)
 > ○      gh / GitHub CLI (optional)
 > ```
 >
@@ -167,23 +165,6 @@ Mirror your phone's screen on your laptop. Great for demos / pair-coding.
     sudo dnf install scrcpy   # Fedora
 
 Plug in your phone via USB (with USB debugging enabled) and run `scrcpy`.
-
-### Holo (optional)
-
-Terminal-based Android profiler + log browser + DB query + trace recorder.
-Replaces clicking around Android Studio for most debug work.
-
-**macOS / Linux:**
-
-    curl -sSL https://raw.githubusercontent.com/measure-sh/holo/main/install.sh | sh
-
-**Windows (any OS with Rust):**
-
-    cargo install holo
-
-(Rust install: https://rustup.rs)
-
-Verify it installed with `command -v holo` (Holo has no `--version` flag). Plug a device in and run `holo` for the TUI.
 
 ### gh / GitHub CLI (optional)
 
