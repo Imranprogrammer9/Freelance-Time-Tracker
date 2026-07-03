@@ -20,10 +20,15 @@ import org.koin.compose.koinInject
  *
  * The paywall design itself is configured in the RevenueCat dashboard
  * (Project Settings → Paywalls). This screen just hosts it and forwards
- * purchase / dismiss events to the kit's navigation. If RevenueCat is not
- * configured for this app (no API key in `local.properties`, no offering
- * published, no paywall designed), the composable renders RevenueCat's own
- * error state on device — acceptable during development.
+ * purchase / dismiss events to the kit's navigation.
+ *
+ * If RevenueCat is not configured (no API key in `local.properties` yet), the
+ * prebuilt [Paywall] must NOT be composed: its ViewModel reads the `Purchases`
+ * singleton in its constructor and throws `UninitializedPropertyAccessException`
+ * ("There is no singleton instance") — it does not render a graceful error
+ * state. So we detect that up front and simply dismiss (skip) the paywall, which
+ * lets the app keep working until the key is added. Once configured, the paywall
+ * renders normally; an empty/undesigned offering then shows RC's own empty state.
  */
 @Composable
 fun PaywallScreen(
@@ -33,6 +38,13 @@ fun PaywallScreen(
     val analytics = koinInject<AnalyticsManager>()
     val purchaseManager = koinInject<PurchaseManager>()
     LaunchedEffect(Unit) { analytics.logScreen(ScreenNames.PAYWALL) }
+
+    // RevenueCat has no API key → the Purchases singleton was never configured.
+    // Composing the prebuilt Paywall here would crash, so skip it and move on.
+    if (!purchaseManager.isConfigured) {
+        LaunchedEffect(Unit) { onDismiss() }
+        return
+    }
 
     Paywall(
         options = PaywallOptions.Builder(dismissRequest = onDismiss)
