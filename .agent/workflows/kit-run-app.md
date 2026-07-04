@@ -7,7 +7,7 @@ You are running **`/kit-run-app`** for NowKit.
 Audience: first-time mobile developers / vibe coders. They want one command that
 gets the app running on their device — be brief and concrete.
 
-**App ID for this app:** `dev.shipkaro.kit`
+**App ID for this app:** `com.freelance.timetracker`
 
 > NOTE — this file is rewritten by `/kit-change-app-id` after the kit is
 > renamed, so the App ID above always matches `applicationId` in
@@ -41,7 +41,7 @@ fails, read the error, explain in one line, and stop — do not try to launch.
 
 Run:
 
-    adb shell monkey -p dev.shipkaro.kit -c android.intent.category.LAUNCHER 1
+    adb shell monkey -p com.freelance.timetracker -c android.intent.category.LAUNCHER 1
 
 Or tell the developer to tap the app icon on the device. Report success or
 failure in one line.

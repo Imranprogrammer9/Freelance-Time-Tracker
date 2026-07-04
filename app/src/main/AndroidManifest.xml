@@ -12,7 +12,7 @@
       uploaded build. `/kit-setup-paywall` uncomments this automatically when you
       turn the paywall on; leave it commented for a free (no-paywall) app.
     -->
-    <!-- <uses-permission android:name="com.android.vending.BILLING" /> -->
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <!--
       Opt-in permissions for the pre-built KitPermissionScreen flows (feature/permissions).
@@ -70,7 +70,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                    android:scheme="shipkaro"
+                    android:scheme="timetracker"
                     android:host="auth-callback" />
             </intent-filter>
 

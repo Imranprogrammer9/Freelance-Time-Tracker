@@ -47,6 +47,8 @@ androidxTestExt = "1.2.1"
 espresso = "3.6.1"
 turbine = "1.1.0"
 coroutinesTest = "1.8.1"
+google-services = "4.4.2"
+firebase-crashlytics-plugin = "3.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -67,7 +69,7 @@ androidx-compose-material-icons = { group = "androidx.compose.material", name = 
 # icons only — every pack below is commented out by default. Enable one by
 # uncommenting its line here + the matching app/build.gradle.kts dependency
 # (`/kit-setup-theme` does this for you). R8 strips unused packs in release builds.
-# composeicons-feather = { group = "br.com.devsrsouza.compose.icons", name = "feather", version.ref = "composeIcons" }
+composeicons-feather = { group = "br.com.devsrsouza.compose.icons", name = "feather", version.ref = "composeIcons" }
 # composeicons-tabler = { group = "br.com.devsrsouza.compose.icons", name = "tabler-icons", version.ref = "composeIcons" }
 # composeicons-simple = { group = "br.com.devsrsouza.compose.icons", name = "simple-icons", version.ref = "composeIcons" }
 # composeicons-fontawesome = { group = "br.com.devsrsouza.compose.icons", name = "font-awesome", version.ref = "composeIcons" }
@@ -164,3 +166,5 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 about-libraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-plugin" }

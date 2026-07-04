@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.about.libraries)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 // detekt + ktlint (via detekt-formatting) for the app module.
@@ -40,13 +42,13 @@ val openRouterApiKey: String = localProps.getProperty("openrouter.api.key", "")
 val sentryDsn: String = localProps.getProperty("sentry.dsn", "")
 
 android {
-    namespace = "dev.shipkaro.kit"
+    namespace = "com.freelance.timetracker"
     // compileSdk 36 — required by androidx.browser 1.10.x (pulled by supabase-auth-kt-android 3.6.0).
     // targetSdk stays at 35 (stable; Play Store still accepts 35 in 2026).
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "dev.shipkaro.kit"
+        applicationId = "com.freelance.timetracker"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
@@ -142,7 +144,7 @@ dependencies {
     // Optional icon packs (see libs.versions.toml for full list). Commented out by
     // default — the kit ships Material icons only. `/kit-setup-theme` uncomments the
     // pack you pick. R8 strips unused packs in release builds anyway.
-    // implementation(libs.composeicons.feather)
+    implementation(libs.composeicons.feather)
     // implementation(libs.composeicons.tabler)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
